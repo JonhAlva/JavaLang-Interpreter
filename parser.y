@@ -13,6 +13,7 @@
     char* identificador;
     char* string_comillas;
     int bool_true;  /* 0 = false, 1 = true */
+    char* null_value;
 }
 
 //Tokens con tipo de dato
@@ -21,9 +22,10 @@
 %token <identificador>      IDENTIFICADOR
 %token <string_comillas>    STRING_COMILLAS
 %token <bool_true>          BOOL_VALUE
+%token <null_value>         NULL_VALUE
 
 //Aqui tiene que ir el nombre del return del lexer para cada token
-%token DATA_TYPE S_PUNTO_COMA S_IGUAL
+%token DATA_TYPE S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
 
@@ -53,12 +55,20 @@ instruccion:
 // * DECLARACION DE VARIABLES -----------------------------------------------------------------------------------
 
 declaration:
-            DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
-            | DATA_TYPE IDENTIFICADOR S_IGUAL INT_NUMBER S_PUNTO_COMA
-            | DATA_TYPE IDENTIFICADOR S_IGUAL FLOAT_NUMBER S_PUNTO_COMA
-            | DATA_TYPE IDENTIFICADOR S_IGUAL STRING_COMILLAS S_PUNTO_COMA
-            | DATA_TYPE IDENTIFICADOR S_IGUAL BOOL_VALUE S_PUNTO_COMA
-;           
+            DATA_TYPE IDENTIFICADOR S_PUNTO_COMA                                  { /* VARIABLE SIN VALOR*/ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL data_type S_PUNTO_COMA              { /* VARIABLE CON VALOR*/ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR S_PUNTO_COMA          { /* CASTEO WIDENING*/ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+            { /* CASTEO NARROWING*/ }
+;
+
+data_type:
+        INT_NUMBER
+        | FLOAT_NUMBER
+        | STRING_COMILLAS
+        | BOOL_VALUE
+        | NULL_VALUE
+;
 
 %%
 

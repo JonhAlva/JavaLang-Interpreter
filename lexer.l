@@ -18,9 +18,12 @@
 "String"                { return DATA_TYPE; }
 "true"                  { yylval.bool_true = 1; return BOOL_VALUE; }
 "false"                 { yylval.bool_true = 0; return BOOL_VALUE; }
+"null"                  { yylval.null_value = "-"; return NULL_VALUE; }
 
 ";"                     { return S_PUNTO_COMA; }
 "="                     { return S_IGUAL; }
+"("                     { return PARENTESIS_OPEN; }
+")"                     { return PARENTESIS_CLOSE; }
 
 "+"                     { return '+'; }                               /* Reconocimiento de simbolos */
 "-"                     { return '-'; }

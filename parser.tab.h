@@ -59,9 +59,12 @@ extern int yydebug;
     IDENTIFICADOR = 260,           /* IDENTIFICADOR  */
     STRING_COMILLAS = 261,         /* STRING_COMILLAS  */
     BOOL_VALUE = 262,              /* BOOL_VALUE  */
-    DATA_TYPE = 263,               /* DATA_TYPE  */
-    S_PUNTO_COMA = 264,            /* S_PUNTO_COMA  */
-    S_IGUAL = 265                  /* S_IGUAL  */
+    NULL_VALUE = 263,              /* NULL_VALUE  */
+    DATA_TYPE = 264,               /* DATA_TYPE  */
+    S_PUNTO_COMA = 265,            /* S_PUNTO_COMA  */
+    S_IGUAL = 266,                 /* S_IGUAL  */
+    PARENTESIS_OPEN = 267,         /* PARENTESIS_OPEN  */
+    PARENTESIS_CLOSE = 268         /* PARENTESIS_CLOSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -77,8 +80,9 @@ union YYSTYPE
     char* identificador;
     char* string_comillas;
     int bool_true;  /* 0 = false, 1 = true */
+    char* null_value;
 
-#line 82 "parser.tab.h"
+#line 86 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

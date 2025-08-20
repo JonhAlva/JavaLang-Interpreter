@@ -1,9 +1,16 @@
-//Declaracion de vaiables
-
+// Declaracion de vaiables
 int Variable = 12;
-
 char VArs;
 boolean _Lol = true;
 float jk = 2.5;
-
 String lol = "Hola Mundo";
+
+// Casteo de Variable
+
+/* Widening */
+int counter = 0;
+float counter2 = counter;
+
+/* Narrowing */
+float block = 0.5;
+int blockInt = (int) block;
