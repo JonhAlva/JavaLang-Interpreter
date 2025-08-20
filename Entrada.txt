@@ -1,1 +1,9 @@
-int variable = 12;
+//Declaracion de vaiables
+
+int Variable = 12;
+
+char VArs;
+boolean _Lol = true;
+float jk = 2.5;
+
+String lol = "Hola Mundo";

@@ -54,27 +54,34 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    FLOAT_NUMBER = 258,            /* FLOAT_NUMBER  */
-    INT_NUMBER = 259,              /* INT_NUMBER  */
+    INT_NUMBER = 258,              /* INT_NUMBER  */
+    FLOAT_NUMBER = 259,            /* FLOAT_NUMBER  */
     IDENTIFICADOR = 260,           /* IDENTIFICADOR  */
-    BOOL_TRUE = 261,               /* BOOL_TRUE  */
-    BOOL_FALSE = 262,              /* BOOL_FALSE  */
+    STRING_COMILLAS = 261,         /* STRING_COMILLAS  */
+    BOOL_VALUE = 262,              /* BOOL_VALUE  */
     DATA_TYPE = 263,               /* DATA_TYPE  */
-    S_MAS = 264,                   /* S_MAS  */
-    S_MENOS = 265,                 /* S_MENOS  */
-    S_MULTI = 266,                 /* S_MULTI  */
-    S_DIVIDIR = 267,               /* S_DIVIDIR  */
-    SALTO_LINEA = 268,             /* SALTO_LINEA  */
-    S_PUNTO_COMA = 269,            /* S_PUNTO_COMA  */
-    S_IGUAL = 270,                 /* S_IGUAL  */
-    STRING_COMILLAS = 271          /* STRING_COMILLAS  */
+    S_PUNTO_COMA = 264,            /* S_PUNTO_COMA  */
+    S_IGUAL = 265                  /* S_IGUAL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 10 "parser.y"
+
+    int int_number;
+    float float_number;
+    char* identificador;
+    char* string_comillas;
+    int bool_true;  /* 0 = false, 1 = true */
+
+#line 82 "parser.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

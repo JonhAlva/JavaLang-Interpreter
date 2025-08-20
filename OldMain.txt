@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Prototipo de parser
+int yyparse(void);
+
+//Leer archivo como argumento
+extern FILE *yyin;
+
+extern void yyrestart(FILE *input_file);
+
+int main(int argc, char **argv) {
+    //Leer el archivo
+    printf("    $ Escribir Entrada  \n");
+    if (argc > 1) {
+        yyin = fopen(argv[1], "r");
+
+        // Mostrar el contenido del archivo antes del análisis
+        printf("=== Contenido del archivo %s ===\n", argv[1]);
+        int c;
+        FILE *temp = fopen(argv[1], "r");
+        while ((c = fgetc(temp)) != EOF) {
+            putchar(c);
+        }
+        fclose(temp);
+        printf("\n=================================\n\n");
+
+        if (!yyin) {
+            perror("El archivo no se pudo leer!");
+            return 1;
+        }
+    }
+
+    // Inicializar el analisis
+    if (yyparse() == 0) {
+        printf("    ->> Análisis sintáctico terminado con éxito \n");
+    } else {
+        printf("    ->> Se encontraron errores durante el análisis \n");
+    }
+
+    return 0;
+}

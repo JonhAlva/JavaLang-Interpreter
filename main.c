@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Prototipo de parser
 int yyparse(void);
@@ -7,34 +8,63 @@ int yyparse(void);
 //Leer archivo como argumento
 extern FILE *yyin;
 
-int main(int argc, char **argv) {
-    //Leer el archivo
-    printf("    $ Escribir Entrada  \n");
-    if (argc > 1) {
-        yyin = fopen(argv[1], "r");
+extern void yyrestart(FILE *input_file);
 
-        // Mostrar el contenido del archivo antes del análisis
-        printf("=== Contenido del archivo %s ===\n", argv[1]);
+int main(int argc, char **argv) {
+    char input[2048];
+    printf("    $ Ingresar una entrada ");
+    if (argc > 1 ) {
+
+        char *filename = argv[1];
+        yyin = fopen(filename, "r");
+        if (!yyin) {
+            perror("El archivo no se pudo leer!");
+            return 1;
+        }
+
+        // Mostrar contenido del archivo
+        printf("\n=== Contenido del archivo '%s' ===\n", filename);
         int c;
-        FILE *temp = fopen(argv[1], "r");
+        FILE *temp = fopen(filename, "r");
         while ((c = fgetc(temp)) != EOF) {
             putchar(c);
         }
         fclose(temp);
         printf("\n=================================\n\n");
 
-        if (!yyin) {
-            perror("El archivo no se pudo leer!");
-            return 1;
+        // Iniciar análisis
+        if (yyparse() == 0) {
+            printf(" ✅ Análisis sintáctico terminado con éxito \n");
+        } else {
+            printf(" ❌ Se encontraron errores durante el análisis \n");
         }
+
+        fclose(yyin);
+    }
+    while(1) {
+        printf("        \n>> ");
+        if (!fgets(input, sizeof(input), stdin)) {
+            break; // EOF
+        }
+
+        //Escribir Exit para salir del bucle
+        if (strncmp(input, "exit", 4) == 0)
+            break;
+
+        // Crear un archivo temporal en memoria con la entrada
+        FILE *f = fmemopen(input, strlen(input), "r");
+        yyrestart(f);
+        yyin = f;
+
+        if (yyparse() == 0) {
+            printf(" ✅ Análisis sintáctico terminado con éxito \n");
+        } else {
+            printf(" ❌ Se encontraron errores durante el análisis \n");
+        }
+
+        fclose(f);
     }
 
-    // Inicializar el analisis
-    if (yyparse() == 0) {
-        printf("    ->> Análisis sintáctico terminado con éxito \n");
-    } else {
-        printf("    ->> Se encontraron errores durante el análisis \n");
-    }
 
     return 0;
 }

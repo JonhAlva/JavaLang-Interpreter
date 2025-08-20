@@ -2,13 +2,31 @@
     #include <stdio.h>
     #include <stdlib.h>
 
+    extern int yylex();
     void yyerror(const char* s);
-    int yylex();
 %}
 
+//Declaracion de Union para diferenciar el tipo de dato yyval.{NOMBRE}  <-
+%union{
+    int int_number;
+    float float_number;
+    char* identificador;
+    char* string_comillas;
+    int bool_true;  /* 0 = false, 1 = true */
+}
+
+//Tokens con tipo de dato
+%token <int_number>         INT_NUMBER
+%token <float_number>       FLOAT_NUMBER
+%token <identificador>      IDENTIFICADOR
+%token <string_comillas>    STRING_COMILLAS
+%token <bool_true>          BOOL_VALUE
+
 //Aqui tiene que ir el nombre del return del lexer para cada token
-%token FLOAT_NUMBER INT_NUMBER IDENTIFICADOR BOOL_TRUE BOOL_FALSE DATA_TYPE
-%token S_MAS S_MENOS S_MULTI S_DIVIDIR SALTO_LINEA S_PUNTO_COMA S_IGUAL STRING_COMILLAS
+%token DATA_TYPE S_PUNTO_COMA S_IGUAL
+
+//Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
+
 
 // Precedencia de Operadores
 %left '+' '-'
@@ -20,11 +38,11 @@
 %%
 
 input:
-        instrucciones SALTO_LINEA            { printf("cadena obteninda: %s\n", $1); }
+        lista_instrucciones
 ;
 
-instrucciones:
-            instrucciones instruccion
+lista_instrucciones:
+            lista_instrucciones instruccion 
             | instruccion
 ;
 
@@ -35,20 +53,15 @@ instruccion:
 // * DECLARACION DE VARIABLES -----------------------------------------------------------------------------------
 
 declaration:
-            DATA_TYPE IDENTIFICADOR S_IGUAL operation S_PUNTO_COMA 
-; 
-
-operation:
-            INT_NUMBER
-            | FLOAT_NUMBER
-            | BOOL_FALSE
-            | BOOL_TRUE
-            | IDENTIFICADOR
-            | STRING_COMILLAS
-;
+            DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+            | DATA_TYPE IDENTIFICADOR S_IGUAL INT_NUMBER S_PUNTO_COMA
+            | DATA_TYPE IDENTIFICADOR S_IGUAL FLOAT_NUMBER S_PUNTO_COMA
+            | DATA_TYPE IDENTIFICADOR S_IGUAL STRING_COMILLAS S_PUNTO_COMA
+            | DATA_TYPE IDENTIFICADOR S_IGUAL BOOL_VALUE S_PUNTO_COMA
+;           
 
 %%
 
 void yyerror(const char* s) {
-    fprintf(stderr, "Error: %s\n", s);
+    fprintf(stderr, "Error: sintáctico: %s\n", s);
 }
