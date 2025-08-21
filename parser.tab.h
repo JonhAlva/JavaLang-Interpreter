@@ -84,7 +84,8 @@ extern int yydebug;
     OP_MENOR_A = 285,              /* OP_MENOR_A  */
     OP_MAYOR_A = 286,              /* OP_MAYOR_A  */
     LOGIC_NOT = 287,               /* LOGIC_NOT  */
-    PRINT_SENTENCE = 288           /* PRINT_SENTENCE  */
+    PRINT_SENTENCE = 288,          /* PRINT_SENTENCE  */
+    FUNC_EQUALS = 289              /* FUNC_EQUALS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -102,7 +103,7 @@ union YYSTYPE
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
 
-#line 106 "parser.tab.h"
+#line 107 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
