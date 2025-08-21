@@ -18,6 +18,7 @@
 "char"                  { return DATA_TYPE; }
 "String"                { return DATA_TYPE; }
 "System.out.println"    { return PRINT_SENTENCE; }
+".equals"               { return FUNC_EQUALS; }
 "true"                  { yylval.bool_true = 1; return BOOL_VALUE; }
 "false"                 { yylval.bool_true = 0; return BOOL_VALUE; }
 "null"                  { yylval.null_value = "-null"; return NULL_VALUE; }

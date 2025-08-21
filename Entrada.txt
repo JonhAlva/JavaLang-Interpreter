@@ -26,7 +26,7 @@ int suma = 5+5;
 int resta = 8-2;
 int multiplicacion = 5*2;
 int divicion = 100/4;
-int compleja = 3-(1+3)*32/90
+int compleja = 3-(1+3)*32/90;
 
 //4.5.1.3 Operadores de asignacion -------------------------------------
 int x = 10;
@@ -43,9 +43,25 @@ x >>= 9;
 x <<= 10;
 
 // 4.5.1.4 Operaciones de comparacion --------------------------------------
+int a;
+int b;
+boolean x = true;
+boolean y = false;
+String n1 = "hola";
+String n2 = "mundo";
 /*Numerico*/
-
+System.out.println(a > b);
+System.out.println(a < b);
+System.out.println(a >= b);
+System.out.println(a <= b);
+System.out.println(a == b);
+System.out.println(a != b);
 
 /*String*/
+System.out.println(n1.equals(n2));
+
 /*Logico*/
+System.out.println(x || y);
+System.out.println(x && y);
+System.out.println(!x);
 
