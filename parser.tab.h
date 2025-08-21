@@ -64,7 +64,27 @@ extern int yydebug;
     S_PUNTO_COMA = 265,            /* S_PUNTO_COMA  */
     S_IGUAL = 266,                 /* S_IGUAL  */
     PARENTESIS_OPEN = 267,         /* PARENTESIS_OPEN  */
-    PARENTESIS_CLOSE = 268         /* PARENTESIS_CLOSE  */
+    PARENTESIS_CLOSE = 268,        /* PARENTESIS_CLOSE  */
+    OP_MAS_IGUAL = 269,            /* OP_MAS_IGUAL  */
+    OP_MENOS_IGUAL = 270,          /* OP_MENOS_IGUAL  */
+    OP_MULTI_IGUAL = 271,          /* OP_MULTI_IGUAL  */
+    OP_DIV_IGUAL = 272,            /* OP_DIV_IGUAL  */
+    OP_MOD_IGUAL = 273,            /* OP_MOD_IGUAL  */
+    OP_AND_IGUAL = 274,            /* OP_AND_IGUAL  */
+    OP_OR_IGUAL = 275,             /* OP_OR_IGUAL  */
+    OP_POT_IGUAL = 276,            /* OP_POT_IGUAL  */
+    OP_MAYOR_IGUAL = 277,          /* OP_MAYOR_IGUAL  */
+    OP_MENOR_IGUAL = 278,          /* OP_MENOR_IGUAL  */
+    OP_IGUAL_IGUAL = 279,          /* OP_IGUAL_IGUAL  */
+    OP_DISTINTO_A = 280,           /* OP_DISTINTO_A  */
+    OP_MENOR_IGUAL_A = 281,        /* OP_MENOR_IGUAL_A  */
+    OP_MAYOR_IGUAL_A = 282,        /* OP_MAYOR_IGUAL_A  */
+    LOGIC_OR = 283,                /* LOGIC_OR  */
+    LOGIC_AND = 284,               /* LOGIC_AND  */
+    OP_MENOR_A = 285,              /* OP_MENOR_A  */
+    OP_MAYOR_A = 286,              /* OP_MAYOR_A  */
+    LOGIC_NOT = 287,               /* LOGIC_NOT  */
+    PRINT_SENTENCE = 288           /* PRINT_SENTENCE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -73,7 +93,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 10 "parser.y"
+#line 11 "parser.y"
 
     int int_number;
     float float_number;
@@ -82,7 +102,7 @@ union YYSTYPE
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
 
-#line 86 "parser.tab.h"
+#line 106 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
