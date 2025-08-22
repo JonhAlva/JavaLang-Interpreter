@@ -19,6 +19,8 @@
 "String"                { return DATA_TYPE; }
 "System.out.println"    { return PRINT_SENTENCE; }
 ".equals"               { return FUNC_EQUALS; }
+"if"                    { return IF_WORD; }
+"else"                  { return ELSE_WORD; }
 "true"                  { yylval.bool_true = 1; return BOOL_VALUE; }
 "false"                 { yylval.bool_true = 0; return BOOL_VALUE; }
 "null"                  { yylval.null_value = "-null"; return NULL_VALUE; }
@@ -27,6 +29,8 @@
 "="                     { return S_IGUAL; }
 "("                     { return PARENTESIS_OPEN; }
 ")"                     { return PARENTESIS_CLOSE; }
+"{"                     { return LLAVE_OPEN; }
+"}"                     { return LLAVE_CLOSE; }
 
 "=="                    { return OP_IGUAL_IGUAL; }
 "!="                    { return OP_DISTINTO_A; }

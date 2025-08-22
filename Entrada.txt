@@ -20,6 +20,8 @@ float counter2 = counter;
 // Narrowing 
 float block = 0.5;
 int blockInt = (int) block;
+int blockInt = (float) block;
+int blockInt = (String) block;
 
 // 4.5.1.2 Operaciones Aritmeticas --------------------------
 int suma = 5+5;
@@ -65,3 +67,21 @@ System.out.println(x || y);
 System.out.println(x && y);
 System.out.println(!x);
 
+// 4.5.1.5 Sentencias de Control de flujo --------------------------------------
+
+/* Sentencia IF solo */
+
+int Nu_mero = 5;
+if ( Nu_mero > 5 ) {
+    System.out.println("Ejecutando If unico");
+}
+
+/* Sentencia IF and ELSE */
+
+boolean _ValBol = true;
+if ( _ValBol == false ) {
+    System.out.println("La sentencia es falsa");
+} else {
+    System.out.println("La sentencia es verdadera");
+    float LoL = 2.5;
+}

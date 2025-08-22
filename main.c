@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
         }
 
         fclose(yyin);
+        return 0;
     }
     while(1) {
         printf("        \n>> ");
@@ -64,7 +65,6 @@ int main(int argc, char **argv) {
 
         fclose(f);
     }
-
 
     return 0;
 }
