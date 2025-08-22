@@ -85,3 +85,34 @@ if ( _ValBol == false ) {
     System.out.println("La sentencia es verdadera");
     float LoL = 2.5;
 }
+
+/* Sentencia SWITCH - CASE */
+int dia = 3;
+
+switch( dia ) {
+    case 1:
+        System.out.println("Caso 1");
+        x >>= 9;
+        break;
+    case 2:
+        System.out.println("Caso 2");
+        int blockInt = (float) block;
+        break;
+    case 3:
+        System.out.println("Caso 3");
+        String n1 = "hola";
+        break;
+    default:
+        System.out.println("Caso default");
+        if ( Nu_mero > 5 ) {
+            System.out.println("Ejecutando If unico");
+        }
+}
+
+/* Sentencia WHILE */
+int condition = 0;
+
+while( condition < 7 ) {
+    System.out.println("Ejecutando");
+    condition++;
+}

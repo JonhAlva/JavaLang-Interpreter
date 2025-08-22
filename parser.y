@@ -26,8 +26,8 @@
 %token <null_value>         NULL_VALUE
 
 //Aqui tiene que ir el nombre del return del lexer para cada token
-%token DATA_TYPE S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE
-%token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL 
+%token DATA_TYPE S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
+%token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL DEFAULT_WORD WHILE_WORD
 %token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL OP_IGUAL_IGUAL OP_DISTINTO_A OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A LOGIC_OR
 %token LOGIC_AND OP_MENOR_A OP_MAYOR_A LOGIC_NOT PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD
 
@@ -62,6 +62,8 @@ instruccion:
             | asignation
             | print
             | if_sentence
+            | switch_case
+            | while_sentence
 ;
 
 // * FUNCION DE IMPRIMIR VALORES -------------------------------------------------------------------------------
@@ -108,12 +110,34 @@ op_expr:
 native_func:
             IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE            {/* EQUALS PARA UNA VARIABLE */}
             | IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE        {/* EQUALS PARA UN TEXTO EN COMILLAS */}
+            | IDENTIFICADOR '+' '+'                                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
+            | IDENTIFICADOR '-' '-'                                                             {/* REDUCTOR DE VARIABLE PARA BUCLES*/}
 ;
 
-//* CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------
+// * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------
 if_sentence:
             IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
             | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+;
+
+// * CONDICIONAL SWITCH CASE -----------------------------------------------------------------------------------------------
+switch_case:
+            SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+;
+
+switch_case_list:
+                switch_case_list CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+                | CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+;
+
+switch_default:
+                DEFAULT_WORD S_PUNTO_PUNTO lista_instrucciones
+                | /* vacío */
+;
+
+// * CONDICIONAL WHILE ----------------------------------------------------------------------------------------------------
+while_sentence:
+                WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
 ;
 
 // * EXPRESIONES GLOBALES QUE INTERPRETAN ARITMETICA, OPERADORES LOGICOS Y ALGUNAS ASIGNACIONES ------------------
