@@ -13,11 +13,11 @@ float jk = 2.5;
 String lol = "Hola Mundo";
 
 // 4.5.1.1 Casteo de Variable --------------------------
-//Widening 
+        /* Widening */
 int counter = 0;
 float counter2 = counter;
 
-// Narrowing 
+        /* Narrowing */
 float block = 0.5;
 int blockInt = (int) block;
 int blockInt = (float) block;
@@ -51,7 +51,7 @@ boolean x = true;
 boolean y = false;
 String n1 = "hola";
 String n2 = "mundo";
-/*Numerico*/
+        /* Numerico */
 System.out.println(a > b);
 System.out.println(a < b);
 System.out.println(a >= b);
@@ -59,24 +59,24 @@ System.out.println(a <= b);
 System.out.println(a == b);
 System.out.println(a != b);
 
-/*String*/
+        /* String */
 System.out.println(n1.equals(n2));
 
-/*Logico*/
+        /* Logico */
 System.out.println(x || y);
 System.out.println(x && y);
 System.out.println(!x);
 
 // 4.5.1.5 Sentencias de Control de flujo --------------------------------------
 
-/* Sentencia IF solo */
+        /* Sentencia IF solo */
 
 int Nu_mero = 5;
 if ( Nu_mero > 5 ) {
     System.out.println("Ejecutando If unico");
 }
 
-/* Sentencia IF and ELSE */
+        /* Sentencia IF and ELSE */
 
 boolean _ValBol = true;
 if ( _ValBol == false ) {
@@ -86,7 +86,7 @@ if ( _ValBol == false ) {
     float LoL = 2.5;
 }
 
-/* Sentencia SWITCH - CASE */
+        /* Sentencia SWITCH - CASE */
 int dia = 3;
 
 switch( dia ) {
@@ -109,10 +109,48 @@ switch( dia ) {
         }
 }
 
-/* Sentencia WHILE */
+        /* Sentencia WHILE */
 int condition = 0;
 
 while( condition < 7 ) {
     System.out.println("Ejecutando");
     condition++;
 }
+
+        /* Sentencia FOR - NORMAL */
+for( int id = 0; i < 5; i++) {
+    System.out.println("Repeticion for normal");
+}
+
+        /* Sentencia FOR - EACH */
+for ( int num : numeros ) {
+    System.out.println("Repeticion for each");
+}
+
+    /*
+        Sentencias de transferencia, break, continue
+        Estas madres pueden venir dentro de un ciclo solamente
+        Sentencia return
+        Solo puede venir cuando se declara una funcion y retorna
+        lo que se indique
+    */
+
+
+// Estructuras de Datos ---------------------------------------------------------------------
+
+        /* Declaracion de Vectores - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo */
+int[] nums = new int[5];
+
+        /* Declaracion de Vectores - Añadiendo sus elementos */
+String[] letters = {"a", "b", "c", "d", "e"};
+
+        /* Declaracion de Matrices - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo */
+float[][] mat = new float[3][3];
+
+        /* Declaracion de Matrices - Añadiendo sus elementos */
+int[][] board = {
+    {0, 1, 0},
+    {1, 0, 1},
+    {0, 1, 0}
+};
+

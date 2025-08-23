@@ -27,9 +27,10 @@
 
 //Aqui tiene que ir el nombre del return del lexer para cada token
 %token DATA_TYPE S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
-%token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL DEFAULT_WORD WHILE_WORD
+%token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
 %token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL OP_IGUAL_IGUAL OP_DISTINTO_A OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A LOGIC_OR
-%token LOGIC_AND OP_MENOR_A OP_MAYOR_A LOGIC_NOT PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD
+%token LOGIC_AND OP_MENOR_A OP_MAYOR_A LOGIC_NOT PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
+%token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
 
@@ -62,8 +63,10 @@ instruccion:
             | asignation
             | print
             | if_sentence
+            | native_func
             | switch_case
             | while_sentence
+            | for_sentence
 ;
 
 // * FUNCION DE IMPRIMIR VALORES -------------------------------------------------------------------------------
@@ -74,13 +77,48 @@ print:
 ;
 
 
-// * DECLARACION DE VARIABLES -----------------------------------------------------------------------------------
+// * DECLARACION DE VARIABLES Y ESTRUCTURAS DE DATOS -----------------------------------------------------------------------------------
 
 declaration:
             DATA_TYPE IDENTIFICADOR S_PUNTO_COMA                                  { /* VARIABLE SIN VALOR*/ }
             | DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA              { /* VARIABLE CON VALOR O SI EXPR ES IDENTIFICADOR ES EL CASTEO WIDENING */ }
-            | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
-            { /* CASTEO NARROWING*/ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA { /* CASTEO NARROWING*/ }
+            | vector
+            | matriz
+;
+
+// ! DECLARACION DE VECTOR
+vector:
+        DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type 
+
+// ! LAS DOS MANERAS DE QUE PUEDEN INGRESAR UN VECTOR
+vector_type:
+            NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA { /* VECTOR AUTO */ }
+            | LLAVE_OPEN vector_values LLAVE_CLOSE S_PUNTO_COMA         { /* VECTOR CON VALORES */ }
+;
+;
+
+// ! RECURSIVA PARA VECTOR, TOMAR VALORES INGRESADOS POR COMAS
+vector_values:
+            vector_values COMA expr
+            | expr
+;
+
+// ! DECLARACION DE MATRIZ
+matriz:
+        DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+;
+
+// ! LAS DOS MANERAS QUE PUEDEN INGRESAR UNA MATRIZ
+matriz_type:
+            NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+            | LLAVE_OPEN matriz_values LLAVE_CLOSE S_PUNTO_COMA
+;
+
+// ! RECURSIVA PARA MATRIZ, TOMAR VALORES INGRESADOS EN APARTADOS POR COMAS
+matriz_values:
+            matriz_values COMA LLAVE_OPEN vector_values LLAVE_CLOSE 
+            | LLAVE_OPEN vector_values LLAVE_CLOSE 
 ;
 
 
@@ -110,8 +148,8 @@ op_expr:
 native_func:
             IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE            {/* EQUALS PARA UNA VARIABLE */}
             | IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE        {/* EQUALS PARA UN TEXTO EN COMILLAS */}
-            | IDENTIFICADOR '+' '+'                                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
-            | IDENTIFICADOR '-' '-'                                                             {/* REDUCTOR DE VARIABLE PARA BUCLES*/}
+            | IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
+            | IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA                                          {/* REDUCTOR DE VARIABLE PARA BUCLES*/}
 ;
 
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------
@@ -120,16 +158,30 @@ if_sentence:
             | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
 ;
 
+// * CICLO FOR ----------------------------------------------------------------------------------------------------------
+for_sentence:
+            FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+; 
+
+// ! CONDICIONES DEL FOR PARA DIFERENCIAR ENTRE FOR NORMAL O UN FOR EACH PARA LISTAS
+for_condition:
+            declaration expr S_PUNTO_COMA IDENTIFICADOR OP_AUMENTO                                {/* ESTRUCTURA FOR NORMAL */}
+            | declaration expr S_PUNTO_COMA IDENTIFICADOR OP_DECREMENTO                           {/* ESTRUCTURA FOR NORMAL */}
+            | DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR                                 {/* ESTRUCTURA FOR EACH */}
+;
+
 // * CONDICIONAL SWITCH CASE -----------------------------------------------------------------------------------------------
 switch_case:
             SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
 ;
 
+// ! RECURSIVIDAD PARA INDEFINIDOS CASOS DE 'CASE'
 switch_case_list:
                 switch_case_list CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
                 | CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
 ;
 
+// ! CONDICIONAL DEL CASO 'DEFAULT' QUE PUEDE O NO VENIR
 switch_default:
                 DEFAULT_WORD S_PUNTO_PUNTO lista_instrucciones
                 | /* vacío */

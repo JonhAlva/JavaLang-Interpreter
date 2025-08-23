@@ -77,25 +77,34 @@ extern int yydebug;
     OP_AND_IGUAL = 278,            /* OP_AND_IGUAL  */
     DEFAULT_WORD = 279,            /* DEFAULT_WORD  */
     WHILE_WORD = 280,              /* WHILE_WORD  */
-    OP_OR_IGUAL = 281,             /* OP_OR_IGUAL  */
-    OP_POT_IGUAL = 282,            /* OP_POT_IGUAL  */
-    OP_MAYOR_IGUAL = 283,          /* OP_MAYOR_IGUAL  */
-    OP_MENOR_IGUAL = 284,          /* OP_MENOR_IGUAL  */
-    OP_IGUAL_IGUAL = 285,          /* OP_IGUAL_IGUAL  */
-    OP_DISTINTO_A = 286,           /* OP_DISTINTO_A  */
-    OP_MENOR_IGUAL_A = 287,        /* OP_MENOR_IGUAL_A  */
-    OP_MAYOR_IGUAL_A = 288,        /* OP_MAYOR_IGUAL_A  */
-    LOGIC_OR = 289,                /* LOGIC_OR  */
-    LOGIC_AND = 290,               /* LOGIC_AND  */
-    OP_MENOR_A = 291,              /* OP_MENOR_A  */
-    OP_MAYOR_A = 292,              /* OP_MAYOR_A  */
-    LOGIC_NOT = 293,               /* LOGIC_NOT  */
-    PRINT_SENTENCE = 294,          /* PRINT_SENTENCE  */
-    FUNC_EQUALS = 295,             /* FUNC_EQUALS  */
-    IF_WORD = 296,                 /* IF_WORD  */
-    LLAVE_OPEN = 297,              /* LLAVE_OPEN  */
-    LLAVE_CLOSE = 298,             /* LLAVE_CLOSE  */
-    ELSE_WORD = 299                /* ELSE_WORD  */
+    OP_AUMENTO = 281,              /* OP_AUMENTO  */
+    OP_DECREMENTO = 282,           /* OP_DECREMENTO  */
+    OP_OR_IGUAL = 283,             /* OP_OR_IGUAL  */
+    OP_POT_IGUAL = 284,            /* OP_POT_IGUAL  */
+    OP_MAYOR_IGUAL = 285,          /* OP_MAYOR_IGUAL  */
+    OP_MENOR_IGUAL = 286,          /* OP_MENOR_IGUAL  */
+    OP_IGUAL_IGUAL = 287,          /* OP_IGUAL_IGUAL  */
+    OP_DISTINTO_A = 288,           /* OP_DISTINTO_A  */
+    OP_MENOR_IGUAL_A = 289,        /* OP_MENOR_IGUAL_A  */
+    OP_MAYOR_IGUAL_A = 290,        /* OP_MAYOR_IGUAL_A  */
+    LOGIC_OR = 291,                /* LOGIC_OR  */
+    LOGIC_AND = 292,               /* LOGIC_AND  */
+    OP_MENOR_A = 293,              /* OP_MENOR_A  */
+    OP_MAYOR_A = 294,              /* OP_MAYOR_A  */
+    LOGIC_NOT = 295,               /* LOGIC_NOT  */
+    PRINT_SENTENCE = 296,          /* PRINT_SENTENCE  */
+    FUNC_EQUALS = 297,             /* FUNC_EQUALS  */
+    IF_WORD = 298,                 /* IF_WORD  */
+    LLAVE_OPEN = 299,              /* LLAVE_OPEN  */
+    LLAVE_CLOSE = 300,             /* LLAVE_CLOSE  */
+    ELSE_WORD = 301,               /* ELSE_WORD  */
+    FOR_WORD = 302,                /* FOR_WORD  */
+    CONTINUE_WORD = 303,           /* CONTINUE_WORD  */
+    RETURN_WORD = 304,             /* RETURN_WORD  */
+    CORCHETE_OPEN = 305,           /* CORCHETE_OPEN  */
+    CORCHETE_CLOSE = 306,          /* CORCHETE_CLOSE  */
+    NEW_WORD = 307,                /* NEW_WORD  */
+    COMA = 308                     /* COMA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -113,7 +122,7 @@ union YYSTYPE
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
 
-#line 117 "parser.tab.h"
+#line 126 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -24,8 +24,12 @@
 "switch"                { return SWITCH_WORD; }
 "case"                  { return CASE_WORD; }
 "break"                 { return BREAK_WORD; }
+"continue"              { return CONTINUE_WORD; }
+"return"                { return RETURN_WORD; }
+"new"                   { return NEW_WORD;}
 "default"               { return DEFAULT_WORD; }
 "while"                 { return WHILE_WORD; }
+"for"                   { return FOR_WORD; }
 "true"                  { yylval.bool_true = 1; return BOOL_VALUE; }
 "false"                 { yylval.bool_true = 0; return BOOL_VALUE; }
 "null"                  { yylval.null_value = "-null"; return NULL_VALUE; }
@@ -37,6 +41,9 @@
 ")"                     { return PARENTESIS_CLOSE; }
 "{"                     { return LLAVE_OPEN; }
 "}"                     { return LLAVE_CLOSE; }
+"["                     { return CORCHETE_OPEN; }
+"]"                     { return CORCHETE_CLOSE; }
+","                     { return COMA; }
 
 "=="                    { return OP_IGUAL_IGUAL; }
 "!="                    { return OP_DISTINTO_A; }
@@ -50,6 +57,9 @@
 "^="                    { return OP_POT_IGUAL; }
 ">>="                   { return OP_MAYOR_IGUAL; }
 "<<="                   { return OP_MENOR_IGUAL; }
+
+"++"                    { return OP_AUMENTO; }
+"--"                    { return OP_DECREMENTO; }
 
 "<="                    { return OP_MENOR_IGUAL_A; }
 ">="                    { return OP_MAYOR_IGUAL_A; }
