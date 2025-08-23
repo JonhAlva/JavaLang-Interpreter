@@ -17,6 +17,10 @@
 "boolean"               { return DATA_TYPE; }
 "char"                  { return DATA_TYPE; }
 "String"                { return DATA_TYPE; }
+"long"                  { return DATA_TYPE; }
+"byte"                  { return DATA_TYPE; }
+"short"                 { return DATA_TYPE; }
+"double"                { return DATA_TYPE; }
 "System.out.println"    { return PRINT_SENTENCE; }
 ".equals"               { return FUNC_EQUALS; }
 "if"                    { return IF_WORD; }

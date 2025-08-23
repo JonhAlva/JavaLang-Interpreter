@@ -85,6 +85,8 @@ declaration:
             | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA { /* CASTEO NARROWING*/ }
             | vector
             | matriz
+            | dynamic_array
+            | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
 ;
 
 // ! DECLARACION DE VECTOR
@@ -121,11 +123,32 @@ matriz_values:
             | LLAVE_OPEN vector_values LLAVE_CLOSE 
 ;
 
+// ! DECLARACION DE ARRAY MULTIDIMENSIONAL
+dynamic_array:
+            DATA_TYPE IDENTIFICADOR dynamic_corchete S_IGUAL NEW_WORD DATA_TYPE dynamic_data_declaration S_PUNTO_COMA
+;
+
+dynamic_corchete:
+                dynamic_corchete CORCHETE_OPEN CORCHETE_CLOSE
+                | CORCHETE_OPEN CORCHETE_CLOSE
+;
+
+dynamic_data_declaration:
+                        dynamic_data_declaration CORCHETE_OPEN expr CORCHETE_CLOSE
+                        | CORCHETE_OPEN expr CORCHETE_CLOSE
+;
 
 // * ASIGNACION DE VARIABLES ------------------------------------------------------------------------------------
 
 asignation:
-            IDENTIFICADOR op_expr expr S_PUNTO_COMA             { /* OPERADOR ASIGNACION PARA UNA VARIABLE*/ }
+            IDENTIFICADOR op_expr expr_bridge S_PUNTO_COMA             { /* 'OPERADOR ASIGNACION' PARA UNA VARIABLE Y ASIGNACION NORMAL*/ }
+            | variable_access S_IGUAL expr S_PUNTO_COMA                { /* ASIGNACION DE UN VALOR VECTOR, MATRIZ*/}
+;
+
+// ! PRODUCCION ENCARGADA DE DECIDIR SI SOLO VIENE UNA EXPRESION O ALGUN VALOR DE ASIGNACION DE VECTORES
+expr_bridge:
+        expr
+        | variable_access
 ;
 
 // ! OPERADORES DE ASIGNACION POSIBLES CASOS
@@ -150,6 +173,12 @@ native_func:
             | IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE        {/* EQUALS PARA UN TEXTO EN COMILLAS */}
             | IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
             | IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA                                          {/* REDUCTOR DE VARIABLE PARA BUCLES*/}
+;
+
+// ! PRODUCCION QUE MANEJA LA FORMA DE ESCRITURA DE LOS VECTORES Y LAS MATRICES
+variable_access:
+                IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE                 {/* ACCESO A VALOR EN UN VECTOR*/}
+                | IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE     {/* ACCESO A VALOR EN UNA MATRIZ */}
 ;
 
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------

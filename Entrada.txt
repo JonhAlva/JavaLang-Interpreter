@@ -12,6 +12,11 @@ boolean _Lol = true;
 float jk = 2.5;
 String lol = "Hola Mundo";
 
+        /* Asignacion de Variable */
+VArs = "hola";
+jk = 10.5;
+_Lol = false;
+
 // 4.5.1.1 Casteo de Variable --------------------------
         /* Widening */
 int counter = 0;
@@ -153,4 +158,18 @@ int[][] board = {
     {1, 0, 1},
     {0, 1, 0}
 };
+
+        /* Acceso a un valor de una matriz o vector y asignacion de un valor*/
+int nums_val = nums[1];
+String board_Val = board[0][1];
+
+int declaration_on_list = nums[2];
+String declaration_on_list2 = letters[2][1];
+
+nums[1] = 42;
+letters[2][1] = "Compi2";
+
+        /* Array multidimensional de n valores*/
+int hypercubo3D[][][] = new int[2][2][2];
+float superhyperCUbo6D[][][][][][] = new float[3][3][3][3][3][3];
 

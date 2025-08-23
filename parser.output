@@ -1,0 +1,4607 @@
+Terminales no usados en la gramática
+
+    CONTINUE_WORD
+    RETURN_WORD
+
+
+Estado 21 conflictos: 1 desplazamiento/reducción
+
+
+Gramática
+
+    0 $accept: input $end
+
+    1 input: lista_instrucciones
+
+    2 lista_instrucciones: lista_instrucciones instruccion
+    3                    | instruccion
+
+    4 instruccion: declaration
+    5            | asignation
+    6            | print
+    7            | if_sentence
+    8            | native_func
+    9            | switch_case
+   10            | while_sentence
+   11            | for_sentence
+
+   12 print: PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+
+   14 declaration: DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | vector
+   18            | matriz
+   19            | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+
+   20 vector: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+
+   21 vector_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+   22            | LLAVE_OPEN vector_values LLAVE_CLOSE S_PUNTO_COMA
+
+   23 vector_values: vector_values COMA expr
+   24              | expr
+
+   25 matriz: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+
+   26 matriz_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+   27            | LLAVE_OPEN matriz_values LLAVE_CLOSE S_PUNTO_COMA
+
+   28 matriz_values: matriz_values COMA LLAVE_OPEN vector_values LLAVE_CLOSE
+   29              | LLAVE_OPEN vector_values LLAVE_CLOSE
+
+   30 asignation: IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+
+   32 op_expr: S_IGUAL
+   33        | OP_MAS_IGUAL
+   34        | OP_MENOS_IGUAL
+   35        | OP_MULTI_IGUAL
+   36        | OP_DIV_IGUAL
+   37        | OP_MOD_IGUAL
+   38        | OP_AND_IGUAL
+   39        | OP_OR_IGUAL
+   40        | OP_POT_IGUAL
+   41        | OP_MAYOR_IGUAL
+   42        | OP_MENOR_IGUAL
+
+   43 native_func: IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+
+   47 variable_access: IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE
+   48                | IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+
+   49 if_sentence: IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+   51 for_sentence: FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+   52 for_condition: declaration expr S_PUNTO_COMA IDENTIFICADOR OP_AUMENTO
+   53              | declaration expr S_PUNTO_COMA IDENTIFICADOR OP_DECREMENTO
+   54              | DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR
+
+   55 switch_case: SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+
+   56 switch_case_list: switch_case_list CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   57                 | CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+
+   58 switch_default: DEFAULT_WORD S_PUNTO_PUNTO lista_instrucciones
+   59               | ε
+
+   60 while_sentence: WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+   61 expr: expr '+' expr
+   62     | expr '-' expr
+   63     | expr '*' expr
+   64     | expr '/' expr
+   65     | expr '%' expr
+   66     | PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | INT_NUMBER
+   68     | FLOAT_NUMBER
+   69     | STRING_COMILLAS
+   70     | BOOL_VALUE
+   71     | NULL_VALUE
+   72     | IDENTIFICADOR
+   73     | expr OP_MENOR_A expr
+   74     | expr OP_MAYOR_A expr
+   75     | expr OP_MENOR_IGUAL_A expr
+   76     | expr OP_MAYOR_IGUAL_A expr
+   77     | expr OP_IGUAL_IGUAL expr
+   78     | expr OP_DISTINTO_A expr
+   79     | expr LOGIC_AND expr
+   80     | expr LOGIC_OR expr
+   81     | LOGIC_NOT expr
+
+
+Terminales con las reglas donde aparecen
+
+    $end (0) 0
+    '%' (37) 65
+    '*' (42) 63
+    '+' (43) 61
+    '-' (45) 62
+    '/' (47) 64
+    error (256)
+    INT_NUMBER <int_number> (258) 67
+    FLOAT_NUMBER <float_number> (259) 68
+    IDENTIFICADOR <identificador> (260) 14 15 16 19 20 25 30 31 43 44 45 46 47 48 52 53 54 55 72
+    STRING_COMILLAS <string_comillas> (261) 44 69
+    BOOL_VALUE <bool_true> (262) 70
+    NULL_VALUE <null_value> (263) 71
+    DATA_TYPE (264) 14 15 16 19 20 21 25 26 54
+    S_PUNTO_COMA (265) 12 13 14 15 16 19 21 22 26 27 30 31 45 46 52 53 56 57
+    S_IGUAL (266) 15 16 19 20 25 31 32
+    PARENTESIS_OPEN (267) 12 13 16 43 44 49 50 51 55 60 66
+    PARENTESIS_CLOSE (268) 12 13 16 43 44 49 50 51 55 60 66
+    S_PUNTO_PUNTO (269) 54 56 57 58
+    SWITCH_WORD (270) 55
+    CASE_WORD (271) 56 57
+    BREAK_WORD (272) 56 57
+    OP_MAS_IGUAL (273) 33
+    OP_MENOS_IGUAL (274) 34
+    OP_MULTI_IGUAL (275) 35
+    OP_DIV_IGUAL (276) 36
+    OP_MOD_IGUAL (277) 37
+    OP_AND_IGUAL (278) 38
+    DEFAULT_WORD (279) 58
+    WHILE_WORD (280) 60
+    OP_AUMENTO (281) 45 52
+    OP_DECREMENTO (282) 46 53
+    OP_OR_IGUAL (283) 39
+    OP_POT_IGUAL (284) 40
+    OP_MAYOR_IGUAL (285) 41
+    OP_MENOR_IGUAL (286) 42
+    OP_IGUAL_IGUAL (287) 77
+    OP_DISTINTO_A (288) 78
+    OP_MENOR_IGUAL_A (289) 75
+    OP_MAYOR_IGUAL_A (290) 76
+    LOGIC_OR (291) 80
+    LOGIC_AND (292) 79
+    OP_MENOR_A (293) 73
+    OP_MAYOR_A (294) 74
+    LOGIC_NOT (295) 81
+    PRINT_SENTENCE (296) 12 13
+    FUNC_EQUALS (297) 43 44
+    IF_WORD (298) 49 50
+    LLAVE_OPEN (299) 22 27 28 29 49 50 51 55 60
+    LLAVE_CLOSE (300) 22 27 28 29 49 50 51 55 60
+    ELSE_WORD (301) 50
+    FOR_WORD (302) 51
+    CONTINUE_WORD (303)
+    RETURN_WORD (304)
+    CORCHETE_OPEN (305) 20 21 25 26 47 48
+    CORCHETE_CLOSE (306) 20 21 25 26 47 48
+    NEW_WORD (307) 21 26
+    COMA (308) 23 28
+
+
+No terminales con las reglas donde aparecen
+
+    $accept (59)
+        on left: 0
+    input (60)
+        on left: 1
+        on right: 0
+    lista_instrucciones (61)
+        on left: 2 3
+        on right: 1 2 49 50 51 56 57 58 60
+    instruccion (62)
+        on left: 4 5 6 7 8 9 10 11
+        on right: 2 3
+    print (63)
+        on left: 12 13
+        on right: 6
+    declaration (64)
+        on left: 14 15 16 17 18 19
+        on right: 4 52 53
+    vector (65)
+        on left: 20
+        on right: 17
+    vector_type (66)
+        on left: 21 22
+        on right: 20
+    vector_values (67)
+        on left: 23 24
+        on right: 22 23 28 29
+    matriz (68)
+        on left: 25
+        on right: 18
+    matriz_type (69)
+        on left: 26 27
+        on right: 25
+    matriz_values (70)
+        on left: 28 29
+        on right: 27 28
+    asignation (71)
+        on left: 30 31
+        on right: 5
+    op_expr (72)
+        on left: 32 33 34 35 36 37 38 39 40 41 42
+        on right: 30
+    native_func (73)
+        on left: 43 44 45 46
+        on right: 8 13
+    variable_access (74)
+        on left: 47 48
+        on right: 19 31
+    if_sentence (75)
+        on left: 49 50
+        on right: 7
+    for_sentence (76)
+        on left: 51
+        on right: 11
+    for_condition (77)
+        on left: 52 53 54
+        on right: 51
+    switch_case (78)
+        on left: 55
+        on right: 9
+    switch_case_list (79)
+        on left: 56 57
+        on right: 55 56
+    switch_default (80)
+        on left: 58 59
+        on right: 55
+    while_sentence (81)
+        on left: 60
+        on right: 10
+    expr (82)
+        on left: 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81
+        on right: 12 15 21 23 24 26 30 47 48 49 50 52 53 56 57 60 61 62 63 64 65 66 73 74 75 76 77 78 79 80 81
+
+
+Estado 0
+
+    0 $accept: • input $end
+    1 input: • lista_instrucciones
+    2 lista_instrucciones: • lista_instrucciones instruccion
+    3                    | • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    input                ir al estado 8
+    lista_instrucciones  ir al estado 9
+    instruccion          ir al estado 10
+    print                ir al estado 11
+    declaration          ir al estado 12
+    vector               ir al estado 13
+    matriz               ir al estado 14
+    asignation           ir al estado 15
+    native_func          ir al estado 16
+    if_sentence          ir al estado 17
+    for_sentence         ir al estado 18
+    switch_case          ir al estado 19
+    while_sentence       ir al estado 20
+
+
+Estado 1
+
+   30 asignation: IDENTIFICADOR • op_expr expr S_PUNTO_COMA
+   31           | IDENTIFICADOR • S_IGUAL variable_access S_PUNTO_COMA
+   32 op_expr: • S_IGUAL
+   33        | • OP_MAS_IGUAL
+   34        | • OP_MENOS_IGUAL
+   35        | • OP_MULTI_IGUAL
+   36        | • OP_DIV_IGUAL
+   37        | • OP_MOD_IGUAL
+   38        | • OP_AND_IGUAL
+   39        | • OP_OR_IGUAL
+   40        | • OP_POT_IGUAL
+   41        | • OP_MAYOR_IGUAL
+   42        | • OP_MENOR_IGUAL
+   43 native_func: IDENTIFICADOR • FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | IDENTIFICADOR • FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | IDENTIFICADOR • OP_AUMENTO S_PUNTO_COMA
+   46            | IDENTIFICADOR • OP_DECREMENTO S_PUNTO_COMA
+
+    S_IGUAL         desplazar e ir al estado 21
+    OP_MAS_IGUAL    desplazar e ir al estado 22
+    OP_MENOS_IGUAL  desplazar e ir al estado 23
+    OP_MULTI_IGUAL  desplazar e ir al estado 24
+    OP_DIV_IGUAL    desplazar e ir al estado 25
+    OP_MOD_IGUAL    desplazar e ir al estado 26
+    OP_AND_IGUAL    desplazar e ir al estado 27
+    OP_AUMENTO      desplazar e ir al estado 28
+    OP_DECREMENTO   desplazar e ir al estado 29
+    OP_OR_IGUAL     desplazar e ir al estado 30
+    OP_POT_IGUAL    desplazar e ir al estado 31
+    OP_MAYOR_IGUAL  desplazar e ir al estado 32
+    OP_MENOR_IGUAL  desplazar e ir al estado 33
+    FUNC_EQUALS     desplazar e ir al estado 34
+
+    op_expr  ir al estado 35
+
+
+Estado 2
+
+   14 declaration: DATA_TYPE • IDENTIFICADOR S_PUNTO_COMA
+   15            | DATA_TYPE • IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | DATA_TYPE • IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   19            | DATA_TYPE • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: DATA_TYPE • CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: DATA_TYPE • CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+
+    IDENTIFICADOR  desplazar e ir al estado 36
+    CORCHETE_OPEN  desplazar e ir al estado 37
+
+
+Estado 3
+
+   55 switch_case: SWITCH_WORD • PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+
+    PARENTESIS_OPEN  desplazar e ir al estado 38
+
+
+Estado 4
+
+   60 while_sentence: WHILE_WORD • PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    PARENTESIS_OPEN  desplazar e ir al estado 39
+
+
+Estado 5
+
+   12 print: PRINT_SENTENCE • PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | PRINT_SENTENCE • PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+
+    PARENTESIS_OPEN  desplazar e ir al estado 40
+
+
+Estado 6
+
+   49 if_sentence: IF_WORD • PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD • PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    PARENTESIS_OPEN  desplazar e ir al estado 41
+
+
+Estado 7
+
+   51 for_sentence: FOR_WORD • PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    PARENTESIS_OPEN  desplazar e ir al estado 42
+
+
+Estado 8
+
+    0 $accept: input • $end
+
+    $end  desplazar e ir al estado 43
+
+
+Estado 9
+
+    1 input: lista_instrucciones •  [$end]
+    2 lista_instrucciones: lista_instrucciones • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    $default  reduce usando la regla 1 (input)
+
+    instruccion     ir al estado 44
+    print           ir al estado 11
+    declaration     ir al estado 12
+    vector          ir al estado 13
+    matriz          ir al estado 14
+    asignation      ir al estado 15
+    native_func     ir al estado 16
+    if_sentence     ir al estado 17
+    for_sentence    ir al estado 18
+    switch_case     ir al estado 19
+    while_sentence  ir al estado 20
+
+
+Estado 10
+
+    3 lista_instrucciones: instruccion •
+
+    $default  reduce usando la regla 3 (lista_instrucciones)
+
+
+Estado 11
+
+    6 instruccion: print •
+
+    $default  reduce usando la regla 6 (instruccion)
+
+
+Estado 12
+
+    4 instruccion: declaration •
+
+    $default  reduce usando la regla 4 (instruccion)
+
+
+Estado 13
+
+   17 declaration: vector •
+
+    $default  reduce usando la regla 17 (declaration)
+
+
+Estado 14
+
+   18 declaration: matriz •
+
+    $default  reduce usando la regla 18 (declaration)
+
+
+Estado 15
+
+    5 instruccion: asignation •
+
+    $default  reduce usando la regla 5 (instruccion)
+
+
+Estado 16
+
+    8 instruccion: native_func •
+
+    $default  reduce usando la regla 8 (instruccion)
+
+
+Estado 17
+
+    7 instruccion: if_sentence •
+
+    $default  reduce usando la regla 7 (instruccion)
+
+
+Estado 18
+
+   11 instruccion: for_sentence •
+
+    $default  reduce usando la regla 11 (instruccion)
+
+
+Estado 19
+
+    9 instruccion: switch_case •
+
+    $default  reduce usando la regla 9 (instruccion)
+
+
+Estado 20
+
+   10 instruccion: while_sentence •
+
+    $default  reduce usando la regla 10 (instruccion)
+
+
+Estado 21
+
+   31 asignation: IDENTIFICADOR S_IGUAL • variable_access S_PUNTO_COMA
+   32 op_expr: S_IGUAL •  [INT_NUMBER, FLOAT_NUMBER, IDENTIFICADOR, STRING_COMILLAS, BOOL_VALUE, NULL_VALUE, PARENTESIS_OPEN, LOGIC_NOT]
+   47 variable_access: • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE
+   48                | • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+
+    IDENTIFICADOR  desplazar e ir al estado 45
+
+    IDENTIFICADOR  [reduce usando la regla 32 (op_expr)]
+    $default       reduce usando la regla 32 (op_expr)
+
+    variable_access  ir al estado 46
+
+    shift/reduce conflict on token IDENTIFICADOR:
+       32 op_expr: S_IGUAL •
+       47 variable_access: • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE
+      First example: IDENTIFICADOR S_IGUAL • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA $end
+      Shift derivation
+        $accept
+        ↳ 0: input                                                                                                           $end
+             ↳ 1: lista_instrucciones
+                  ↳ 3: instruccion
+                       ↳ 5: asignation
+                            ↳ 31: IDENTIFICADOR S_IGUAL variable_access                                         S_PUNTO_COMA
+                                                        ↳ 47: • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE
+      Second example: IDENTIFICADOR S_IGUAL • IDENTIFICADOR S_PUNTO_COMA $end
+      Reduce derivation
+        $accept
+        ↳ 0: input                                                                               $end
+             ↳ 1: lista_instrucciones
+                  ↳ 3: instruccion
+                       ↳ 5: asignation
+                            ↳ 30: IDENTIFICADOR op_expr         expr                S_PUNTO_COMA
+                                                ↳ 32: S_IGUAL • ↳ 72: IDENTIFICADOR
+
+    shift/reduce conflict on token IDENTIFICADOR:
+       32 op_expr: S_IGUAL •
+       48 variable_access: • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+      First example: IDENTIFICADOR S_IGUAL • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA $end
+      Shift derivation
+        $accept
+        ↳ 0: input                                                                                                                                             $end
+             ↳ 1: lista_instrucciones
+                  ↳ 3: instruccion
+                       ↳ 5: asignation
+                            ↳ 31: IDENTIFICADOR S_IGUAL variable_access                                                                           S_PUNTO_COMA
+                                                        ↳ 48: • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+      Second example: IDENTIFICADOR S_IGUAL • IDENTIFICADOR S_PUNTO_COMA $end
+      Reduce derivation
+        $accept
+        ↳ 0: input                                                                               $end
+             ↳ 1: lista_instrucciones
+                  ↳ 3: instruccion
+                       ↳ 5: asignation
+                            ↳ 30: IDENTIFICADOR op_expr         expr                S_PUNTO_COMA
+                                                ↳ 32: S_IGUAL • ↳ 72: IDENTIFICADOR
+
+
+
+Estado 22
+
+   33 op_expr: OP_MAS_IGUAL •
+
+    $default  reduce usando la regla 33 (op_expr)
+
+
+Estado 23
+
+   34 op_expr: OP_MENOS_IGUAL •
+
+    $default  reduce usando la regla 34 (op_expr)
+
+
+Estado 24
+
+   35 op_expr: OP_MULTI_IGUAL •
+
+    $default  reduce usando la regla 35 (op_expr)
+
+
+Estado 25
+
+   36 op_expr: OP_DIV_IGUAL •
+
+    $default  reduce usando la regla 36 (op_expr)
+
+
+Estado 26
+
+   37 op_expr: OP_MOD_IGUAL •
+
+    $default  reduce usando la regla 37 (op_expr)
+
+
+Estado 27
+
+   38 op_expr: OP_AND_IGUAL •
+
+    $default  reduce usando la regla 38 (op_expr)
+
+
+Estado 28
+
+   45 native_func: IDENTIFICADOR OP_AUMENTO • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 47
+
+
+Estado 29
+
+   46 native_func: IDENTIFICADOR OP_DECREMENTO • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 48
+
+
+Estado 30
+
+   39 op_expr: OP_OR_IGUAL •
+
+    $default  reduce usando la regla 39 (op_expr)
+
+
+Estado 31
+
+   40 op_expr: OP_POT_IGUAL •
+
+    $default  reduce usando la regla 40 (op_expr)
+
+
+Estado 32
+
+   41 op_expr: OP_MAYOR_IGUAL •
+
+    $default  reduce usando la regla 41 (op_expr)
+
+
+Estado 33
+
+   42 op_expr: OP_MENOR_IGUAL •
+
+    $default  reduce usando la regla 42 (op_expr)
+
+
+Estado 34
+
+   43 native_func: IDENTIFICADOR FUNC_EQUALS • PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | IDENTIFICADOR FUNC_EQUALS • PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+
+    PARENTESIS_OPEN  desplazar e ir al estado 49
+
+
+Estado 35
+
+   30 asignation: IDENTIFICADOR op_expr • expr S_PUNTO_COMA
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 58
+
+
+Estado 36
+
+   14 declaration: DATA_TYPE IDENTIFICADOR • S_PUNTO_COMA
+   15            | DATA_TYPE IDENTIFICADOR • S_IGUAL expr S_PUNTO_COMA
+   16            | DATA_TYPE IDENTIFICADOR • S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   19            | DATA_TYPE IDENTIFICADOR • S_IGUAL variable_access S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 59
+    S_IGUAL       desplazar e ir al estado 60
+
+
+Estado 37
+
+   20 vector: DATA_TYPE CORCHETE_OPEN • CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: DATA_TYPE CORCHETE_OPEN • CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+
+    CORCHETE_CLOSE  desplazar e ir al estado 61
+
+
+Estado 38
+
+   55 switch_case: SWITCH_WORD PARENTESIS_OPEN • IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+
+    IDENTIFICADOR  desplazar e ir al estado 62
+
+
+Estado 39
+
+   60 while_sentence: WHILE_WORD PARENTESIS_OPEN • expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 63
+
+
+Estado 40
+
+   12 print: PRINT_SENTENCE PARENTESIS_OPEN • expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | PRINT_SENTENCE PARENTESIS_OPEN • native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 64
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    native_func  ir al estado 65
+    expr         ir al estado 66
+
+
+Estado 41
+
+   49 if_sentence: IF_WORD PARENTESIS_OPEN • expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD PARENTESIS_OPEN • expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 67
+
+
+Estado 42
+
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   51 for_sentence: FOR_WORD PARENTESIS_OPEN • for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   52 for_condition: • declaration expr S_PUNTO_COMA IDENTIFICADOR OP_AUMENTO
+   53              | • declaration expr S_PUNTO_COMA IDENTIFICADOR OP_DECREMENTO
+   54              | • DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR
+
+    DATA_TYPE  desplazar e ir al estado 68
+
+    declaration    ir al estado 69
+    vector         ir al estado 13
+    matriz         ir al estado 14
+    for_condition  ir al estado 70
+
+
+Estado 43
+
+    0 $accept: input $end •
+
+    $default  aceptar
+
+
+Estado 44
+
+    2 lista_instrucciones: lista_instrucciones instruccion •
+
+    $default  reduce usando la regla 2 (lista_instrucciones)
+
+
+Estado 45
+
+   47 variable_access: IDENTIFICADOR • CORCHETE_OPEN expr CORCHETE_CLOSE
+   48                | IDENTIFICADOR • CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+
+    CORCHETE_OPEN  desplazar e ir al estado 71
+
+
+Estado 46
+
+   31 asignation: IDENTIFICADOR S_IGUAL variable_access • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 72
+
+
+Estado 47
+
+   45 native_func: IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA •
+
+    $default  reduce usando la regla 45 (native_func)
+
+
+Estado 48
+
+   46 native_func: IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA •
+
+    $default  reduce usando la regla 46 (native_func)
+
+
+Estado 49
+
+   43 native_func: IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN • IDENTIFICADOR PARENTESIS_CLOSE
+   44            | IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN • STRING_COMILLAS PARENTESIS_CLOSE
+
+    IDENTIFICADOR    desplazar e ir al estado 73
+    STRING_COMILLAS  desplazar e ir al estado 74
+
+
+Estado 50
+
+   67 expr: INT_NUMBER •
+
+    $default  reduce usando la regla 67 (expr)
+
+
+Estado 51
+
+   68 expr: FLOAT_NUMBER •
+
+    $default  reduce usando la regla 68 (expr)
+
+
+Estado 52
+
+   72 expr: IDENTIFICADOR •
+
+    $default  reduce usando la regla 72 (expr)
+
+
+Estado 53
+
+   69 expr: STRING_COMILLAS •
+
+    $default  reduce usando la regla 69 (expr)
+
+
+Estado 54
+
+   70 expr: BOOL_VALUE •
+
+    $default  reduce usando la regla 70 (expr)
+
+
+Estado 55
+
+   71 expr: NULL_VALUE •
+
+    $default  reduce usando la regla 71 (expr)
+
+
+Estado 56
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   66     | PARENTESIS_OPEN • expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 75
+
+
+Estado 57
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+   81     | LOGIC_NOT • expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 76
+
+
+Estado 58
+
+   30 asignation: IDENTIFICADOR op_expr expr • S_PUNTO_COMA
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    S_PUNTO_COMA      desplazar e ir al estado 77
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 59
+
+   14 declaration: DATA_TYPE IDENTIFICADOR S_PUNTO_COMA •
+
+    $default  reduce usando la regla 14 (declaration)
+
+
+Estado 60
+
+   15 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL • expr S_PUNTO_COMA
+   16            | DATA_TYPE IDENTIFICADOR S_IGUAL • PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   19            | DATA_TYPE IDENTIFICADOR S_IGUAL • variable_access S_PUNTO_COMA
+   47 variable_access: • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE
+   48                | • IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 91
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 92
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    variable_access  ir al estado 93
+    expr             ir al estado 94
+
+
+Estado 61
+
+   20 vector: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE • IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE • CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+
+    IDENTIFICADOR  desplazar e ir al estado 95
+    CORCHETE_OPEN  desplazar e ir al estado 96
+
+
+Estado 62
+
+   55 switch_case: SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR • PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 97
+
+
+Estado 63
+
+   60 while_sentence: WHILE_WORD PARENTESIS_OPEN expr • PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 98
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 64
+
+   43 native_func: IDENTIFICADOR • FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | IDENTIFICADOR • FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | IDENTIFICADOR • OP_AUMENTO S_PUNTO_COMA
+   46            | IDENTIFICADOR • OP_DECREMENTO S_PUNTO_COMA
+   72 expr: IDENTIFICADOR •  [PARENTESIS_CLOSE, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, '+', '-', '*', '/', '%']
+
+    OP_AUMENTO     desplazar e ir al estado 28
+    OP_DECREMENTO  desplazar e ir al estado 29
+    FUNC_EQUALS    desplazar e ir al estado 34
+
+    $default  reduce usando la regla 72 (expr)
+
+
+Estado 65
+
+   13 print: PRINT_SENTENCE PARENTESIS_OPEN native_func • PARENTESIS_CLOSE S_PUNTO_COMA
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 99
+
+
+Estado 66
+
+   12 print: PRINT_SENTENCE PARENTESIS_OPEN expr • PARENTESIS_CLOSE S_PUNTO_COMA
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 100
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 67
+
+   49 if_sentence: IF_WORD PARENTESIS_OPEN expr • PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD PARENTESIS_OPEN expr • PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 101
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 68
+
+   14 declaration: DATA_TYPE • IDENTIFICADOR S_PUNTO_COMA
+   15            | DATA_TYPE • IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | DATA_TYPE • IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   19            | DATA_TYPE • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: DATA_TYPE • CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: DATA_TYPE • CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   54 for_condition: DATA_TYPE • IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR
+
+    IDENTIFICADOR  desplazar e ir al estado 102
+    CORCHETE_OPEN  desplazar e ir al estado 37
+
+
+Estado 69
+
+   52 for_condition: declaration • expr S_PUNTO_COMA IDENTIFICADOR OP_AUMENTO
+   53              | declaration • expr S_PUNTO_COMA IDENTIFICADOR OP_DECREMENTO
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 103
+
+
+Estado 70
+
+   51 for_sentence: FOR_WORD PARENTESIS_OPEN for_condition • PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 104
+
+
+Estado 71
+
+   47 variable_access: IDENTIFICADOR CORCHETE_OPEN • expr CORCHETE_CLOSE
+   48                | IDENTIFICADOR CORCHETE_OPEN • expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 105
+
+
+Estado 72
+
+   31 asignation: IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA •
+
+    $default  reduce usando la regla 31 (asignation)
+
+
+Estado 73
+
+   43 native_func: IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR • PARENTESIS_CLOSE
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 106
+
+
+Estado 74
+
+   44 native_func: IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS • PARENTESIS_CLOSE
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 107
+
+
+Estado 75
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   66     | PARENTESIS_OPEN expr • PARENTESIS_CLOSE
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 108
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 76
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+   81     | LOGIC_NOT expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA, '+', '-', '*', '/', '%']
+
+    $default  reduce usando la regla 81 (expr)
+
+    Conflict between rule 81 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < LOGIC_NOT).
+    Conflict between rule 81 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < LOGIC_NOT).
+    Conflict between rule 81 and token OP_MENOR_IGUAL_A resolved as reduce (OP_MENOR_IGUAL_A < LOGIC_NOT).
+    Conflict between rule 81 and token OP_MAYOR_IGUAL_A resolved as reduce (OP_MAYOR_IGUAL_A < LOGIC_NOT).
+    Conflict between rule 81 and token LOGIC_OR resolved as reduce (LOGIC_OR < LOGIC_NOT).
+    Conflict between rule 81 and token LOGIC_AND resolved as reduce (LOGIC_AND < LOGIC_NOT).
+    Conflict between rule 81 and token OP_MENOR_A resolved as reduce (OP_MENOR_A < LOGIC_NOT).
+    Conflict between rule 81 and token OP_MAYOR_A resolved as reduce (OP_MAYOR_A < LOGIC_NOT).
+    Conflict between rule 81 and token '+' resolved as reduce ('+' < LOGIC_NOT).
+    Conflict between rule 81 and token '-' resolved as reduce ('-' < LOGIC_NOT).
+    Conflict between rule 81 and token '*' resolved as reduce ('*' < LOGIC_NOT).
+    Conflict between rule 81 and token '/' resolved as reduce ('/' < LOGIC_NOT).
+    Conflict between rule 81 and token '%' resolved as reduce ('%' < LOGIC_NOT).
+
+
+Estado 77
+
+   30 asignation: IDENTIFICADOR op_expr expr S_PUNTO_COMA •
+
+    $default  reduce usando la regla 30 (asignation)
+
+
+Estado 78
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   77     | expr OP_IGUAL_IGUAL • expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 109
+
+
+Estado 79
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   78     | expr OP_DISTINTO_A • expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 110
+
+
+Estado 80
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   75     | expr OP_MENOR_IGUAL_A • expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 111
+
+
+Estado 81
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   76     | expr OP_MAYOR_IGUAL_A • expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 112
+
+
+Estado 82
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   80     | expr LOGIC_OR • expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 113
+
+
+Estado 83
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   79     | expr LOGIC_AND • expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 114
+
+
+Estado 84
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   73     | expr OP_MENOR_A • expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 115
+
+
+Estado 85
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   74     | expr OP_MAYOR_A • expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 116
+
+
+Estado 86
+
+   61 expr: • expr '+' expr
+   61     | expr '+' • expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 117
+
+
+Estado 87
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   62     | expr '-' • expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 118
+
+
+Estado 88
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   63     | expr '*' • expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 119
+
+
+Estado 89
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   64     | expr '/' • expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 120
+
+
+Estado 90
+
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   65     | expr '%' • expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 121
+
+
+Estado 91
+
+   47 variable_access: IDENTIFICADOR • CORCHETE_OPEN expr CORCHETE_CLOSE
+   48                | IDENTIFICADOR • CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+   72 expr: IDENTIFICADOR •  [S_PUNTO_COMA, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, '+', '-', '*', '/', '%']
+
+    CORCHETE_OPEN  desplazar e ir al estado 71
+
+    $default  reduce usando la regla 72 (expr)
+
+
+Estado 92
+
+   16 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN • DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   66     | PARENTESIS_OPEN • expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    DATA_TYPE        desplazar e ir al estado 122
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 75
+
+
+Estado 93
+
+   19 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL variable_access • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 123
+
+
+Estado 94
+
+   15 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL expr • S_PUNTO_COMA
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    S_PUNTO_COMA      desplazar e ir al estado 124
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 95
+
+   20 vector: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR • S_IGUAL vector_type
+
+    S_IGUAL  desplazar e ir al estado 125
+
+
+Estado 96
+
+   25 matriz: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN • CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+
+    CORCHETE_CLOSE  desplazar e ir al estado 126
+
+
+Estado 97
+
+   55 switch_case: SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE • LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+
+    LLAVE_OPEN  desplazar e ir al estado 127
+
+
+Estado 98
+
+   60 while_sentence: WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE • LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    LLAVE_OPEN  desplazar e ir al estado 128
+
+
+Estado 99
+
+   13 print: PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 129
+
+
+Estado 100
+
+   12 print: PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 130
+
+
+Estado 101
+
+   49 if_sentence: IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE • LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE • LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    LLAVE_OPEN  desplazar e ir al estado 131
+
+
+Estado 102
+
+   14 declaration: DATA_TYPE IDENTIFICADOR • S_PUNTO_COMA
+   15            | DATA_TYPE IDENTIFICADOR • S_IGUAL expr S_PUNTO_COMA
+   16            | DATA_TYPE IDENTIFICADOR • S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   19            | DATA_TYPE IDENTIFICADOR • S_IGUAL variable_access S_PUNTO_COMA
+   54 for_condition: DATA_TYPE IDENTIFICADOR • S_PUNTO_PUNTO IDENTIFICADOR
+
+    S_PUNTO_COMA   desplazar e ir al estado 59
+    S_IGUAL        desplazar e ir al estado 60
+    S_PUNTO_PUNTO  desplazar e ir al estado 132
+
+
+Estado 103
+
+   52 for_condition: declaration expr • S_PUNTO_COMA IDENTIFICADOR OP_AUMENTO
+   53              | declaration expr • S_PUNTO_COMA IDENTIFICADOR OP_DECREMENTO
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    S_PUNTO_COMA      desplazar e ir al estado 133
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 104
+
+   51 for_sentence: FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE • LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    LLAVE_OPEN  desplazar e ir al estado 134
+
+
+Estado 105
+
+   47 variable_access: IDENTIFICADOR CORCHETE_OPEN expr • CORCHETE_CLOSE
+   48                | IDENTIFICADOR CORCHETE_OPEN expr • CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    CORCHETE_CLOSE    desplazar e ir al estado 135
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 106
+
+   43 native_func: IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE •
+
+    $default  reduce usando la regla 43 (native_func)
+
+
+Estado 107
+
+   44 native_func: IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE •
+
+    $default  reduce usando la regla 44 (native_func)
+
+
+Estado 108
+
+   66 expr: PARENTESIS_OPEN expr PARENTESIS_CLOSE •
+
+    $default  reduce usando la regla 66 (expr)
+
+
+Estado 109
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   77     | expr OP_IGUAL_IGUAL expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, LOGIC_OR, LOGIC_AND, LLAVE_CLOSE, CORCHETE_CLOSE, COMA]
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+    $default  reduce usando la regla 77 (expr)
+
+    Conflict between rule 77 and token OP_IGUAL_IGUAL resolved as reduce (%left OP_IGUAL_IGUAL).
+    Conflict between rule 77 and token OP_DISTINTO_A resolved as reduce (%left OP_DISTINTO_A).
+    Conflict between rule 77 and token OP_MENOR_IGUAL_A resolved as shift (OP_IGUAL_IGUAL < OP_MENOR_IGUAL_A).
+    Conflict between rule 77 and token OP_MAYOR_IGUAL_A resolved as shift (OP_IGUAL_IGUAL < OP_MAYOR_IGUAL_A).
+    Conflict between rule 77 and token LOGIC_OR resolved as reduce (LOGIC_OR < OP_IGUAL_IGUAL).
+    Conflict between rule 77 and token LOGIC_AND resolved as reduce (LOGIC_AND < OP_IGUAL_IGUAL).
+    Conflict between rule 77 and token OP_MENOR_A resolved as shift (OP_IGUAL_IGUAL < OP_MENOR_A).
+    Conflict between rule 77 and token OP_MAYOR_A resolved as shift (OP_IGUAL_IGUAL < OP_MAYOR_A).
+    Conflict between rule 77 and token '+' resolved as shift (OP_IGUAL_IGUAL < '+').
+    Conflict between rule 77 and token '-' resolved as shift (OP_IGUAL_IGUAL < '-').
+    Conflict between rule 77 and token '*' resolved as shift (OP_IGUAL_IGUAL < '*').
+    Conflict between rule 77 and token '/' resolved as shift (OP_IGUAL_IGUAL < '/').
+    Conflict between rule 77 and token '%' resolved as shift (OP_IGUAL_IGUAL < '%').
+
+
+Estado 110
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   78     | expr OP_DISTINTO_A expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, LOGIC_OR, LOGIC_AND, LLAVE_CLOSE, CORCHETE_CLOSE, COMA]
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+    $default  reduce usando la regla 78 (expr)
+
+    Conflict between rule 78 and token OP_IGUAL_IGUAL resolved as reduce (%left OP_IGUAL_IGUAL).
+    Conflict between rule 78 and token OP_DISTINTO_A resolved as reduce (%left OP_DISTINTO_A).
+    Conflict between rule 78 and token OP_MENOR_IGUAL_A resolved as shift (OP_DISTINTO_A < OP_MENOR_IGUAL_A).
+    Conflict between rule 78 and token OP_MAYOR_IGUAL_A resolved as shift (OP_DISTINTO_A < OP_MAYOR_IGUAL_A).
+    Conflict between rule 78 and token LOGIC_OR resolved as reduce (LOGIC_OR < OP_DISTINTO_A).
+    Conflict between rule 78 and token LOGIC_AND resolved as reduce (LOGIC_AND < OP_DISTINTO_A).
+    Conflict between rule 78 and token OP_MENOR_A resolved as shift (OP_DISTINTO_A < OP_MENOR_A).
+    Conflict between rule 78 and token OP_MAYOR_A resolved as shift (OP_DISTINTO_A < OP_MAYOR_A).
+    Conflict between rule 78 and token '+' resolved as shift (OP_DISTINTO_A < '+').
+    Conflict between rule 78 and token '-' resolved as shift (OP_DISTINTO_A < '-').
+    Conflict between rule 78 and token '*' resolved as shift (OP_DISTINTO_A < '*').
+    Conflict between rule 78 and token '/' resolved as shift (OP_DISTINTO_A < '/').
+    Conflict between rule 78 and token '%' resolved as shift (OP_DISTINTO_A < '%').
+
+
+Estado 111
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   75     | expr OP_MENOR_IGUAL_A expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA]
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    '+'  desplazar e ir al estado 86
+    '-'  desplazar e ir al estado 87
+    '*'  desplazar e ir al estado 88
+    '/'  desplazar e ir al estado 89
+    '%'  desplazar e ir al estado 90
+
+    $default  reduce usando la regla 75 (expr)
+
+    Conflict between rule 75 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < OP_MENOR_IGUAL_A).
+    Conflict between rule 75 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < OP_MENOR_IGUAL_A).
+    Conflict between rule 75 and token OP_MENOR_IGUAL_A resolved as reduce (%left OP_MENOR_IGUAL_A).
+    Conflict between rule 75 and token OP_MAYOR_IGUAL_A resolved as reduce (%left OP_MAYOR_IGUAL_A).
+    Conflict between rule 75 and token LOGIC_OR resolved as reduce (LOGIC_OR < OP_MENOR_IGUAL_A).
+    Conflict between rule 75 and token LOGIC_AND resolved as reduce (LOGIC_AND < OP_MENOR_IGUAL_A).
+    Conflict between rule 75 and token OP_MENOR_A resolved as reduce (%left OP_MENOR_A).
+    Conflict between rule 75 and token OP_MAYOR_A resolved as reduce (%left OP_MAYOR_A).
+    Conflict between rule 75 and token '+' resolved as shift (OP_MENOR_IGUAL_A < '+').
+    Conflict between rule 75 and token '-' resolved as shift (OP_MENOR_IGUAL_A < '-').
+    Conflict between rule 75 and token '*' resolved as shift (OP_MENOR_IGUAL_A < '*').
+    Conflict between rule 75 and token '/' resolved as shift (OP_MENOR_IGUAL_A < '/').
+    Conflict between rule 75 and token '%' resolved as shift (OP_MENOR_IGUAL_A < '%').
+
+
+Estado 112
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   76     | expr OP_MAYOR_IGUAL_A expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA]
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    '+'  desplazar e ir al estado 86
+    '-'  desplazar e ir al estado 87
+    '*'  desplazar e ir al estado 88
+    '/'  desplazar e ir al estado 89
+    '%'  desplazar e ir al estado 90
+
+    $default  reduce usando la regla 76 (expr)
+
+    Conflict between rule 76 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < OP_MAYOR_IGUAL_A).
+    Conflict between rule 76 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < OP_MAYOR_IGUAL_A).
+    Conflict between rule 76 and token OP_MENOR_IGUAL_A resolved as reduce (%left OP_MENOR_IGUAL_A).
+    Conflict between rule 76 and token OP_MAYOR_IGUAL_A resolved as reduce (%left OP_MAYOR_IGUAL_A).
+    Conflict between rule 76 and token LOGIC_OR resolved as reduce (LOGIC_OR < OP_MAYOR_IGUAL_A).
+    Conflict between rule 76 and token LOGIC_AND resolved as reduce (LOGIC_AND < OP_MAYOR_IGUAL_A).
+    Conflict between rule 76 and token OP_MENOR_A resolved as reduce (%left OP_MENOR_A).
+    Conflict between rule 76 and token OP_MAYOR_A resolved as reduce (%left OP_MAYOR_A).
+    Conflict between rule 76 and token '+' resolved as shift (OP_MAYOR_IGUAL_A < '+').
+    Conflict between rule 76 and token '-' resolved as shift (OP_MAYOR_IGUAL_A < '-').
+    Conflict between rule 76 and token '*' resolved as shift (OP_MAYOR_IGUAL_A < '*').
+    Conflict between rule 76 and token '/' resolved as shift (OP_MAYOR_IGUAL_A < '/').
+    Conflict between rule 76 and token '%' resolved as shift (OP_MAYOR_IGUAL_A < '%').
+
+
+Estado 113
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+   80     | expr LOGIC_OR expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, LOGIC_OR, LLAVE_CLOSE, CORCHETE_CLOSE, COMA]
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+    $default  reduce usando la regla 80 (expr)
+
+    Conflict between rule 80 and token OP_IGUAL_IGUAL resolved as shift (LOGIC_OR < OP_IGUAL_IGUAL).
+    Conflict between rule 80 and token OP_DISTINTO_A resolved as shift (LOGIC_OR < OP_DISTINTO_A).
+    Conflict between rule 80 and token OP_MENOR_IGUAL_A resolved as shift (LOGIC_OR < OP_MENOR_IGUAL_A).
+    Conflict between rule 80 and token OP_MAYOR_IGUAL_A resolved as shift (LOGIC_OR < OP_MAYOR_IGUAL_A).
+    Conflict between rule 80 and token LOGIC_OR resolved as reduce (%left LOGIC_OR).
+    Conflict between rule 80 and token LOGIC_AND resolved as shift (LOGIC_OR < LOGIC_AND).
+    Conflict between rule 80 and token OP_MENOR_A resolved as shift (LOGIC_OR < OP_MENOR_A).
+    Conflict between rule 80 and token OP_MAYOR_A resolved as shift (LOGIC_OR < OP_MAYOR_A).
+    Conflict between rule 80 and token '+' resolved as shift (LOGIC_OR < '+').
+    Conflict between rule 80 and token '-' resolved as shift (LOGIC_OR < '-').
+    Conflict between rule 80 and token '*' resolved as shift (LOGIC_OR < '*').
+    Conflict between rule 80 and token '/' resolved as shift (LOGIC_OR < '/').
+    Conflict between rule 80 and token '%' resolved as shift (LOGIC_OR < '%').
+
+
+Estado 114
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   79     | expr LOGIC_AND expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, LOGIC_OR, LOGIC_AND, LLAVE_CLOSE, CORCHETE_CLOSE, COMA]
+   80     | expr • LOGIC_OR expr
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+    $default  reduce usando la regla 79 (expr)
+
+    Conflict between rule 79 and token OP_IGUAL_IGUAL resolved as shift (LOGIC_AND < OP_IGUAL_IGUAL).
+    Conflict between rule 79 and token OP_DISTINTO_A resolved as shift (LOGIC_AND < OP_DISTINTO_A).
+    Conflict between rule 79 and token OP_MENOR_IGUAL_A resolved as shift (LOGIC_AND < OP_MENOR_IGUAL_A).
+    Conflict between rule 79 and token OP_MAYOR_IGUAL_A resolved as shift (LOGIC_AND < OP_MAYOR_IGUAL_A).
+    Conflict between rule 79 and token LOGIC_OR resolved as reduce (LOGIC_OR < LOGIC_AND).
+    Conflict between rule 79 and token LOGIC_AND resolved as reduce (%left LOGIC_AND).
+    Conflict between rule 79 and token OP_MENOR_A resolved as shift (LOGIC_AND < OP_MENOR_A).
+    Conflict between rule 79 and token OP_MAYOR_A resolved as shift (LOGIC_AND < OP_MAYOR_A).
+    Conflict between rule 79 and token '+' resolved as shift (LOGIC_AND < '+').
+    Conflict between rule 79 and token '-' resolved as shift (LOGIC_AND < '-').
+    Conflict between rule 79 and token '*' resolved as shift (LOGIC_AND < '*').
+    Conflict between rule 79 and token '/' resolved as shift (LOGIC_AND < '/').
+    Conflict between rule 79 and token '%' resolved as shift (LOGIC_AND < '%').
+
+
+Estado 115
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   73     | expr OP_MENOR_A expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA]
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    '+'  desplazar e ir al estado 86
+    '-'  desplazar e ir al estado 87
+    '*'  desplazar e ir al estado 88
+    '/'  desplazar e ir al estado 89
+    '%'  desplazar e ir al estado 90
+
+    $default  reduce usando la regla 73 (expr)
+
+    Conflict between rule 73 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < OP_MENOR_A).
+    Conflict between rule 73 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < OP_MENOR_A).
+    Conflict between rule 73 and token OP_MENOR_IGUAL_A resolved as reduce (%left OP_MENOR_IGUAL_A).
+    Conflict between rule 73 and token OP_MAYOR_IGUAL_A resolved as reduce (%left OP_MAYOR_IGUAL_A).
+    Conflict between rule 73 and token LOGIC_OR resolved as reduce (LOGIC_OR < OP_MENOR_A).
+    Conflict between rule 73 and token LOGIC_AND resolved as reduce (LOGIC_AND < OP_MENOR_A).
+    Conflict between rule 73 and token OP_MENOR_A resolved as reduce (%left OP_MENOR_A).
+    Conflict between rule 73 and token OP_MAYOR_A resolved as reduce (%left OP_MAYOR_A).
+    Conflict between rule 73 and token '+' resolved as shift (OP_MENOR_A < '+').
+    Conflict between rule 73 and token '-' resolved as shift (OP_MENOR_A < '-').
+    Conflict between rule 73 and token '*' resolved as shift (OP_MENOR_A < '*').
+    Conflict between rule 73 and token '/' resolved as shift (OP_MENOR_A < '/').
+    Conflict between rule 73 and token '%' resolved as shift (OP_MENOR_A < '%').
+
+
+Estado 116
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   74     | expr OP_MAYOR_A expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA]
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    '+'  desplazar e ir al estado 86
+    '-'  desplazar e ir al estado 87
+    '*'  desplazar e ir al estado 88
+    '/'  desplazar e ir al estado 89
+    '%'  desplazar e ir al estado 90
+
+    $default  reduce usando la regla 74 (expr)
+
+    Conflict between rule 74 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < OP_MAYOR_A).
+    Conflict between rule 74 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < OP_MAYOR_A).
+    Conflict between rule 74 and token OP_MENOR_IGUAL_A resolved as reduce (%left OP_MENOR_IGUAL_A).
+    Conflict between rule 74 and token OP_MAYOR_IGUAL_A resolved as reduce (%left OP_MAYOR_IGUAL_A).
+    Conflict between rule 74 and token LOGIC_OR resolved as reduce (LOGIC_OR < OP_MAYOR_A).
+    Conflict between rule 74 and token LOGIC_AND resolved as reduce (LOGIC_AND < OP_MAYOR_A).
+    Conflict between rule 74 and token OP_MENOR_A resolved as reduce (%left OP_MENOR_A).
+    Conflict between rule 74 and token OP_MAYOR_A resolved as reduce (%left OP_MAYOR_A).
+    Conflict between rule 74 and token '+' resolved as shift (OP_MAYOR_A < '+').
+    Conflict between rule 74 and token '-' resolved as shift (OP_MAYOR_A < '-').
+    Conflict between rule 74 and token '*' resolved as shift (OP_MAYOR_A < '*').
+    Conflict between rule 74 and token '/' resolved as shift (OP_MAYOR_A < '/').
+    Conflict between rule 74 and token '%' resolved as shift (OP_MAYOR_A < '%').
+
+
+Estado 117
+
+   61 expr: expr • '+' expr
+   61     | expr '+' expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA, '+', '-']
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    '*'  desplazar e ir al estado 88
+    '/'  desplazar e ir al estado 89
+    '%'  desplazar e ir al estado 90
+
+    $default  reduce usando la regla 61 (expr)
+
+    Conflict between rule 61 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < '+').
+    Conflict between rule 61 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < '+').
+    Conflict between rule 61 and token OP_MENOR_IGUAL_A resolved as reduce (OP_MENOR_IGUAL_A < '+').
+    Conflict between rule 61 and token OP_MAYOR_IGUAL_A resolved as reduce (OP_MAYOR_IGUAL_A < '+').
+    Conflict between rule 61 and token LOGIC_OR resolved as reduce (LOGIC_OR < '+').
+    Conflict between rule 61 and token LOGIC_AND resolved as reduce (LOGIC_AND < '+').
+    Conflict between rule 61 and token OP_MENOR_A resolved as reduce (OP_MENOR_A < '+').
+    Conflict between rule 61 and token OP_MAYOR_A resolved as reduce (OP_MAYOR_A < '+').
+    Conflict between rule 61 and token '+' resolved as reduce (%left '+').
+    Conflict between rule 61 and token '-' resolved as reduce (%left '-').
+    Conflict between rule 61 and token '*' resolved as shift ('+' < '*').
+    Conflict between rule 61 and token '/' resolved as shift ('+' < '/').
+    Conflict between rule 61 and token '%' resolved as shift ('+' < '%').
+
+
+Estado 118
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   62     | expr '-' expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA, '+', '-']
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    '*'  desplazar e ir al estado 88
+    '/'  desplazar e ir al estado 89
+    '%'  desplazar e ir al estado 90
+
+    $default  reduce usando la regla 62 (expr)
+
+    Conflict between rule 62 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < '-').
+    Conflict between rule 62 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < '-').
+    Conflict between rule 62 and token OP_MENOR_IGUAL_A resolved as reduce (OP_MENOR_IGUAL_A < '-').
+    Conflict between rule 62 and token OP_MAYOR_IGUAL_A resolved as reduce (OP_MAYOR_IGUAL_A < '-').
+    Conflict between rule 62 and token LOGIC_OR resolved as reduce (LOGIC_OR < '-').
+    Conflict between rule 62 and token LOGIC_AND resolved as reduce (LOGIC_AND < '-').
+    Conflict between rule 62 and token OP_MENOR_A resolved as reduce (OP_MENOR_A < '-').
+    Conflict between rule 62 and token OP_MAYOR_A resolved as reduce (OP_MAYOR_A < '-').
+    Conflict between rule 62 and token '+' resolved as reduce (%left '+').
+    Conflict between rule 62 and token '-' resolved as reduce (%left '-').
+    Conflict between rule 62 and token '*' resolved as shift ('-' < '*').
+    Conflict between rule 62 and token '/' resolved as shift ('-' < '/').
+    Conflict between rule 62 and token '%' resolved as shift ('-' < '%').
+
+
+Estado 119
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   63     | expr '*' expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA, '+', '-', '*', '/', '%']
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    $default  reduce usando la regla 63 (expr)
+
+    Conflict between rule 63 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < '*').
+    Conflict between rule 63 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < '*').
+    Conflict between rule 63 and token OP_MENOR_IGUAL_A resolved as reduce (OP_MENOR_IGUAL_A < '*').
+    Conflict between rule 63 and token OP_MAYOR_IGUAL_A resolved as reduce (OP_MAYOR_IGUAL_A < '*').
+    Conflict between rule 63 and token LOGIC_OR resolved as reduce (LOGIC_OR < '*').
+    Conflict between rule 63 and token LOGIC_AND resolved as reduce (LOGIC_AND < '*').
+    Conflict between rule 63 and token OP_MENOR_A resolved as reduce (OP_MENOR_A < '*').
+    Conflict between rule 63 and token OP_MAYOR_A resolved as reduce (OP_MAYOR_A < '*').
+    Conflict between rule 63 and token '+' resolved as reduce ('+' < '*').
+    Conflict between rule 63 and token '-' resolved as reduce ('-' < '*').
+    Conflict between rule 63 and token '*' resolved as reduce (%left '*').
+    Conflict between rule 63 and token '/' resolved as reduce (%left '/').
+    Conflict between rule 63 and token '%' resolved as reduce (%left '%').
+
+
+Estado 120
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   64     | expr '/' expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA, '+', '-', '*', '/', '%']
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    $default  reduce usando la regla 64 (expr)
+
+    Conflict between rule 64 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < '/').
+    Conflict between rule 64 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < '/').
+    Conflict between rule 64 and token OP_MENOR_IGUAL_A resolved as reduce (OP_MENOR_IGUAL_A < '/').
+    Conflict between rule 64 and token OP_MAYOR_IGUAL_A resolved as reduce (OP_MAYOR_IGUAL_A < '/').
+    Conflict between rule 64 and token LOGIC_OR resolved as reduce (LOGIC_OR < '/').
+    Conflict between rule 64 and token LOGIC_AND resolved as reduce (LOGIC_AND < '/').
+    Conflict between rule 64 and token OP_MENOR_A resolved as reduce (OP_MENOR_A < '/').
+    Conflict between rule 64 and token OP_MAYOR_A resolved as reduce (OP_MAYOR_A < '/').
+    Conflict between rule 64 and token '+' resolved as reduce ('+' < '/').
+    Conflict between rule 64 and token '-' resolved as reduce ('-' < '/').
+    Conflict between rule 64 and token '*' resolved as reduce (%left '*').
+    Conflict between rule 64 and token '/' resolved as reduce (%left '/').
+    Conflict between rule 64 and token '%' resolved as reduce (%left '%').
+
+
+Estado 121
+
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   65     | expr '%' expr •  [S_PUNTO_COMA, PARENTESIS_CLOSE, S_PUNTO_PUNTO, OP_IGUAL_IGUAL, OP_DISTINTO_A, OP_MENOR_IGUAL_A, OP_MAYOR_IGUAL_A, LOGIC_OR, LOGIC_AND, OP_MENOR_A, OP_MAYOR_A, LLAVE_CLOSE, CORCHETE_CLOSE, COMA, '+', '-', '*', '/', '%']
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    $default  reduce usando la regla 65 (expr)
+
+    Conflict between rule 65 and token OP_IGUAL_IGUAL resolved as reduce (OP_IGUAL_IGUAL < '%').
+    Conflict between rule 65 and token OP_DISTINTO_A resolved as reduce (OP_DISTINTO_A < '%').
+    Conflict between rule 65 and token OP_MENOR_IGUAL_A resolved as reduce (OP_MENOR_IGUAL_A < '%').
+    Conflict between rule 65 and token OP_MAYOR_IGUAL_A resolved as reduce (OP_MAYOR_IGUAL_A < '%').
+    Conflict between rule 65 and token LOGIC_OR resolved as reduce (LOGIC_OR < '%').
+    Conflict between rule 65 and token LOGIC_AND resolved as reduce (LOGIC_AND < '%').
+    Conflict between rule 65 and token OP_MENOR_A resolved as reduce (OP_MENOR_A < '%').
+    Conflict between rule 65 and token OP_MAYOR_A resolved as reduce (OP_MAYOR_A < '%').
+    Conflict between rule 65 and token '+' resolved as reduce ('+' < '%').
+    Conflict between rule 65 and token '-' resolved as reduce ('-' < '%').
+    Conflict between rule 65 and token '*' resolved as reduce (%left '*').
+    Conflict between rule 65 and token '/' resolved as reduce (%left '/').
+    Conflict between rule 65 and token '%' resolved as reduce (%left '%').
+
+
+Estado 122
+
+   16 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE • PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+
+    PARENTESIS_CLOSE  desplazar e ir al estado 136
+
+
+Estado 123
+
+   19 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA •
+
+    $default  reduce usando la regla 19 (declaration)
+
+
+Estado 124
+
+   15 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA •
+
+    $default  reduce usando la regla 15 (declaration)
+
+
+Estado 125
+
+   20 vector: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL • vector_type
+   21 vector_type: • NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+   22            | • LLAVE_OPEN vector_values LLAVE_CLOSE S_PUNTO_COMA
+
+    LLAVE_OPEN  desplazar e ir al estado 137
+    NEW_WORD    desplazar e ir al estado 138
+
+    vector_type  ir al estado 139
+
+
+Estado 126
+
+   25 matriz: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE • IDENTIFICADOR S_IGUAL matriz_type
+
+    IDENTIFICADOR  desplazar e ir al estado 140
+
+
+Estado 127
+
+   55 switch_case: SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN • switch_case_list switch_default LLAVE_CLOSE
+   56 switch_case_list: • switch_case_list CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   57                 | • CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+
+    CASE_WORD  desplazar e ir al estado 141
+
+    switch_case_list  ir al estado 142
+
+
+Estado 128
+
+    2 lista_instrucciones: • lista_instrucciones instruccion
+    3                    | • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   60               | WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN • lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    lista_instrucciones  ir al estado 143
+    instruccion          ir al estado 10
+    print                ir al estado 11
+    declaration          ir al estado 12
+    vector               ir al estado 13
+    matriz               ir al estado 14
+    asignation           ir al estado 15
+    native_func          ir al estado 16
+    if_sentence          ir al estado 17
+    for_sentence         ir al estado 18
+    switch_case          ir al estado 19
+    while_sentence       ir al estado 20
+
+
+Estado 129
+
+   13 print: PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA •
+
+    $default  reduce usando la regla 13 (print)
+
+
+Estado 130
+
+   12 print: PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA •
+
+    $default  reduce usando la regla 12 (print)
+
+
+Estado 131
+
+    2 lista_instrucciones: • lista_instrucciones instruccion
+    3                    | • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   49            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN • lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN • lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    lista_instrucciones  ir al estado 144
+    instruccion          ir al estado 10
+    print                ir al estado 11
+    declaration          ir al estado 12
+    vector               ir al estado 13
+    matriz               ir al estado 14
+    asignation           ir al estado 15
+    native_func          ir al estado 16
+    if_sentence          ir al estado 17
+    for_sentence         ir al estado 18
+    switch_case          ir al estado 19
+    while_sentence       ir al estado 20
+
+
+Estado 132
+
+   54 for_condition: DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO • IDENTIFICADOR
+
+    IDENTIFICADOR  desplazar e ir al estado 145
+
+
+Estado 133
+
+   52 for_condition: declaration expr S_PUNTO_COMA • IDENTIFICADOR OP_AUMENTO
+   53              | declaration expr S_PUNTO_COMA • IDENTIFICADOR OP_DECREMENTO
+
+    IDENTIFICADOR  desplazar e ir al estado 146
+
+
+Estado 134
+
+    2 lista_instrucciones: • lista_instrucciones instruccion
+    3                    | • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51             | FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN • lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    lista_instrucciones  ir al estado 147
+    instruccion          ir al estado 10
+    print                ir al estado 11
+    declaration          ir al estado 12
+    vector               ir al estado 13
+    matriz               ir al estado 14
+    asignation           ir al estado 15
+    native_func          ir al estado 16
+    if_sentence          ir al estado 17
+    for_sentence         ir al estado 18
+    switch_case          ir al estado 19
+    while_sentence       ir al estado 20
+
+
+Estado 135
+
+   47 variable_access: IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE •  [S_PUNTO_COMA]
+   48                | IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE • CORCHETE_OPEN expr CORCHETE_CLOSE
+
+    CORCHETE_OPEN  desplazar e ir al estado 148
+
+    $default  reduce usando la regla 47 (variable_access)
+
+
+Estado 136
+
+   16 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE • IDENTIFICADOR S_PUNTO_COMA
+
+    IDENTIFICADOR  desplazar e ir al estado 149
+
+
+Estado 137
+
+   22 vector_type: LLAVE_OPEN • vector_values LLAVE_CLOSE S_PUNTO_COMA
+   23 vector_values: • vector_values COMA expr
+   24              | • expr
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    vector_values  ir al estado 150
+    expr           ir al estado 151
+
+
+Estado 138
+
+   21 vector_type: NEW_WORD • DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+
+    DATA_TYPE  desplazar e ir al estado 152
+
+
+Estado 139
+
+   20 vector: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type •
+
+    $default  reduce usando la regla 20 (vector)
+
+
+Estado 140
+
+   25 matriz: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR • S_IGUAL matriz_type
+
+    S_IGUAL  desplazar e ir al estado 153
+
+
+Estado 141
+
+   57 switch_case_list: CASE_WORD • expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 154
+
+
+Estado 142
+
+   55 switch_case: SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list • switch_default LLAVE_CLOSE
+   56 switch_case_list: switch_case_list • CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   58 switch_default: • DEFAULT_WORD S_PUNTO_PUNTO lista_instrucciones
+   59               | ε •  [LLAVE_CLOSE]
+
+    CASE_WORD     desplazar e ir al estado 155
+    DEFAULT_WORD  desplazar e ir al estado 156
+
+    $default  reduce usando la regla 59 (switch_default)
+
+    switch_default  ir al estado 157
+
+
+Estado 143
+
+    2 lista_instrucciones: lista_instrucciones • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   60               | WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones • LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    LLAVE_CLOSE     desplazar e ir al estado 158
+    FOR_WORD        desplazar e ir al estado 7
+
+    instruccion     ir al estado 44
+    print           ir al estado 11
+    declaration     ir al estado 12
+    vector          ir al estado 13
+    matriz          ir al estado 14
+    asignation      ir al estado 15
+    native_func     ir al estado 16
+    if_sentence     ir al estado 17
+    for_sentence    ir al estado 18
+    switch_case     ir al estado 19
+    while_sentence  ir al estado 20
+
+
+Estado 144
+
+    2 lista_instrucciones: lista_instrucciones • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   49            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones • LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones • LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    LLAVE_CLOSE     desplazar e ir al estado 159
+    FOR_WORD        desplazar e ir al estado 7
+
+    instruccion     ir al estado 44
+    print           ir al estado 11
+    declaration     ir al estado 12
+    vector          ir al estado 13
+    matriz          ir al estado 14
+    asignation      ir al estado 15
+    native_func     ir al estado 16
+    if_sentence     ir al estado 17
+    for_sentence    ir al estado 18
+    switch_case     ir al estado 19
+    while_sentence  ir al estado 20
+
+
+Estado 145
+
+   54 for_condition: DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR •
+
+    $default  reduce usando la regla 54 (for_condition)
+
+
+Estado 146
+
+   52 for_condition: declaration expr S_PUNTO_COMA IDENTIFICADOR • OP_AUMENTO
+   53              | declaration expr S_PUNTO_COMA IDENTIFICADOR • OP_DECREMENTO
+
+    OP_AUMENTO     desplazar e ir al estado 160
+    OP_DECREMENTO  desplazar e ir al estado 161
+
+
+Estado 147
+
+    2 lista_instrucciones: lista_instrucciones • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51             | FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones • LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    LLAVE_CLOSE     desplazar e ir al estado 162
+    FOR_WORD        desplazar e ir al estado 7
+
+    instruccion     ir al estado 44
+    print           ir al estado 11
+    declaration     ir al estado 12
+    vector          ir al estado 13
+    matriz          ir al estado 14
+    asignation      ir al estado 15
+    native_func     ir al estado 16
+    if_sentence     ir al estado 17
+    for_sentence    ir al estado 18
+    switch_case     ir al estado 19
+    while_sentence  ir al estado 20
+
+
+Estado 148
+
+   48 variable_access: IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN • expr CORCHETE_CLOSE
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 163
+
+
+Estado 149
+
+   16 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 164
+
+
+Estado 150
+
+   22 vector_type: LLAVE_OPEN vector_values • LLAVE_CLOSE S_PUNTO_COMA
+   23 vector_values: vector_values • COMA expr
+
+    LLAVE_CLOSE  desplazar e ir al estado 165
+    COMA         desplazar e ir al estado 166
+
+
+Estado 151
+
+   24 vector_values: expr •  [LLAVE_CLOSE, COMA]
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+    $default  reduce usando la regla 24 (vector_values)
+
+
+Estado 152
+
+   21 vector_type: NEW_WORD DATA_TYPE • CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+
+    CORCHETE_OPEN  desplazar e ir al estado 167
+
+
+Estado 153
+
+   25 matriz: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL • matriz_type
+   26 matriz_type: • NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+   27            | • LLAVE_OPEN matriz_values LLAVE_CLOSE S_PUNTO_COMA
+
+    LLAVE_OPEN  desplazar e ir al estado 168
+    NEW_WORD    desplazar e ir al estado 169
+
+    matriz_type  ir al estado 170
+
+
+Estado 154
+
+   57 switch_case_list: CASE_WORD expr • S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    S_PUNTO_PUNTO     desplazar e ir al estado 171
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 155
+
+   56 switch_case_list: switch_case_list CASE_WORD • expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 172
+
+
+Estado 156
+
+   58 switch_default: DEFAULT_WORD • S_PUNTO_PUNTO lista_instrucciones
+
+    S_PUNTO_PUNTO  desplazar e ir al estado 173
+
+
+Estado 157
+
+   55 switch_case: SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default • LLAVE_CLOSE
+
+    LLAVE_CLOSE  desplazar e ir al estado 174
+
+
+Estado 158
+
+   60 while_sentence: WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE •
+
+    $default  reduce usando la regla 60 (while_sentence)
+
+
+Estado 159
+
+   49 if_sentence: IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE •  [$end, IDENTIFICADOR, DATA_TYPE, SWITCH_WORD, BREAK_WORD, WHILE_WORD, PRINT_SENTENCE, IF_WORD, LLAVE_CLOSE, FOR_WORD]
+   50            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE • ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    ELSE_WORD  desplazar e ir al estado 175
+
+    $default  reduce usando la regla 49 (if_sentence)
+
+
+Estado 160
+
+   52 for_condition: declaration expr S_PUNTO_COMA IDENTIFICADOR OP_AUMENTO •
+
+    $default  reduce usando la regla 52 (for_condition)
+
+
+Estado 161
+
+   53 for_condition: declaration expr S_PUNTO_COMA IDENTIFICADOR OP_DECREMENTO •
+
+    $default  reduce usando la regla 53 (for_condition)
+
+
+Estado 162
+
+   51 for_sentence: FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE •
+
+    $default  reduce usando la regla 51 (for_sentence)
+
+
+Estado 163
+
+   48 variable_access: IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr • CORCHETE_CLOSE
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    CORCHETE_CLOSE    desplazar e ir al estado 176
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 164
+
+   16 declaration: DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA •
+
+    $default  reduce usando la regla 16 (declaration)
+
+
+Estado 165
+
+   22 vector_type: LLAVE_OPEN vector_values LLAVE_CLOSE • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 177
+
+
+Estado 166
+
+   23 vector_values: vector_values COMA • expr
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 178
+
+
+Estado 167
+
+   21 vector_type: NEW_WORD DATA_TYPE CORCHETE_OPEN • expr CORCHETE_CLOSE S_PUNTO_COMA
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 179
+
+
+Estado 168
+
+   27 matriz_type: LLAVE_OPEN • matriz_values LLAVE_CLOSE S_PUNTO_COMA
+   28 matriz_values: • matriz_values COMA LLAVE_OPEN vector_values LLAVE_CLOSE
+   29              | • LLAVE_OPEN vector_values LLAVE_CLOSE
+
+    LLAVE_OPEN  desplazar e ir al estado 180
+
+    matriz_values  ir al estado 181
+
+
+Estado 169
+
+   26 matriz_type: NEW_WORD • DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+
+    DATA_TYPE  desplazar e ir al estado 182
+
+
+Estado 170
+
+   25 matriz: DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type •
+
+    $default  reduce usando la regla 25 (matriz)
+
+
+Estado 171
+
+    2 lista_instrucciones: • lista_instrucciones instruccion
+    3                    | • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   57 switch_case_list: CASE_WORD expr S_PUNTO_PUNTO • lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    lista_instrucciones  ir al estado 183
+    instruccion          ir al estado 10
+    print                ir al estado 11
+    declaration          ir al estado 12
+    vector               ir al estado 13
+    matriz               ir al estado 14
+    asignation           ir al estado 15
+    native_func          ir al estado 16
+    if_sentence          ir al estado 17
+    for_sentence         ir al estado 18
+    switch_case          ir al estado 19
+    while_sentence       ir al estado 20
+
+
+Estado 172
+
+   56 switch_case_list: switch_case_list CASE_WORD expr • S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    S_PUNTO_PUNTO     desplazar e ir al estado 184
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 173
+
+    2 lista_instrucciones: • lista_instrucciones instruccion
+    3                    | • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   58 switch_default: DEFAULT_WORD S_PUNTO_PUNTO • lista_instrucciones
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    lista_instrucciones  ir al estado 185
+    instruccion          ir al estado 10
+    print                ir al estado 11
+    declaration          ir al estado 12
+    vector               ir al estado 13
+    matriz               ir al estado 14
+    asignation           ir al estado 15
+    native_func          ir al estado 16
+    if_sentence          ir al estado 17
+    for_sentence         ir al estado 18
+    switch_case          ir al estado 19
+    while_sentence       ir al estado 20
+
+
+Estado 174
+
+   55 switch_case: SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE •
+
+    $default  reduce usando la regla 55 (switch_case)
+
+
+Estado 175
+
+   50 if_sentence: IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD • LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    LLAVE_OPEN  desplazar e ir al estado 186
+
+
+Estado 176
+
+   48 variable_access: IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE •
+
+    $default  reduce usando la regla 48 (variable_access)
+
+
+Estado 177
+
+   22 vector_type: LLAVE_OPEN vector_values LLAVE_CLOSE S_PUNTO_COMA •
+
+    $default  reduce usando la regla 22 (vector_type)
+
+
+Estado 178
+
+   23 vector_values: vector_values COMA expr •  [LLAVE_CLOSE, COMA]
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+    $default  reduce usando la regla 23 (vector_values)
+
+
+Estado 179
+
+   21 vector_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr • CORCHETE_CLOSE S_PUNTO_COMA
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    CORCHETE_CLOSE    desplazar e ir al estado 187
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 180
+
+   23 vector_values: • vector_values COMA expr
+   24              | • expr
+   29 matriz_values: LLAVE_OPEN • vector_values LLAVE_CLOSE
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    vector_values  ir al estado 188
+    expr           ir al estado 151
+
+
+Estado 181
+
+   27 matriz_type: LLAVE_OPEN matriz_values • LLAVE_CLOSE S_PUNTO_COMA
+   28 matriz_values: matriz_values • COMA LLAVE_OPEN vector_values LLAVE_CLOSE
+
+    LLAVE_CLOSE  desplazar e ir al estado 189
+    COMA         desplazar e ir al estado 190
+
+
+Estado 182
+
+   26 matriz_type: NEW_WORD DATA_TYPE • CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+
+    CORCHETE_OPEN  desplazar e ir al estado 191
+
+
+Estado 183
+
+    2 lista_instrucciones: lista_instrucciones • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   57 switch_case_list: CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones • BREAK_WORD S_PUNTO_COMA
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    BREAK_WORD      desplazar e ir al estado 192
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    instruccion     ir al estado 44
+    print           ir al estado 11
+    declaration     ir al estado 12
+    vector          ir al estado 13
+    matriz          ir al estado 14
+    asignation      ir al estado 15
+    native_func     ir al estado 16
+    if_sentence     ir al estado 17
+    for_sentence    ir al estado 18
+    switch_case     ir al estado 19
+    while_sentence  ir al estado 20
+
+
+Estado 184
+
+    2 lista_instrucciones: • lista_instrucciones instruccion
+    3                    | • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   56 switch_case_list: switch_case_list CASE_WORD expr S_PUNTO_PUNTO • lista_instrucciones BREAK_WORD S_PUNTO_COMA
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    lista_instrucciones  ir al estado 193
+    instruccion          ir al estado 10
+    print                ir al estado 11
+    declaration          ir al estado 12
+    vector               ir al estado 13
+    matriz               ir al estado 14
+    asignation           ir al estado 15
+    native_func          ir al estado 16
+    if_sentence          ir al estado 17
+    for_sentence         ir al estado 18
+    switch_case          ir al estado 19
+    while_sentence       ir al estado 20
+
+
+Estado 185
+
+    2 lista_instrucciones: lista_instrucciones • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   58 switch_default: DEFAULT_WORD S_PUNTO_PUNTO lista_instrucciones •  [LLAVE_CLOSE]
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    $default  reduce usando la regla 58 (switch_default)
+
+    instruccion     ir al estado 44
+    print           ir al estado 11
+    declaration     ir al estado 12
+    vector          ir al estado 13
+    matriz          ir al estado 14
+    asignation      ir al estado 15
+    native_func     ir al estado 16
+    if_sentence     ir al estado 17
+    for_sentence    ir al estado 18
+    switch_case     ir al estado 19
+    while_sentence  ir al estado 20
+
+
+Estado 186
+
+    2 lista_instrucciones: • lista_instrucciones instruccion
+    3                    | • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN • lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    lista_instrucciones  ir al estado 194
+    instruccion          ir al estado 10
+    print                ir al estado 11
+    declaration          ir al estado 12
+    vector               ir al estado 13
+    matriz               ir al estado 14
+    asignation           ir al estado 15
+    native_func          ir al estado 16
+    if_sentence          ir al estado 17
+    for_sentence         ir al estado 18
+    switch_case          ir al estado 19
+    while_sentence       ir al estado 20
+
+
+Estado 187
+
+   21 vector_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 195
+
+
+Estado 188
+
+   23 vector_values: vector_values • COMA expr
+   29 matriz_values: LLAVE_OPEN vector_values • LLAVE_CLOSE
+
+    LLAVE_CLOSE  desplazar e ir al estado 196
+    COMA         desplazar e ir al estado 166
+
+
+Estado 189
+
+   27 matriz_type: LLAVE_OPEN matriz_values LLAVE_CLOSE • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 197
+
+
+Estado 190
+
+   28 matriz_values: matriz_values COMA • LLAVE_OPEN vector_values LLAVE_CLOSE
+
+    LLAVE_OPEN  desplazar e ir al estado 198
+
+
+Estado 191
+
+   26 matriz_type: NEW_WORD DATA_TYPE CORCHETE_OPEN • expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 199
+
+
+Estado 192
+
+   57 switch_case_list: CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 200
+
+
+Estado 193
+
+    2 lista_instrucciones: lista_instrucciones • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   56 switch_case_list: switch_case_list CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones • BREAK_WORD S_PUNTO_COMA
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    BREAK_WORD      desplazar e ir al estado 201
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    FOR_WORD        desplazar e ir al estado 7
+
+    instruccion     ir al estado 44
+    print           ir al estado 11
+    declaration     ir al estado 12
+    vector          ir al estado 13
+    matriz          ir al estado 14
+    asignation      ir al estado 15
+    native_func     ir al estado 16
+    if_sentence     ir al estado 17
+    for_sentence    ir al estado 18
+    switch_case     ir al estado 19
+    while_sentence  ir al estado 20
+
+
+Estado 194
+
+    2 lista_instrucciones: lista_instrucciones • instruccion
+    4 instruccion: • declaration
+    5            | • asignation
+    6            | • print
+    7            | • if_sentence
+    8            | • native_func
+    9            | • switch_case
+   10            | • while_sentence
+   11            | • for_sentence
+   12 print: • PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+   13      | • PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+   14 declaration: • DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+   15            | • DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA
+   16            | • DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA
+   17            | • vector
+   18            | • matriz
+   19            | • DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   20 vector: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type
+   25 matriz: • DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+   30 asignation: • IDENTIFICADOR op_expr expr S_PUNTO_COMA
+   31           | • IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
+   43 native_func: • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+   44            | • IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE
+   45            | • IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA
+   46            | • IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA
+   49 if_sentence: • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | • IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   50            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones • LLAVE_CLOSE
+   51 for_sentence: • FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+   55 switch_case: • SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+   60 while_sentence: • WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+
+    IDENTIFICADOR   desplazar e ir al estado 1
+    DATA_TYPE       desplazar e ir al estado 2
+    SWITCH_WORD     desplazar e ir al estado 3
+    WHILE_WORD      desplazar e ir al estado 4
+    PRINT_SENTENCE  desplazar e ir al estado 5
+    IF_WORD         desplazar e ir al estado 6
+    LLAVE_CLOSE     desplazar e ir al estado 202
+    FOR_WORD        desplazar e ir al estado 7
+
+    instruccion     ir al estado 44
+    print           ir al estado 11
+    declaration     ir al estado 12
+    vector          ir al estado 13
+    matriz          ir al estado 14
+    asignation      ir al estado 15
+    native_func     ir al estado 16
+    if_sentence     ir al estado 17
+    for_sentence    ir al estado 18
+    switch_case     ir al estado 19
+    while_sentence  ir al estado 20
+
+
+Estado 195
+
+   21 vector_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA •
+
+    $default  reduce usando la regla 21 (vector_type)
+
+
+Estado 196
+
+   29 matriz_values: LLAVE_OPEN vector_values LLAVE_CLOSE •
+
+    $default  reduce usando la regla 29 (matriz_values)
+
+
+Estado 197
+
+   27 matriz_type: LLAVE_OPEN matriz_values LLAVE_CLOSE S_PUNTO_COMA •
+
+    $default  reduce usando la regla 27 (matriz_type)
+
+
+Estado 198
+
+   23 vector_values: • vector_values COMA expr
+   24              | • expr
+   28 matriz_values: matriz_values COMA LLAVE_OPEN • vector_values LLAVE_CLOSE
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    vector_values  ir al estado 203
+    expr           ir al estado 151
+
+
+Estado 199
+
+   26 matriz_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr • CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    CORCHETE_CLOSE    desplazar e ir al estado 204
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 200
+
+   57 switch_case_list: CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA •
+
+    $default  reduce usando la regla 57 (switch_case_list)
+
+
+Estado 201
+
+   56 switch_case_list: switch_case_list CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 205
+
+
+Estado 202
+
+   50 if_sentence: IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE •
+
+    $default  reduce usando la regla 50 (if_sentence)
+
+
+Estado 203
+
+   23 vector_values: vector_values • COMA expr
+   28 matriz_values: matriz_values COMA LLAVE_OPEN vector_values • LLAVE_CLOSE
+
+    LLAVE_CLOSE  desplazar e ir al estado 206
+    COMA         desplazar e ir al estado 166
+
+
+Estado 204
+
+   26 matriz_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE • CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+
+    CORCHETE_OPEN  desplazar e ir al estado 207
+
+
+Estado 205
+
+   56 switch_case_list: switch_case_list CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA •
+
+    $default  reduce usando la regla 56 (switch_case_list)
+
+
+Estado 206
+
+   28 matriz_values: matriz_values COMA LLAVE_OPEN vector_values LLAVE_CLOSE •
+
+    $default  reduce usando la regla 28 (matriz_values)
+
+
+Estado 207
+
+   26 matriz_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN • expr CORCHETE_CLOSE S_PUNTO_COMA
+   61 expr: • expr '+' expr
+   62     | • expr '-' expr
+   63     | • expr '*' expr
+   64     | • expr '/' expr
+   65     | • expr '%' expr
+   66     | • PARENTESIS_OPEN expr PARENTESIS_CLOSE
+   67     | • INT_NUMBER
+   68     | • FLOAT_NUMBER
+   69     | • STRING_COMILLAS
+   70     | • BOOL_VALUE
+   71     | • NULL_VALUE
+   72     | • IDENTIFICADOR
+   73     | • expr OP_MENOR_A expr
+   74     | • expr OP_MAYOR_A expr
+   75     | • expr OP_MENOR_IGUAL_A expr
+   76     | • expr OP_MAYOR_IGUAL_A expr
+   77     | • expr OP_IGUAL_IGUAL expr
+   78     | • expr OP_DISTINTO_A expr
+   79     | • expr LOGIC_AND expr
+   80     | • expr LOGIC_OR expr
+   81     | • LOGIC_NOT expr
+
+    INT_NUMBER       desplazar e ir al estado 50
+    FLOAT_NUMBER     desplazar e ir al estado 51
+    IDENTIFICADOR    desplazar e ir al estado 52
+    STRING_COMILLAS  desplazar e ir al estado 53
+    BOOL_VALUE       desplazar e ir al estado 54
+    NULL_VALUE       desplazar e ir al estado 55
+    PARENTESIS_OPEN  desplazar e ir al estado 56
+    LOGIC_NOT        desplazar e ir al estado 57
+
+    expr  ir al estado 208
+
+
+Estado 208
+
+   26 matriz_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr • CORCHETE_CLOSE S_PUNTO_COMA
+   61 expr: expr • '+' expr
+   62     | expr • '-' expr
+   63     | expr • '*' expr
+   64     | expr • '/' expr
+   65     | expr • '%' expr
+   73     | expr • OP_MENOR_A expr
+   74     | expr • OP_MAYOR_A expr
+   75     | expr • OP_MENOR_IGUAL_A expr
+   76     | expr • OP_MAYOR_IGUAL_A expr
+   77     | expr • OP_IGUAL_IGUAL expr
+   78     | expr • OP_DISTINTO_A expr
+   79     | expr • LOGIC_AND expr
+   80     | expr • LOGIC_OR expr
+
+    OP_IGUAL_IGUAL    desplazar e ir al estado 78
+    OP_DISTINTO_A     desplazar e ir al estado 79
+    OP_MENOR_IGUAL_A  desplazar e ir al estado 80
+    OP_MAYOR_IGUAL_A  desplazar e ir al estado 81
+    LOGIC_OR          desplazar e ir al estado 82
+    LOGIC_AND         desplazar e ir al estado 83
+    OP_MENOR_A        desplazar e ir al estado 84
+    OP_MAYOR_A        desplazar e ir al estado 85
+    CORCHETE_CLOSE    desplazar e ir al estado 209
+    '+'               desplazar e ir al estado 86
+    '-'               desplazar e ir al estado 87
+    '*'               desplazar e ir al estado 88
+    '/'               desplazar e ir al estado 89
+    '%'               desplazar e ir al estado 90
+
+
+Estado 209
+
+   26 matriz_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE • S_PUNTO_COMA
+
+    S_PUNTO_COMA  desplazar e ir al estado 210
+
+
+Estado 210
+
+   26 matriz_type: NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA •
+
+    $default  reduce usando la regla 26 (matriz_type)

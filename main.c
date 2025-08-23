@@ -11,7 +11,7 @@ extern FILE *yyin;
 extern void yyrestart(FILE *input_file);
 
 int main(int argc, char **argv) {
-    char input[2048];
+    char input[1024];
     printf("    $ Ingresar una entrada ");
     if (argc > 1 ) {
 
