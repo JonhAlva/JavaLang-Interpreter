@@ -173,3 +173,19 @@ letters[2][1] = "Compi2";
 int hypercubo3D[][][] = new int[2][2][2];
 float superhyperCUbo6D[][][][][][] = new float[3][3][3][3][3][3];
 
+        /* Declaracion de Funciones CON parametros */
+int suma(int a, int b) {
+        return a + b;
+}
+
+        /* Declaracion de Funciones SIN parametros */
+void saludo() {
+        System.out.println("Hola mundo");
+}
+
+        /*
+                FUNCIONES RECURSIVAS,
+                AHI VEMOS SI LAS IMPLEMENTAMOS XD
+        */ 
+
+        /* Llamada  a funciones CON parametros */

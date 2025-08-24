@@ -21,6 +21,7 @@
 "byte"                  { return DATA_TYPE; }
 "short"                 { return DATA_TYPE; }
 "double"                { return DATA_TYPE; }
+"void"                  { return DATA_TYPE; }
 "System.out.println"    { return PRINT_SENTENCE; }
 ".equals"               { return FUNC_EQUALS; }
 "if"                    { return IF_WORD; }

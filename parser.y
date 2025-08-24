@@ -67,6 +67,7 @@ instruccion:
             | switch_case
             | while_sentence
             | for_sentence
+            | function_sentence
 ;
 
 // * FUNCION DE IMPRIMIR VALORES -------------------------------------------------------------------------------
@@ -173,6 +174,9 @@ native_func:
             | IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN STRING_COMILLAS PARENTESIS_CLOSE        {/* EQUALS PARA UN TEXTO EN COMILLAS */}
             | IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
             | IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA                                          {/* REDUCTOR DE VARIABLE PARA BUCLES*/}
+            | CONTINUE_WORD S_PUNTO_COMA
+            | BREAK_WORD S_PUNTO_COMA
+            | RETURN_WORD expr S_PUNTO_COMA
 ;
 
 // ! PRODUCCION QUE MANEJA LA FORMA DE ESCRITURA DE LOS VECTORES Y LAS MATRICES
@@ -219,6 +223,23 @@ switch_default:
 // * CONDICIONAL WHILE ----------------------------------------------------------------------------------------------------
 while_sentence:
                 WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+;
+
+// * DECLARACION DE FUNCIONES ----------------------------------------------------------------------------------------------------
+function_sentence:
+                    DATA_TYPE IDENTIFICADOR PARENTESIS_OPEN parameters_bridge PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+;
+
+// ! PUENTE PARA QUE EL PARSER DECIDA SI VIENEN O NO PARAMETROS
+parameters_bridge:
+                    function_parameters
+                    | {/* vaćio */}
+;
+
+// ! RECURSIVA DE PARAMETROS 
+function_parameters:
+                    function_parameters COMA DATA_TYPE IDENTIFICADOR
+                    | DATA_TYPE IDENTIFICADOR
 ;
 
 // * EXPRESIONES GLOBALES QUE INTERPRETAN ARITMETICA, OPERADORES LOGICOS Y ALGUNAS ASIGNACIONES ------------------
