@@ -12,7 +12,7 @@ extern void yyrestart(FILE *input_file);
 
 int main(int argc, char **argv) {
     char input[1024];
-    printf("    $ Ingresar una entrada ");
+    printf("    $ Ingresar una entrada \n");
     if (argc > 1 ) {
 
         char *filename = argv[1];
@@ -23,14 +23,14 @@ int main(int argc, char **argv) {
         }
 
         // Mostrar contenido del archivo
-        printf("\n=== Contenido del archivo '%s' ===\n", filename);
+        /*printf("\n=== Contenido del archivo '%s' ===\n", filename);
         int c;
         FILE *temp = fopen(filename, "r");
         while ((c = fgetc(temp)) != EOF) {
             putchar(c);
         }
         fclose(temp);
-        printf("\n=================================\n\n");
+        printf("\n=================================\n\n"); */
 
         // Iniciar análisis
         if (yyparse() == 0) {

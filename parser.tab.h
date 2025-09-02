@@ -108,7 +108,11 @@ extern int yydebug;
     PARSE_INT = 309,               /* PARSE_INT  */
     PARSE_FLOAT = 310,             /* PARSE_FLOAT  */
     PARSE_DOUBLE = 311,            /* PARSE_DOUBLE  */
-    PARSE_STRING = 312             /* PARSE_STRING  */
+    PARSE_STRING = 312,            /* PARSE_STRING  */
+    JOIN_STRING = 313,             /* JOIN_STRING  */
+    ARRAY_INDEX = 314,             /* ARRAY_INDEX  */
+    FUNC_LENGTH = 315,             /* FUNC_LENGTH  */
+    FUNC_ADD = 316                 /* FUNC_ADD  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -126,7 +130,7 @@ union YYSTYPE
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
 
-#line 130 "parser.tab.h"
+#line 134 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

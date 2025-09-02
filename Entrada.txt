@@ -214,7 +214,25 @@ float temp = Float.parseFloat("36.5"); //Error si no es el tipo esperado
 String s1 = String.valueOf(123);
 String s2 = String.valueOf(true);
 
-        /* String tipo JOIN */
+        /* String tipo JOIN - Concatena los strings dados */
+String s = String.join("-", "2025", "08", "03"); //Resultado: "2025-08-03"
 
+String[] frutas = {"manzana", "pera", "uvas"};
+String csv = String.join(",", frutas);          //Resultado: "manzana,pera,uvas"
 
+String nums = String.join("|", "1", "2", "3");  //Resultado: "1 | 2 | 3"
 
+        /* Arrays Index Of - Busca un elemento dentro de una lista y devuelve el numero del indice donde está */
+int[] numeros = {1, 2, 3, 4};
+int clave = 3;
+
+int indice = Arrays.indexOf(numeros, clave); // Resultado: indice == 2
+// SI hay varias weas que tienen la misma llave, devuelve el indice mas cercano a 0
+// Si no lo encuentra devolvera -1
+
+        /* Array Legth - devuelve la cantidad total de elementos en el array */
+int tam = numeros.length;       // Resultado: tam == 4
+
+        /* Array Add - Añade el elemento al ultimo lugar del array */
+int nuevoVAL = 11;
+int[] extendido_Numeros = numeros.add(nuevoVAL); // Resultado del add: numeros = 1, 2, 3, 4, 11
