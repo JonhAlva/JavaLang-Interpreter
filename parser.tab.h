@@ -104,7 +104,11 @@ extern int yydebug;
     CORCHETE_OPEN = 305,           /* CORCHETE_OPEN  */
     CORCHETE_CLOSE = 306,          /* CORCHETE_CLOSE  */
     NEW_WORD = 307,                /* NEW_WORD  */
-    COMA = 308                     /* COMA  */
+    COMA = 308,                    /* COMA  */
+    PARSE_INT = 309,               /* PARSE_INT  */
+    PARSE_FLOAT = 310,             /* PARSE_FLOAT  */
+    PARSE_DOUBLE = 311,            /* PARSE_DOUBLE  */
+    PARSE_STRING = 312             /* PARSE_STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -122,7 +126,7 @@ union YYSTYPE
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
 
-#line 126 "parser.tab.h"
+#line 130 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -148,6 +148,7 @@ int[] nums = new int[5];
 
         /* Declaracion de Vectores - Añadiendo sus elementos */
 String[] letters = {"a", "b", "c", "d", "e"};
+int[] numbers = {23, 56, 12, 124, 21};
 
         /* Declaracion de Matrices - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo */
 float[][] mat = new float[3][3];
@@ -178,6 +179,10 @@ int suma(int a, int b) {
         return a + b;
 }
 
+int contatenar(String a, String b, String c) {
+        return a + b + c;
+}
+
         /* Declaracion de Funciones SIN parametros */
 void saludo() {
         System.out.println("Hola mundo");
@@ -189,3 +194,27 @@ void saludo() {
         */ 
 
         /* Llamada  a funciones CON parametros */
+int total = suma(4, 5);
+String cadena = concatenar("Hola", "Mundo", "Laboral");
+saludo();
+
+        /* Funcion Endebida Sout concatenada */
+System.out.println("Resultado: " + total);
+System.out.println(5+2);
+System.out.println("Mensaje: " + cadena + " Caraj0");
+System.out.println(cadena.equals("Hola")); //True o False solo compara texto
+
+        /* Parseo de tipos */
+int edad = Integer.parseInt("25"); //Error si la wea entre parentesis no es un numero
+
+double pi = Double.parseDouble("3.1416"); //Error si no es el tipo esperado
+
+float temp = Float.parseFloat("36.5"); //Error si no es el tipo esperado
+
+String s1 = String.valueOf(123);
+String s2 = String.valueOf(true);
+
+        /* String tipo JOIN */
+
+
+

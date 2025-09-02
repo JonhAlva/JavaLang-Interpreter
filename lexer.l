@@ -24,6 +24,10 @@
 "void"                  { return DATA_TYPE; }
 "System.out.println"    { return PRINT_SENTENCE; }
 ".equals"               { return FUNC_EQUALS; }
+"Integer.parseInt"      { return PARSE_INT; }
+"Double.parseDouble"    { return PARSE_DOUBLE; }
+"Float.parseFloat"      { return PARSE_FLOAT; }
+"String.valueOf"        { return PARSE_STRING; }
 "if"                    { return IF_WORD; }
 "else"                  { return ELSE_WORD; }
 "switch"                { return SWITCH_WORD; }
