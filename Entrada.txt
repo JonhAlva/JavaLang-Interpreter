@@ -5,6 +5,12 @@
 
 */
 
+// Sentencia Main de funcion *-*-*-*-*-*-
+
+void main(String[] args) {
+        System.out.println("Inicio del programa");
+}
+
 // 4.5 Declaracion de vaiables -----------------------
 int Variable = 12;
 char VArs;
@@ -74,14 +80,14 @@ System.out.println(!x);
 
 // 4.5.1.5 Sentencias de Control de flujo --------------------------------------
 
-        /* Sentencia IF solo */
+        // Sentencia IF solo  -------------------------------------------------------------------------------------- 
 
 int Nu_mero = 5;
 if ( Nu_mero > 5 ) {
     System.out.println("Ejecutando If unico");
 }
 
-        /* Sentencia IF and ELSE */
+        // Sentencia IF and ELSE ------------------------------------------------------------------------------------
 
 boolean _ValBol = true;
 if ( _ValBol == false ) {
@@ -91,7 +97,7 @@ if ( _ValBol == false ) {
     float LoL = 2.5;
 }
 
-        /* Sentencia SWITCH - CASE */
+        // Sentencia SWITCH - CASE -----------------------------------------------------------------------------------
 int dia = 3;
 
 switch( dia ) {
@@ -114,7 +120,7 @@ switch( dia ) {
         }
 }
 
-        /* Sentencia WHILE */
+        // Sentencia WHILE            -------------------------------------------------------------------------
 int condition = 0;
 
 while( condition < 7 ) {
@@ -122,12 +128,12 @@ while( condition < 7 ) {
     condition++;
 }
 
-        /* Sentencia FOR - NORMAL */
+        // Sentencia FOR - NORMAL            ---------------------------------------------------------------
 for( int id = 0; i < 5; i++) {
     System.out.println("Repeticion for normal");
 }
 
-        /* Sentencia FOR - EACH */
+        // Sentencia FOR - EACH              --------------------------------------------------------------------------
 for ( int num : numeros ) {
     System.out.println("Repeticion for each");
 }
@@ -141,26 +147,26 @@ for ( int num : numeros ) {
     */
 
 
-// Estructuras de Datos ---------------------------------------------------------------------
+// Estructuras de Datos -----------------------------------------------------------------------------------------------------------
 
-        /* Declaracion de Vectores - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo */
+        // Declaracion de Vectores - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo -----------------------
 int[] nums = new int[5];
 
-        /* Declaracion de Vectores - Añadiendo sus elementos */
+        // Declaracion de Vectores - Añadiendo sus elementos        ------------------------------------------------------------------
 String[] letters = {"a", "b", "c", "d", "e"};
 int[] numbers = {23, 56, 12, 124, 21};
 
-        /* Declaracion de Matrices - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo */
+        // Declaracion de Matrices - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo  -----------------------
 float[][] mat = new float[3][3];
 
-        /* Declaracion de Matrices - Añadiendo sus elementos */
+        // Declaracion de Matrices - Añadiendo sus elementos  ----------------------------------------------------------------------
 int[][] board = {
     {0, 1, 0},
     {1, 0, 1},
     {0, 1, 0}
 };
 
-        /* Acceso a un valor de una matriz o vector y asignacion de un valor*/
+        // Acceso a un valor de una matriz o vector y asignacion de un valor  ------------------------------------------------------
 int nums_val = nums[1];
 String board_Val = board[0][1];
 
@@ -170,11 +176,11 @@ String declaration_on_list2 = letters[2][1];
 nums[1] = 42;
 letters[2][1] = "Compi2";
 
-        /* Array multidimensional de n valores*/
+        // Array multidimensional de n valores        ------------------------------------------------------------------------------
 int hypercubo3D[][][] = new int[2][2][2];
 float superhyperCUbo6D[][][][][][] = new float[3][3][3][3][3][3];
 
-        /* Declaracion de Funciones CON parametros */
+        // Declaracion de Funciones CON parametros   -------------------------------------------------------------------------------
 int suma(int a, int b) {
         return a + b;
 }
@@ -183,7 +189,7 @@ int contatenar(String a, String b, String c) {
         return a + b + c;
 }
 
-        /* Declaracion de Funciones SIN parametros */
+        // Declaracion de Funciones SIN parametros   --------------------------------------------------------------------------------
 void saludo() {
         System.out.println("Hola mundo");
 }
@@ -193,18 +199,18 @@ void saludo() {
                 AHI VEMOS SI LAS IMPLEMENTAMOS XD
         */ 
 
-        /* Llamada  a funciones CON parametros */
+        // Llamada  a funciones CON parametros   ------------------------------------------------------------------------------------
 int total = suma(4, 5);
 String cadena = concatenar("Hola", "Mundo", "Laboral");
 saludo();
 
-        /* Funcion Endebida Sout concatenada */
+        // Funcion Endebida Sout concatenada      -------------------------------------------------------------------------------------
 System.out.println("Resultado: " + total);
 System.out.println(5+2);
 System.out.println("Mensaje: " + cadena + " Caraj0");
 System.out.println(cadena.equals("Hola")); //True o False solo compara texto
 
-        /* Parseo de tipos */
+        // Parseo de tipos          -------------------------------------------------------------------------------------------------
 int edad = Integer.parseInt("25"); //Error si la wea entre parentesis no es un numero
 
 double pi = Double.parseDouble("3.1416"); //Error si no es el tipo esperado
@@ -214,7 +220,7 @@ float temp = Float.parseFloat("36.5"); //Error si no es el tipo esperado
 String s1 = String.valueOf(123);
 String s2 = String.valueOf(true);
 
-        /* String tipo JOIN - Concatena los strings dados */
+        // String tipo JOIN - Concatena los strings dados     ----------------------------------------------------------------------
 String s = String.join("-", "2025", "08", "03"); //Resultado: "2025-08-03"
 
 String[] frutas = {"manzana", "pera", "uvas"};
@@ -222,7 +228,7 @@ String csv = String.join(",", frutas);          //Resultado: "manzana,pera,uvas"
 
 String nums = String.join("|", "1", "2", "3");  //Resultado: "1 | 2 | 3"
 
-        /* Arrays Index Of - Busca un elemento dentro de una lista y devuelve el numero del indice donde está */
+        // Arrays Index Of - Busca un elemento dentro de una lista y devuelve el numero del indice donde está ------------------------
 int[] numeros = {1, 2, 3, 4};
 int clave = 3;
 
@@ -230,9 +236,9 @@ int indice = Arrays.indexOf(numeros, clave); // Resultado: indice == 2
 // SI hay varias weas que tienen la misma llave, devuelve el indice mas cercano a 0
 // Si no lo encuentra devolvera -1
 
-        /* Array Legth - devuelve la cantidad total de elementos en el array */
+        // Array Legth - devuelve la cantidad total de elementos en el array -----------------------------------------------------
 int tam = numeros.length;       // Resultado: tam == 4
 
-        /* Array Add - Añade el elemento al ultimo lugar del array */
+        // Array Add - Añade el elemento al ultimo lugar del array ---------------------------------------------------------------
 int nuevoVAL = 11;
 int[] extendido_Numeros = numeros.add(nuevoVAL); // Resultado del add: numeros = 1, 2, 3, 4, 11

@@ -1,6 +1,7 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include "./Functions/Tabla_Simbolos.h"
 
     extern int yylex();
     extern int yylineno;
@@ -17,6 +18,14 @@
     char* null_value;
 }
 
+//Aqui tiene que ir el nombre del return del lexer para cada token
+%token DATA_TYPE S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
+%token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
+%token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL OP_IGUAL_IGUAL OP_DISTINTO_A OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A LOGIC_OR
+%token LOGIC_AND OP_MENOR_A OP_MAYOR_A LOGIC_NOT PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
+%token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING JOIN_STRING
+%token ARRAY_INDEX FUNC_LENGTH FUNC_ADD MAIN_STRING
+
 //Tokens con tipo de dato
 %token <int_number>         INT_NUMBER
 %token <float_number>       FLOAT_NUMBER
@@ -25,16 +34,8 @@
 %token <bool_true>          BOOL_VALUE
 %token <null_value>         NULL_VALUE
 
-//Aqui tiene que ir el nombre del return del lexer para cada token
-%token DATA_TYPE S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
-%token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
-%token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL OP_IGUAL_IGUAL OP_DISTINTO_A OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A LOGIC_OR
-%token LOGIC_AND OP_MENOR_A OP_MAYOR_A LOGIC_NOT PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
-%token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING JOIN_STRING
-%token ARRAY_INDEX FUNC_LENGTH FUNC_ADD
-
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
-
+//%type
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -74,7 +75,7 @@ instruccion:
 // * FUNCION DE IMPRIMIR VALORES -------------------------------------------------------------------------------
 
 print:
-    PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
+    PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA           
     | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
 ;
 
@@ -82,7 +83,8 @@ print:
 // * DECLARACION DE VARIABLES Y ESTRUCTURAS DE DATOS -----------------------------------------------------------------------------------
 
 declaration:
-            DATA_TYPE IDENTIFICADOR S_PUNTO_COMA                                  { /* VARIABLE SIN VALOR*/ }
+            DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
+            { /* VARIABLE SIN VALOR*/ }
             | DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA              { /* VARIABLE CON VALOR O SI EXPR ES IDENTIFICADOR ES EL CASTEO WIDENING */ }
             | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA { /* CASTEO NARROWING*/ }
             | vector
@@ -262,6 +264,7 @@ parameters_bridge:
 function_parameters:
                     function_parameters COMA function_expr
                     | function_expr
+                    | MAIN_STRING
 ;
 
 function_expr:

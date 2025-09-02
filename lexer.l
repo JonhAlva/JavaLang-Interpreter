@@ -32,6 +32,7 @@
 "String.valueOf"        { return PARSE_STRING; }
 "String.join"           { return JOIN_STRING; }
 "Arrays.indexOf"        { return ARRAY_INDEX; }
+"String[] args"         { return MAIN_STRING; }
 "if"                    { return IF_WORD; }
 "else"                  { return ELSE_WORD; }
 "switch"                { return SWITCH_WORD; }
