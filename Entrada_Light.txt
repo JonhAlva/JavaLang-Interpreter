@@ -1,8 +1,8 @@
 // 4.5 Declaracion de vaiables -----------------------
-int Variable = 12;
-char VArs;
-boolean _Lol = true;
-float jk = 2.5;
-String lol = "Hola Mundo";
+//int Variable = 12;
+//char VArs;
+//boolean _Lol = true;
+//float jk = 2.5;
+//String lol = "Hola Mundo";
 
 System.out.println("Hola mundo");

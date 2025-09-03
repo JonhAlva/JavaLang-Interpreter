@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "./Functions/Tabla_Simbolos.h"
+    #include "./Functions/AST.h"
 
     extern int yylex();
     extern int yylineno;
@@ -10,6 +11,7 @@
 
 //Declaracion de Union para diferenciar el tipo de dato yyval.{NOMBRE}  <-
 %union{
+    struct Nodo* nodo;
     int int_number;
     float float_number;
     char* identificador;
@@ -35,7 +37,7 @@
 %token <null_value>         NULL_VALUE
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
-//%type
+%type <nodo> expr print instruccion
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -63,7 +65,7 @@ lista_instrucciones:
 instruccion:
             declaration
             | asignation
-            | print
+            | print             { $$ = $1; }
             | if_sentence
             | native_func
             | switch_case
@@ -75,7 +77,7 @@ instruccion:
 // * FUNCION DE IMPRIMIR VALORES -------------------------------------------------------------------------------
 
 print:
-    PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA           
+    PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA               { $$ = Print($3); }
     | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
 ;
 
@@ -281,7 +283,7 @@ expr:
     | PARENTESIS_OPEN expr PARENTESIS_CLOSE
     | INT_NUMBER
     | FLOAT_NUMBER
-    | STRING_COMILLAS
+    | STRING_COMILLAS                           { $$ = Terminal_String($1); }
     | BOOL_VALUE
     | NULL_VALUE
     | IDENTIFICADOR
