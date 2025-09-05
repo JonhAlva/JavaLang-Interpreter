@@ -6,7 +6,9 @@
 
     extern int yylex();
     extern int yylineno;
-    void yyerror(const char* s);
+    void yyerror(const char* s);  
+
+    Nodo* raiz = NULL;
 %}
 
 //Declaracion de Union para diferenciar el tipo de dato yyval.{NOMBRE}  <-
@@ -16,6 +18,7 @@
     float float_number;
     char* identificador;
     char* string_comillas;
+    char* operador;
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
 }
@@ -23,21 +26,24 @@
 //Aqui tiene que ir el nombre del return del lexer para cada token
 %token DATA_TYPE S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
 %token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
-%token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL OP_IGUAL_IGUAL OP_DISTINTO_A OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A LOGIC_OR
-%token LOGIC_AND OP_MENOR_A OP_MAYOR_A LOGIC_NOT PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
+%token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL
+%token PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
 %token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING JOIN_STRING
 %token ARRAY_INDEX FUNC_LENGTH FUNC_ADD MAIN_STRING
 
 //Tokens con tipo de dato
-%token <int_number>         INT_NUMBER
+%token <int_number>         LOGIC_NOT INT_NUMBER OP_MENOR_A OP_MAYOR_A '+' '-' '/' '*' '%'
 %token <float_number>       FLOAT_NUMBER
-%token <identificador>      IDENTIFICADOR
+%token <identificador>      IDENTIFICADOR 
 %token <string_comillas>    STRING_COMILLAS
 %token <bool_true>          BOOL_VALUE
 %token <null_value>         NULL_VALUE
+%token <operador>           OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A OP_IGUAL_IGUAL OP_DISTINTO_A LOGIC_AND LOGIC_OR
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
-%type <nodo> expr print instruccion
+%type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence
+%type <nodo> for_sentence switch_case switch_case_list switch_default native_func variable_access vector matriz
+%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -54,31 +60,31 @@
 %%
 
 input:
-        lista_instrucciones                         { yylineno = 1; }
+        lista_instrucciones                         { raiz = $1; yylineno = 1; }
 ;
 
 lista_instrucciones:
-            lista_instrucciones instruccion 
-            | instruccion
+            lista_instrucciones instruccion         { $$ = ListaInstrucciones($2, $1); }
+            | instruccion                           { $$ = ListaInstrucciones($1, NULL); }  
 ;
 
 instruccion:
-            declaration
-            | asignation
-            | print             { $$ = $1; }
-            | if_sentence
-            | native_func
-            | switch_case
-            | while_sentence
-            | for_sentence
-            | function_sentence
+            declaration             { $$ = $1; }
+            | asignation            { $$ = $1; }
+            | print                 { $$ = $1; }
+            | if_sentence           { $$ = $1; }
+            | native_func           { $$ = $1; }
+            | switch_case           { $$ = $1; }
+            | while_sentence        { $$ = $1; }
+            | for_sentence          { $$ = $1; }
+            | function_sentence     { $$ = $1; }
 ;
 
 // * FUNCION DE IMPRIMIR VALORES -------------------------------------------------------------------------------
 
 print:
     PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA               { $$ = Print($3); }
-    | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA
+    | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA      { $$ = Print($3); }
 ;
 
 
@@ -91,7 +97,7 @@ declaration:
             | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA { /* CASTEO NARROWING*/ }
             | vector
             | matriz
-            | dynamic_array
+            | dynamic_array                                                     { $$ = $1; }
             | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
             | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters PARENTESIS_CLOSE S_PUNTO_COMA
             | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
@@ -275,27 +281,27 @@ function_expr:
 ;
 // * EXPRESIONES GLOBALES QUE INTERPRETAN ARITMETICA, OPERADORES LOGICOS Y ALGUNAS ASIGNACIONES ------------------
 expr:
-    expr '+' expr
-    | expr '-' expr
-    | expr '*' expr
-    | expr '/' expr
-    | expr '%' expr
-    | PARENTESIS_OPEN expr PARENTESIS_CLOSE
-    | INT_NUMBER
-    | FLOAT_NUMBER
+    expr '+' expr                               { $$ = Suma($2, $1, $3); }
+    | expr '-' expr                             { $$ = Resta($2, $1, $3); }
+    | expr '*' expr                             { $$ = Multiplicacion($2, $1, $3); }
+    | expr '/' expr                             { $$ = Division($2, $1, $3); }
+    | expr '%' expr                             { $$ = Modulo($2, $1, $3); }
+    | PARENTESIS_OPEN expr PARENTESIS_CLOSE     { $$ = $2; }
+    | INT_NUMBER                                { $$ = Terminal_Int($1); }
+    | FLOAT_NUMBER                              { $$ = Terminal_Float($1); }
     | STRING_COMILLAS                           { $$ = Terminal_String($1); }
-    | BOOL_VALUE
-    | NULL_VALUE
-    | IDENTIFICADOR
-    | expr OP_MENOR_A expr
-    | expr OP_MAYOR_A expr
-    | expr OP_MENOR_IGUAL_A expr
-    | expr OP_MAYOR_IGUAL_A expr
-    | expr OP_IGUAL_IGUAL expr
-    | expr OP_DISTINTO_A expr
-    | expr LOGIC_AND expr
-    | expr LOGIC_OR expr
-    | LOGIC_NOT expr
+    | BOOL_VALUE                                { $$ = Terminal_Bool($1); }
+    | NULL_VALUE                                { $$ = Terminal_Null($1); } // ! Cambiar a "-null" si no lo procesa bien
+    | IDENTIFICADOR                             /*{ $$ = Identificador_Ref($1); }*/
+    | expr OP_MENOR_A expr                      { $$ = Operacion_Bool("<", $1, $3); }
+    | expr OP_MAYOR_A expr                      { $$ = Operacion_Bool(">", $1, $3); }
+    | expr OP_MENOR_IGUAL_A expr                { $$ = Operacion_Bool($2, $1, $3); }
+    | expr OP_MAYOR_IGUAL_A expr                { $$ = Operacion_Bool($2, $1, $3); }
+    | expr OP_IGUAL_IGUAL expr                  { $$ = Operacion_Bool($2, $1, $3); }
+    | expr OP_DISTINTO_A expr                   { $$ = Operacion_Bool($2, $1, $3); }
+    | expr LOGIC_AND expr                       { $$ = Operacion_Bool($2, $1, $3); }
+    | expr LOGIC_OR expr                        { $$ = Operacion_Bool($2, $1, $3); }
+    | LOGIC_NOT expr                            { $$ = Not($1, $2); }
 ;
 
 %%

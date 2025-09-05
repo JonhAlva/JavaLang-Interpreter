@@ -1,8 +1,90 @@
+/* 
+* CONSTRUCCION DE LOS TIPOS DE NODOS, QUE TIPO DE VALOR ES, ESTABLECER SU HIJO IZQ Y DER
+* SU VALOR POR DEFECTO Y LOS PARAMETROS QUE NECESITA PAR CONSTRUIRSE
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "AST.h"
+
+// ? NODOS DE OPERACIONES ARITMETICAS -----------------------------------------------------------------
+
+// ! Nodo Operacion, hace todo lo necesario para operaciones aritmeticas y relacionales
+Nodo* Suma(int Op, Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_SUMA;
+    n->valor.op = Op;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Resta(int Op, Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_RESTA;
+    n->valor.op = Op;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Multiplicacion(int Op, Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MULTIPLICACION;
+    n->valor.op = Op;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Division(int Op, Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_DIVISION;
+    n->valor.op = Op;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Modulo(int Op, Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MODULO;
+    n->valor.op = Op;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+// ? ------------------------------------------------------------------------------------------------------------
+
+Nodo* Not(int Op, Nodo* Izq) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_BOOL;
+    n->valor.op = Op;
+    n->izq = Izq;
+    n->der = NULL;
+    return n;
+}
+
+// ! Nodo para identificador de variable { Nombre de variable }
+/*Nodo* Identificador_Ref(char* nombre) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_IDENTIFICADOR;
+    n->nombre = strdup(nombre);
+    n->izq = n->der = NULL;
+    return n;
+} */
+
+// ! Nodo Booleano, hace la logica de las operaciones booleanas
+Nodo* Operacion_Bool(char* Op, Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_OP_BOOLEAN;
+    n->valor.op_bool = Op;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
 
 // ! Nodo SYSTEM OUT PRINT
 Nodo* Print(Nodo* expr) {
@@ -50,18 +132,18 @@ Nodo* Variable_Ref(char* nombre) {
     return n;
 }
 
-// ! Declaracion de variable
-Nodo* Declaration_Var(char* nombre, Nodo* valor) {
+// ! Declaracion de variable con valor
+/*Nodo* Declaration_Var(char* nombre, Nodo* valor) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_DECLARATION;
     n->nombre = strdup(nombre);
     n->izq = valor;
     n->der = NULL;
     return n;
-}
+} */
 
 // ! Booleano normal * * * * 
-Nodo* Terminal_Bool(bool valor) {
+Nodo* Terminal_Bool(int valor) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_BOOL;
     n->valor.b_val = valor;
@@ -78,12 +160,19 @@ Nodo* Terminal_Char(char valor) {
     return n;
 }
 
-// ! Operaciones combinadas
-Nodo * Operacion(int op, Nodo* izq, Nodo* der) {
+// ! Valor null por defecto
+Nodo* Terminal_Null(char* valor) {
     Nodo* n = malloc(sizeof(Nodo));
-    n->tipo = NODO_OPERACION;
-    n->valor.op = op;
-    n->izq = izq;
-    n->der = der;
+    n->tipo = NODO_NULL;
+    n->valor.null_val = valor;
+    n->izq = n->der = NULL;
+    return n;
+}
+
+Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_LISTA;
+    n->izq = instr;
+    n->der = resto;
     return n;
 }

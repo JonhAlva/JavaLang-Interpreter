@@ -77,43 +77,43 @@ extern int yydebug;
     OP_POT_IGUAL = 278,            /* OP_POT_IGUAL  */
     OP_MAYOR_IGUAL = 279,          /* OP_MAYOR_IGUAL  */
     OP_MENOR_IGUAL = 280,          /* OP_MENOR_IGUAL  */
-    OP_IGUAL_IGUAL = 281,          /* OP_IGUAL_IGUAL  */
-    OP_DISTINTO_A = 282,           /* OP_DISTINTO_A  */
-    OP_MENOR_IGUAL_A = 283,        /* OP_MENOR_IGUAL_A  */
-    OP_MAYOR_IGUAL_A = 284,        /* OP_MAYOR_IGUAL_A  */
-    LOGIC_OR = 285,                /* LOGIC_OR  */
-    LOGIC_AND = 286,               /* LOGIC_AND  */
-    OP_MENOR_A = 287,              /* OP_MENOR_A  */
-    OP_MAYOR_A = 288,              /* OP_MAYOR_A  */
-    LOGIC_NOT = 289,               /* LOGIC_NOT  */
-    PRINT_SENTENCE = 290,          /* PRINT_SENTENCE  */
-    FUNC_EQUALS = 291,             /* FUNC_EQUALS  */
-    IF_WORD = 292,                 /* IF_WORD  */
-    LLAVE_OPEN = 293,              /* LLAVE_OPEN  */
-    LLAVE_CLOSE = 294,             /* LLAVE_CLOSE  */
-    ELSE_WORD = 295,               /* ELSE_WORD  */
-    FOR_WORD = 296,                /* FOR_WORD  */
-    CONTINUE_WORD = 297,           /* CONTINUE_WORD  */
-    RETURN_WORD = 298,             /* RETURN_WORD  */
-    CORCHETE_OPEN = 299,           /* CORCHETE_OPEN  */
-    CORCHETE_CLOSE = 300,          /* CORCHETE_CLOSE  */
-    NEW_WORD = 301,                /* NEW_WORD  */
-    COMA = 302,                    /* COMA  */
-    PARSE_INT = 303,               /* PARSE_INT  */
-    PARSE_FLOAT = 304,             /* PARSE_FLOAT  */
-    PARSE_DOUBLE = 305,            /* PARSE_DOUBLE  */
-    PARSE_STRING = 306,            /* PARSE_STRING  */
-    JOIN_STRING = 307,             /* JOIN_STRING  */
-    ARRAY_INDEX = 308,             /* ARRAY_INDEX  */
-    FUNC_LENGTH = 309,             /* FUNC_LENGTH  */
-    FUNC_ADD = 310,                /* FUNC_ADD  */
-    MAIN_STRING = 311,             /* MAIN_STRING  */
-    INT_NUMBER = 312,              /* INT_NUMBER  */
-    FLOAT_NUMBER = 313,            /* FLOAT_NUMBER  */
-    IDENTIFICADOR = 314,           /* IDENTIFICADOR  */
-    STRING_COMILLAS = 315,         /* STRING_COMILLAS  */
-    BOOL_VALUE = 316,              /* BOOL_VALUE  */
-    NULL_VALUE = 317               /* NULL_VALUE  */
+    PRINT_SENTENCE = 281,          /* PRINT_SENTENCE  */
+    FUNC_EQUALS = 282,             /* FUNC_EQUALS  */
+    IF_WORD = 283,                 /* IF_WORD  */
+    LLAVE_OPEN = 284,              /* LLAVE_OPEN  */
+    LLAVE_CLOSE = 285,             /* LLAVE_CLOSE  */
+    ELSE_WORD = 286,               /* ELSE_WORD  */
+    FOR_WORD = 287,                /* FOR_WORD  */
+    CONTINUE_WORD = 288,           /* CONTINUE_WORD  */
+    RETURN_WORD = 289,             /* RETURN_WORD  */
+    CORCHETE_OPEN = 290,           /* CORCHETE_OPEN  */
+    CORCHETE_CLOSE = 291,          /* CORCHETE_CLOSE  */
+    NEW_WORD = 292,                /* NEW_WORD  */
+    COMA = 293,                    /* COMA  */
+    PARSE_INT = 294,               /* PARSE_INT  */
+    PARSE_FLOAT = 295,             /* PARSE_FLOAT  */
+    PARSE_DOUBLE = 296,            /* PARSE_DOUBLE  */
+    PARSE_STRING = 297,            /* PARSE_STRING  */
+    JOIN_STRING = 298,             /* JOIN_STRING  */
+    ARRAY_INDEX = 299,             /* ARRAY_INDEX  */
+    FUNC_LENGTH = 300,             /* FUNC_LENGTH  */
+    FUNC_ADD = 301,                /* FUNC_ADD  */
+    MAIN_STRING = 302,             /* MAIN_STRING  */
+    LOGIC_NOT = 303,               /* LOGIC_NOT  */
+    INT_NUMBER = 304,              /* INT_NUMBER  */
+    OP_MENOR_A = 305,              /* OP_MENOR_A  */
+    OP_MAYOR_A = 306,              /* OP_MAYOR_A  */
+    FLOAT_NUMBER = 307,            /* FLOAT_NUMBER  */
+    IDENTIFICADOR = 308,           /* IDENTIFICADOR  */
+    STRING_COMILLAS = 309,         /* STRING_COMILLAS  */
+    BOOL_VALUE = 310,              /* BOOL_VALUE  */
+    NULL_VALUE = 311,              /* NULL_VALUE  */
+    OP_MENOR_IGUAL_A = 312,        /* OP_MENOR_IGUAL_A  */
+    OP_MAYOR_IGUAL_A = 313,        /* OP_MAYOR_IGUAL_A  */
+    OP_IGUAL_IGUAL = 314,          /* OP_IGUAL_IGUAL  */
+    OP_DISTINTO_A = 315,           /* OP_DISTINTO_A  */
+    LOGIC_AND = 316,               /* LOGIC_AND  */
+    LOGIC_OR = 317                 /* LOGIC_OR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -122,16 +122,18 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 12 "parser.y"
+#line 15 "parser.y"
 
+    struct Nodo* nodo;
     int int_number;
     float float_number;
     char* identificador;
     char* string_comillas;
+    char* operador;
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
 
-#line 135 "parser.tab.h"
+#line 137 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

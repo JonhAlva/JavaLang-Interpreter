@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "Functions/AST.h"
+#include "Functions/Evaluate.h"
 
 // Prototipo de parser
 int yyparse(void);
@@ -10,6 +12,8 @@ int yyparse(void);
 extern FILE *yyin;
 
 extern void yyrestart(FILE *input_file);
+
+extern Nodo* raiz;
 
 int main(int argc, char **argv) {
     char input[1024];
@@ -36,6 +40,9 @@ int main(int argc, char **argv) {
         // Iniciar análisis
         if (yyparse() == 0) {
             printf(" ✅ Análisis sintáctico terminado con éxito \n");
+            if (raiz != NULL ) {
+                Evaluar(raiz);
+            }
         } else {
             printf(" ❌ Se encontraron errores durante el análisis \n");
         }
@@ -60,6 +67,9 @@ int main(int argc, char **argv) {
 
         if (yyparse() == 0) {
             printf(" ✅ Análisis sintáctico terminado con éxito \n");
+            if (raiz != NULL ) {
+                Evaluar(raiz);
+            }
         } else {
             printf(" ❌ Se encontraron errores durante el análisis \n");
         }
