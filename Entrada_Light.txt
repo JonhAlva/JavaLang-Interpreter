@@ -1,7 +1,32 @@
 
-System.out.println("Hola mundo");
+// Operaciones aritmeticas funcionales
+
+System.out.println("Operaciones aritmeticas y concatenacion: ");
 System.out.println(2+5);
 System.out.println(5-2);
-System.out.println(5*5);
+System.out.println(100-10);
 System.out.println(100/10);
 System.out.println(10%3);
+System.out.println("SI llega acá");
+System.out.println("Hola" + "Hola2");
+System.out.println("El resultado es: " + (5+2) + " Ekisde");
+
+System.out.println("Comparacion mayor menor");
+System.out.println("a">"b");
+System.out.println("a"<"b");
+System.out.println(5>2);
+System.out.println(5<2);
+
+System.out.println("Comparacion mayor menor igual");
+System.out.println(1 >= 2);
+System.out.println(5 >= 5);
+System.out.println("n" <= "b");
+System.out.println("a" <= "a");
+
+System.out.println("Coparacion igual igual");
+System.out.println(1 == 2);
+System.out.println(5 == 5);
+System.out.println("n" == "b");
+System.out.println("a" == "a");
+System.out.println("Hola" == "Hola");
+

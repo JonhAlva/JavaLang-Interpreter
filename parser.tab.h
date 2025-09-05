@@ -104,16 +104,16 @@ extern int yydebug;
     OP_MENOR_A = 305,              /* OP_MENOR_A  */
     OP_MAYOR_A = 306,              /* OP_MAYOR_A  */
     FLOAT_NUMBER = 307,            /* FLOAT_NUMBER  */
-    IDENTIFICADOR = 308,           /* IDENTIFICADOR  */
-    STRING_COMILLAS = 309,         /* STRING_COMILLAS  */
-    BOOL_VALUE = 310,              /* BOOL_VALUE  */
-    NULL_VALUE = 311,              /* NULL_VALUE  */
-    OP_MENOR_IGUAL_A = 312,        /* OP_MENOR_IGUAL_A  */
-    OP_MAYOR_IGUAL_A = 313,        /* OP_MAYOR_IGUAL_A  */
-    OP_IGUAL_IGUAL = 314,          /* OP_IGUAL_IGUAL  */
-    OP_DISTINTO_A = 315,           /* OP_DISTINTO_A  */
-    LOGIC_AND = 316,               /* LOGIC_AND  */
-    LOGIC_OR = 317                 /* LOGIC_OR  */
+    STRING_COMILLAS = 308,         /* STRING_COMILLAS  */
+    BOOL_VALUE = 309,              /* BOOL_VALUE  */
+    NULL_VALUE = 310,              /* NULL_VALUE  */
+    OP_MENOR_IGUAL_A = 311,        /* OP_MENOR_IGUAL_A  */
+    OP_MAYOR_IGUAL_A = 312,        /* OP_MAYOR_IGUAL_A  */
+    OP_IGUAL_IGUAL = 313,          /* OP_IGUAL_IGUAL  */
+    OP_DISTINTO_A = 314,           /* OP_DISTINTO_A  */
+    LOGIC_AND = 315,               /* LOGIC_AND  */
+    LOGIC_OR = 316,                /* LOGIC_OR  */
+    IDENTIFICADOR = 317            /* IDENTIFICADOR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

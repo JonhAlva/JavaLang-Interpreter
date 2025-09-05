@@ -34,16 +34,17 @@
 //Tokens con tipo de dato
 %token <int_number>         LOGIC_NOT INT_NUMBER OP_MENOR_A OP_MAYOR_A '+' '-' '/' '*' '%'
 %token <float_number>       FLOAT_NUMBER
-%token <identificador>      IDENTIFICADOR 
 %token <string_comillas>    STRING_COMILLAS
 %token <bool_true>          BOOL_VALUE
 %token <null_value>         NULL_VALUE
 %token <operador>           OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A OP_IGUAL_IGUAL OP_DISTINTO_A LOGIC_AND LOGIC_OR
+%token <identificador>      IDENTIFICADOR
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
+//%type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence
+//%type <nodo> for_sentence switch_case switch_case_list switch_default native_func variable_access vector matriz
+//%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence
-%type <nodo> for_sentence switch_case switch_case_list switch_default native_func variable_access vector matriz
-%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -64,28 +65,27 @@ input:
 ;
 
 lista_instrucciones:
-            lista_instrucciones instruccion         { $$ = ListaInstrucciones($2, $1); }
+            lista_instrucciones instruccion         { $$ = ListaInstrucciones($1, $2); }
             | instruccion                           { $$ = ListaInstrucciones($1, NULL); }  
 ;
 
 instruccion:
-            declaration             { $$ = $1; }
-            | asignation            { $$ = $1; }
+            declaration             { $$ = Nodo_Vacio("DECLARACION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
+            | asignation            { $$ = Nodo_Vacio("ASIGNACION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
             | print                 { $$ = $1; }
-            | if_sentence           { $$ = $1; }
-            | native_func           { $$ = $1; }
-            | switch_case           { $$ = $1; }
-            | while_sentence        { $$ = $1; }
-            | for_sentence          { $$ = $1; }
-            | function_sentence     { $$ = $1; }
+            | if_sentence           { $$ = Nodo_Vacio("IF NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
+            | native_func           { $$ = Nodo_Vacio("FUNCION NATIVA NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
+            | switch_case           { $$ = Nodo_Vacio("SWITCH CASE NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
+            | while_sentence        { $$ = Nodo_Vacio("WHILE NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
+            | for_sentence          { $$ = Nodo_Vacio("FOR NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
+            | function_sentence     { $$ = Nodo_Vacio("FUNCION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
 ;
 
 // * FUNCION DE IMPRIMIR VALORES -------------------------------------------------------------------------------
 
 print:
     PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA               { $$ = Print($3); }
-    | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA      { $$ = Print($3); }
-;
+    | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA      { /* PRINT FUNCION NATIVA */ };
 
 
 // * DECLARACION DE VARIABLES Y ESTRUCTURAS DE DATOS -----------------------------------------------------------------------------------
@@ -93,16 +93,16 @@ print:
 declaration:
             DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
             { /* VARIABLE SIN VALOR*/ }
-            | DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA              { /* VARIABLE CON VALOR O SI EXPR ES IDENTIFICADOR ES EL CASTEO WIDENING */ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA              { $$ = Nodo_Vacio("DECLARACION SIN ASIGNACION NO IMPLEMENTADA AUN"); /* DECLARACION CON ASIGNACION NORMAL*/ }
             | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA { /* CASTEO NARROWING*/ }
-            | vector
-            | matriz
-            | dynamic_array                                                     { $$ = $1; }
-            | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA
-            | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters PARENTESIS_CLOSE S_PUNTO_COMA
-            | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA
-            | DATA_TYPE IDENTIFICADOR S_IGUAL string_join S_PUNTO_COMA
-            | DATA_TYPE IDENTIFICADOR S_IGUAL array_funcs S_PUNTO_COMA
+            | vector                { $$ = Nodo_Vacio("VECTOR NO IMPLEMENTADO AUN"); /* VECTOR */ }
+            | matriz                { $$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN"); /* MATRIZ */ }
+            | dynamic_array         { $$ = Nodo_Vacio("DYNAMIC_ARRAY NO IMPLEMENTADO AUN"); /* DYNAMIC_ARRAY */ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA      { $$ = Nodo_Vacio("Variable acceso NO IMPLEMENTADO AUN"); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters PARENTESIS_CLOSE S_PUNTO_COMA  { $$ = Nodo_Vacio("DECLARACION DE FUNCION NO IMPLEMENTADO AUN"); /* DECLARACION DE FUNCIONES */ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA { $$ = Nodo_Vacio("PARSEO DE TIPOS NO IMPLEMENTADO AUN"); /* PARSEO DE TIPOS */ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL string_join S_PUNTO_COMA  { $$ = Nodo_Vacio("JOIN DE STRINGS NO IMPLEMENTADO AUN"); /* JOIN DE STRINGS */ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL array_funcs S_PUNTO_COMA  { $$ = Nodo_Vacio("ARRAY FUNCS NO IMPLEMENTADO AUN"); /* FUNCIONES DE ARRAYS */ }
 ;
 
 parse_expretion:
@@ -219,8 +219,8 @@ variable_access:
 
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------
 if_sentence:
-            IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
-            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+            IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE    { $$ = Nodo_Vacio("IF SIMPLE NO IMPLEMENTADO AUN"); }
+            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE { $$ = Nodo_Vacio("IF ELSE NO IMPLEMENTADO AUN"); }
 ;
 
 // * CICLO FOR ----------------------------------------------------------------------------------------------------------
@@ -254,7 +254,7 @@ switch_default:
 
 // * CONDICIONAL WHILE ----------------------------------------------------------------------------------------------------
 while_sentence:
-                WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+                WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE { $$ = Nodo_Vacio("WHILE NO IMPLEMENTADO AUN"); }
 ;
 
 // * DECLARACION DE FUNCIONES ----------------------------------------------------------------------------------------------------
@@ -289,16 +289,16 @@ expr:
     | PARENTESIS_OPEN expr PARENTESIS_CLOSE     { $$ = $2; }
     | INT_NUMBER                                { $$ = Terminal_Int($1); }
     | FLOAT_NUMBER                              { $$ = Terminal_Float($1); }
-    | STRING_COMILLAS                           { $$ = Terminal_String($1); }
+    | STRING_COMILLAS                           { if (strlen($1) == 3) { $$ = Terminal_Char($1[1]); } else { $$ = Terminal_String($1); }} // ! Agregar verificacion si es un char o no
     | BOOL_VALUE                                { $$ = Terminal_Bool($1); }
     | NULL_VALUE                                { $$ = Terminal_Null($1); } // ! Cambiar a "-null" si no lo procesa bien
-    | IDENTIFICADOR                             /*{ $$ = Identificador_Ref($1); }*/
-    | expr OP_MENOR_A expr                      { $$ = Operacion_Bool("<", $1, $3); }
-    | expr OP_MAYOR_A expr                      { $$ = Operacion_Bool(">", $1, $3); }
-    | expr OP_MENOR_IGUAL_A expr                { $$ = Operacion_Bool($2, $1, $3); }
-    | expr OP_MAYOR_IGUAL_A expr                { $$ = Operacion_Bool($2, $1, $3); }
-    | expr OP_IGUAL_IGUAL expr                  { $$ = Operacion_Bool($2, $1, $3); }
-    | expr OP_DISTINTO_A expr                   { $$ = Operacion_Bool($2, $1, $3); }
+    | IDENTIFICADOR                             { $$ = Identificador_Ref($1);}
+    | expr OP_MENOR_A expr                      { $$ = Menor_A($1, $3); }
+    | expr OP_MAYOR_A expr                      { $$ = Mayor_A($1, $3); }
+    | expr OP_MENOR_IGUAL_A expr                { $$ = Menor_Igual_A($1, $3); }
+    | expr OP_MAYOR_IGUAL_A expr                { $$ = Mayor_Igual_A($1, $3); }
+    | expr OP_IGUAL_IGUAL expr                  { $$ = Igual_Igual($1, $3); }
+    | expr OP_DISTINTO_A expr                   { $$ = Diferente_Que($1, $3); }
     | expr LOGIC_AND expr                       { $$ = Operacion_Bool($2, $1, $3); }
     | expr LOGIC_OR expr                        { $$ = Operacion_Bool($2, $1, $3); }
     | LOGIC_NOT expr                            { $$ = Not($1, $2); }

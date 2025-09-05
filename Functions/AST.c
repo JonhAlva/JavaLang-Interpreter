@@ -68,13 +68,13 @@ Nodo* Not(int Op, Nodo* Izq) {
 }
 
 // ! Nodo para identificador de variable { Nombre de variable }
-/*Nodo* Identificador_Ref(char* nombre) {
+Nodo* Identificador_Ref(char* nombre) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_IDENTIFICADOR;
     n->nombre = strdup(nombre);
     n->izq = n->der = NULL;
     return n;
-} */
+}
 
 // ! Nodo Booleano, hace la logica de las operaciones booleanas
 Nodo* Operacion_Bool(char* Op, Nodo* Izq, Nodo* Der) {
@@ -174,5 +174,61 @@ Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto) {
     n->tipo = NODO_LISTA;
     n->izq = instr;
     n->der = resto;
+    return n;
+}
+
+Nodo* Mayor_A(Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MAYOR_A;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Menor_A(Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MENOR_A;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Mayor_Igual_A(Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MAYOR_IGUAL_A;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Menor_Igual_A(Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MENOR_IGUAL_A;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Igual_Igual(Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_IGUAL_IGUAL;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Diferente_Que(Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_DIFERENTE_QUE;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Nodo_Vacio(const char* mensaje) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_NULL;
+    n->valor.s_val = strdup(mensaje);
+    n->izq = n->der = NULL;
     return n;
 }

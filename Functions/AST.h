@@ -15,7 +15,7 @@ typedef enum {
     NODO_INT,               // *
     NODO_FLOAT,             // *
     NODO_STRING,            // *
-    //NODO_IDENTIFICADOR, 
+    NODO_IDENTIFICADOR,     // *
     //NODO_DECLARATION,
     NODO_BOOL,              // *
     NODO_CHAR,              // *
@@ -28,7 +28,13 @@ typedef enum {
     NODO_NOT,               // *
     NODO_NULL,              // *
     NODO_OP_BOOLEAN,
-    NODO_LISTA
+    NODO_LISTA,              // *
+    NODO_MENOR_A,
+    NODO_MAYOR_A,
+    NODO_MENOR_IGUAL_A,
+    NODO_MAYOR_IGUAL_A,
+    NODO_IGUAL_IGUAL,
+    NODO_DIFERENTE_QUE
 } TipoNodo;
 
 typedef struct Nodo {
@@ -63,13 +69,21 @@ Nodo* Resta(int Op, Nodo* Izq, Nodo* Der);
 Nodo* Multiplicacion(int Op, Nodo* Izq, Nodo* Der);
 Nodo* Division(int Op, Nodo* Izq, Nodo* Der);
 Nodo* Modulo(int Op, Nodo* Izq, Nodo* Der);
-
 Nodo* Not(int Op, Nodo* Izq);
 Nodo* Operacion_Bool(char* Op, Nodo* Izq, Nodo* Der);
 
+Nodo* Mayor_A(Nodo* Izq, Nodo* Der);
+Nodo* Menor_A(Nodo* Izq, Nodo* Der);
+Nodo* Mayor_Igual_A(Nodo* Izq, Nodo* Der);
+Nodo* Menor_Igual_A(Nodo* Izq, Nodo* Der);
+Nodo* Igual_Igual(Nodo* Izq, Nodo* Der);
+Nodo* Diferente_Que(Nodo* Izq, Nodo* Der);
+
 Nodo* Print(Nodo* expr);
+Nodo* Identificador_Ref(char* nombre);
 
 Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto);
+Nodo* Nodo_Vacio(const char* mensaje);
 
 // ? Funciones de limpieza
 //void ImprimirNodo(Nodo* nodo, int nivel);

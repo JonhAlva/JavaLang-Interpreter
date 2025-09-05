@@ -39,12 +39,13 @@ int main(int argc, char **argv) {
 
         // Iniciar análisis
         if (yyparse() == 0) {
-            printf(" ✅ Análisis sintáctico terminado con éxito \n");
+            printf("        ✅ Análisis sintáctico terminado con éxito \n");
+            printf(" ⚒️   Salida: \n");
             if (raiz != NULL ) {
                 Evaluar(raiz);
             }
         } else {
-            printf(" ❌ Se encontraron errores durante el análisis \n");
+            printf("        ❌ Se encontraron errores durante el análisis \n");
         }
 
         fclose(yyin);
