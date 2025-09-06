@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
         // Iniciar análisis
         if (yyparse() == 0) {
             printf("        ✅ Análisis sintáctico terminado con éxito \n");
-            printf(" ⚒️   Salida: \n");
+            printf(" ⚒️ : \n");
             if (raiz != NULL ) {
                 Evaluar(raiz);
             }

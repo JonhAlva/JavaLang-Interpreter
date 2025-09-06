@@ -52,14 +52,12 @@ Valor Evaluar(Nodo* n) {
             return v;
 
         case NODO_NOT: { // * ----------------------------------------------------------------------------------------
-            Valor izq = Evaluar(n->izq);    
-            
-            if (izq.b_val == 1) {
-                v.tipo = VAL_BOOL;
-                v.b_val = 0;
-            } else {
-                v.tipo = VAL_BOOL;
-                v.b_val = 1;
+            Valor izq = Evaluar(n->izq);
+
+            if (izq.tipo == VAL_BOOL) {
+            v.tipo = VAL_BOOL;
+            v.b_val = !izq.b_val;
+            return v;
             }
         }
 
@@ -370,6 +368,61 @@ Valor Evaluar(Nodo* n) {
             }
         }
 
+        case NODO_DIFERENTE_QUE:{// * ----------------------------------------------------------------------------------------
+            Valor izq = Evaluar(n->izq);
+            Valor der = Evaluar(n->der);
+
+            if (izq.tipo == VAL_INT && der.tipo == VAL_INT) {
+            v.tipo = VAL_BOOL;
+            v.b_val = (izq.i_val != der.i_val) ? 1 : 0;
+            return v;
+            }
+
+            if (izq.tipo == VAL_FLOAT || der.tipo == VAL_FLOAT) {
+            v.tipo = VAL_BOOL;
+            float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
+            float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
+            v.b_val = (izq_val != der_val) ? 1 : 0;
+            return v;
+            }
+
+            // Comparación de caracteres
+            if (izq.tipo == VAL_CHAR && der.tipo == VAL_CHAR) {
+            v.tipo = VAL_BOOL;
+            v.b_val = (izq.c_val != der.c_val) ? 1 : 0;
+            return v;
+            }
+
+            // Comparación de strings
+            if (izq.tipo == VAL_STRING && der.tipo == VAL_STRING) {
+            v.tipo = VAL_BOOL;
+            v.b_val = (strcmp(izq.s_val, der.s_val) != 0) ? 1 : 0;
+            return v;
+            }
+        }
+
+        case NODO_AND: { // * ----------------------------------------------------------------------------------------
+            Valor izq = Evaluar(n->izq);
+            Valor der = Evaluar(n->der);
+
+            if (izq.tipo == VAL_BOOL && der.tipo == VAL_BOOL) {
+                v.tipo = VAL_BOOL;
+                v.b_val = (izq.b_val == 1 && der.b_val == 1) ? 1 : 0;
+                return v;
+            }
+        }
+
+        case NODO_OR: { // * ----------------------------------------------------------------------------------------
+            Valor izq = Evaluar(n->izq);
+            Valor der = Evaluar(n->der);
+
+            if (izq.tipo == VAL_BOOL && der.tipo == VAL_BOOL) {
+                v.tipo = VAL_BOOL;
+                v.b_val = (izq.b_val == 1 || der.b_val == 1) ? 1 : 0;
+                return v;
+            }
+        }
+
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             Valor resultado = Evaluar(n->izq);
 
@@ -420,7 +473,7 @@ Valor Evaluar(Nodo* n) {
         // ! Aqui solo desglozamos valores y los mandamos
         // ! AQUI SE AÑADEN MAS CASES PARA LOS DISTINTOS NODOS Y LO QUE QUIERO QUE SALGA
     }
-    v.tipo = VAL_NULL;
-    v.null_val = "-Mayor_A Err"; // Error de tipo
-    return v;
+    //v.tipo = VAL_NULL;
+    //v.null_val = "NODO DESCONOCIDO"; // Error de tipo
+    //return v;
 }

@@ -299,9 +299,9 @@ expr:
     | expr OP_MAYOR_IGUAL_A expr                { $$ = Mayor_Igual_A($1, $3); }
     | expr OP_IGUAL_IGUAL expr                  { $$ = Igual_Igual($1, $3); }
     | expr OP_DISTINTO_A expr                   { $$ = Diferente_Que($1, $3); }
-    | expr LOGIC_AND expr                       { $$ = Operacion_Bool($2, $1, $3); }
-    | expr LOGIC_OR expr                        { $$ = Operacion_Bool($2, $1, $3); }
-    | LOGIC_NOT expr                            { $$ = Not($1, $2); }
+    | expr LOGIC_AND expr                       { $$ = And($1, $3); }
+    | expr LOGIC_OR expr                        { $$ = Or($1, $3); }
+    | LOGIC_NOT expr                            { $$ = Not($2); }
 ;
 
 %%

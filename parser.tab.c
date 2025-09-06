@@ -1862,19 +1862,19 @@ yyreduce:
 
   case 113: /* expr: expr LOGIC_AND expr  */
 #line 302 "parser.y"
-                                                { (yyval.nodo) = Operacion_Bool((yyvsp[-1].operador), (yyvsp[-2].nodo), (yyvsp[0].nodo)); }
+                                                { (yyval.nodo) = And((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1867 "parser.tab.c"
     break;
 
   case 114: /* expr: expr LOGIC_OR expr  */
 #line 303 "parser.y"
-                                                { (yyval.nodo) = Operacion_Bool((yyvsp[-1].operador), (yyvsp[-2].nodo), (yyvsp[0].nodo)); }
+                                                { (yyval.nodo) = Or((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1873 "parser.tab.c"
     break;
 
   case 115: /* expr: LOGIC_NOT expr  */
 #line 304 "parser.y"
-                                                { (yyval.nodo) = Not((yyvsp[-1].int_number), (yyvsp[0].nodo)); }
+                                                { (yyval.nodo) = Not((yyvsp[0].nodo)); }
 #line 1879 "parser.tab.c"
     break;
 

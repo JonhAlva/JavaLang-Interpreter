@@ -27,14 +27,15 @@ typedef enum {
     NODO_MODULO,            // *
     NODO_NOT,               // *
     NODO_NULL,              // *
-    NODO_OP_BOOLEAN,
+    NODO_AND,
+    NODO_OR,                
     NODO_LISTA,              // *
-    NODO_MENOR_A,
-    NODO_MAYOR_A,
-    NODO_MENOR_IGUAL_A,
-    NODO_MAYOR_IGUAL_A,
-    NODO_IGUAL_IGUAL,
-    NODO_DIFERENTE_QUE
+    NODO_MENOR_A,            // *
+    NODO_MAYOR_A,            // *
+    NODO_MENOR_IGUAL_A,     // *
+    NODO_MAYOR_IGUAL_A,     // *
+    NODO_IGUAL_IGUAL,       // *
+    NODO_DIFERENTE_QUE      // *
 } TipoNodo;
 
 typedef struct Nodo {
@@ -69,8 +70,6 @@ Nodo* Resta(int Op, Nodo* Izq, Nodo* Der);
 Nodo* Multiplicacion(int Op, Nodo* Izq, Nodo* Der);
 Nodo* Division(int Op, Nodo* Izq, Nodo* Der);
 Nodo* Modulo(int Op, Nodo* Izq, Nodo* Der);
-Nodo* Not(int Op, Nodo* Izq);
-Nodo* Operacion_Bool(char* Op, Nodo* Izq, Nodo* Der);
 
 Nodo* Mayor_A(Nodo* Izq, Nodo* Der);
 Nodo* Menor_A(Nodo* Izq, Nodo* Der);
@@ -78,6 +77,9 @@ Nodo* Mayor_Igual_A(Nodo* Izq, Nodo* Der);
 Nodo* Menor_Igual_A(Nodo* Izq, Nodo* Der);
 Nodo* Igual_Igual(Nodo* Izq, Nodo* Der);
 Nodo* Diferente_Que(Nodo* Izq, Nodo* Der);
+Nodo* Not(Nodo* Neg);
+Nodo* And(Nodo* Izq, Nodo* Der);
+Nodo* Or(Nodo* Izq, Nodo* Der);
 
 Nodo* Print(Nodo* expr);
 Nodo* Identificador_Ref(char* nombre);

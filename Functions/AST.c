@@ -58,15 +58,6 @@ Nodo* Modulo(int Op, Nodo* Izq, Nodo* Der) {
 
 // ? ------------------------------------------------------------------------------------------------------------
 
-Nodo* Not(int Op, Nodo* Izq) {
-    Nodo* n = malloc(sizeof(Nodo));
-    n->tipo = NODO_BOOL;
-    n->valor.op = Op;
-    n->izq = Izq;
-    n->der = NULL;
-    return n;
-}
-
 // ! Nodo para identificador de variable { Nombre de variable }
 Nodo* Identificador_Ref(char* nombre) {
     Nodo* n = malloc(sizeof(Nodo));
@@ -77,12 +68,27 @@ Nodo* Identificador_Ref(char* nombre) {
 }
 
 // ! Nodo Booleano, hace la logica de las operaciones booleanas
-Nodo* Operacion_Bool(char* Op, Nodo* Izq, Nodo* Der) {
+Nodo* And(Nodo* Izq, Nodo* Der) {
     Nodo* n = malloc(sizeof(Nodo));
-    n->tipo = NODO_OP_BOOLEAN;
-    n->valor.op_bool = Op;
+    n->tipo = NODO_AND;
     n->izq = Izq;
     n->der = Der;
+    return n;
+}
+
+Nodo* Or(Nodo* Izq, Nodo* Der) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_OR;
+    n->izq = Izq;
+    n->der = Der;
+    return n;
+}
+
+Nodo* Not(Nodo* Neg) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_NOT;
+    n->izq = Neg;
+    n->der = NULL;
     return n;
 }
 
