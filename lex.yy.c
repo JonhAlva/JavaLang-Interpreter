@@ -956,52 +956,52 @@ YY_RULE_SETUP
 case 4:
 YY_RULE_SETUP
 #line 15 "lexer.l"
-{ return DATA_TYPE; }                           /* Reconocimiento de  palabras reservadas */
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }                           /* Reconocimiento de  palabras reservadas */
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 16 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 17 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 18 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 19 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 20 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 21 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 22 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 23 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 24 "lexer.l"
-{ return DATA_TYPE; }
+{ yylval.data_type = strdup(yytext); return DATA_TYPE; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP

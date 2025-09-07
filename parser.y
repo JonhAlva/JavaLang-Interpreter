@@ -21,10 +21,11 @@
     char* operador;
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
+    char* data_type;
 }
 
 //Aqui tiene que ir el nombre del return del lexer para cada token
-%token DATA_TYPE S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
+%token S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
 %token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
 %token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL
 %token PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
@@ -39,6 +40,7 @@
 %token <null_value>         NULL_VALUE
 %token <operador>           OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A OP_IGUAL_IGUAL OP_DISTINTO_A LOGIC_AND LOGIC_OR
 %token <identificador>      IDENTIFICADOR
+%token <data_type>          DATA_TYPE
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
 //%type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence
@@ -70,7 +72,7 @@ lista_instrucciones:
 ;
 
 instruccion:
-            declaration             { $$ = Nodo_Vacio("DECLARACION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
+            declaration             { $$ = $1; }
             | asignation            { $$ = Nodo_Vacio("ASIGNACION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
             | print                 { $$ = $1; }
             | if_sentence           { $$ = Nodo_Vacio("IF NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
@@ -85,15 +87,18 @@ instruccion:
 
 print:
     PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA               { $$ = Print($3); }
-    | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA      { /* PRINT FUNCION NATIVA */ };
+    | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA      { $$ = Nodo_Vacio("NATIVE FUNCION NO IMPLEMENTADA AUN"); /* VECTOR */ };
 
 
 // * DECLARACION DE VARIABLES Y ESTRUCTURAS DE DATOS -----------------------------------------------------------------------------------
 
 declaration:
-            DATA_TYPE IDENTIFICADOR S_PUNTO_COMA
-            { /* VARIABLE SIN VALOR*/ }
-            | DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA              { $$ = Nodo_Vacio("DECLARACION SIN ASIGNACION NO IMPLEMENTADA AUN"); /* DECLARACION CON ASIGNACION NORMAL*/ }
+            DATA_TYPE IDENTIFICADOR S_PUNTO_COMA 
+            {  $$ = Nodo_Vacio("VARIABLE SIN VALOR NO IMPLEMENTADO AUN"); /* VARIABLE SIN VALOR*/ }
+
+            | DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA                  
+            { $$ = Var_Declaration($1, $2, $4); }  
+
             | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA { /* CASTEO NARROWING*/ }
             | vector                { $$ = Nodo_Vacio("VECTOR NO IMPLEMENTADO AUN"); /* VECTOR */ }
             | matriz                { $$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN"); /* MATRIZ */ }
@@ -208,7 +213,7 @@ native_func:
             | BREAK_WORD S_PUNTO_COMA
             | RETURN_WORD S_PUNTO_COMA
             | RETURN_WORD expr S_PUNTO_COMA
-            | IDENTIFICADOR PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_COMA
+            | IDENTIFICADOR PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_COMA               { /** LLAMADA A FUNCION SIN PARAMETROS */ }
 ;
 
 // ! PRODUCCION QUE MANEJA LA FORMA DE ESCRITURA DE LOS VECTORES Y LAS MATRICES

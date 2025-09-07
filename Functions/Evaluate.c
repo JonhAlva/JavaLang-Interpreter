@@ -14,6 +14,8 @@ Valor Evaluar(Nodo* n) {
     Valor v;
 
     if (n == NULL) {
+        v.tipo = VAL_NULL;
+        v.null_val = "-Null Err"; // Error de nodo nulo
         return v;
     }
 
@@ -67,13 +69,29 @@ Valor Evaluar(Nodo* n) {
 
             // * Comprobar si son enteros
             if (izq.tipo == VAL_INT && der.tipo == VAL_INT) {
-                v.tipo = VAL_INT;
-                v.i_val = izq.i_val % der.i_val;
-                return v;
+            v.tipo = VAL_INT;
+            v.i_val = izq.i_val % der.i_val;
+            return v;
             }
 
-            // ! DEBE JALAR CON CHAR y DOUBLE
+            // * Si ambos son char, usar su valor ASCII
+            if (izq.tipo == VAL_CHAR && der.tipo == VAL_CHAR) {
+            v.tipo = VAL_INT;
+            v.i_val = ((int)izq.c_val) % ((int)der.c_val);
+            return v;
+            }
 
+            // * Si uno es char y otro es int
+            if (izq.tipo == VAL_CHAR && der.tipo == VAL_INT) {
+            v.tipo = VAL_INT;
+            v.i_val = ((int)izq.c_val) % der.i_val;
+            return v;
+            }
+            if (izq.tipo == VAL_INT && der.tipo == VAL_CHAR) {
+            v.tipo = VAL_INT;
+            v.i_val = izq.i_val % ((int)der.c_val);
+            return v;
+            }
         }
 
         case NODO_SUMA: { // * ----------------------------------------------------------------------------------------
@@ -421,6 +439,37 @@ Valor Evaluar(Nodo* n) {
                 v.b_val = (izq.b_val == 1 || der.b_val == 1) ? 1 : 0;
                 return v;
             }
+        }
+
+        case NODO_DECLARATION: { // * ----------------------------------------------------------------------------------------
+            Valor izq = Evaluar(n->izq);
+            // * Nombre de variable en "n->nombre"
+            // * Tipo de variable en "n->valor.varType"
+            // * Valor asignado en "izq.[Atributo segun tipo]"
+            // Validar si el tipo declarado en varType es igual al tipo del valor evaluado
+            if (strcmp(n->valor.varType, "int") == 0) {
+                printf(" »   Tipo de dato declarado es INT \n");
+            } else if (strcmp(n->valor.varType, "float") == 0) {
+                printf(" »   Tipo de dato declarado es FLOAT \n");
+            } else if (strcmp(n->valor.varType, "String") == 0) {
+                printf(" »   Tipo de dato declarado es STRING \n");
+            } else if (strcmp(n->valor.varType, "boolean") == 0) {
+                printf(" »   Tipo de dato declarado es BOOL \n");
+            } else if (strcmp(n->valor.varType, "char") == 0) {
+                printf(" »   Tipo de dato declarado es CHAR \n");
+            } else if (strcmp(n->valor.varType, "long") == 0) {
+                printf(" »   Tipo de dato declarado es LONG \n");
+            } else if (strcmp(n->valor.varType, "short") == 0) {
+                printf(" »   Tipo de dato declarado es SHORT \n");
+            } else if (strcmp(n->valor.varType, "double") == 0) {
+                printf(" »   Tipo de dato declarado es DOUBLE \n");
+            } else if (strcmp(n->valor.varType, "byte") == 0) {
+                printf(" »   Tipo de dato declarado es BYTE \n");
+            } else {
+                printf(" »   Tipo de dato desconocido en declaracion * \n");
+            }
+            // ! Manejo de declaraciones se hace en otro lado
+            break;
         }
 
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------

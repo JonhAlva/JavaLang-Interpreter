@@ -7,6 +7,8 @@ System.out.println(5-2);
 System.out.println(100-10);
 System.out.println(100/10);
 System.out.println(10%3);
+System.out.println("n"%"d");
+System.out.println("d"%6);
 System.out.println("SI llega acá");
 System.out.println("Hola" + "Hola2");
 System.out.println("El resultado es: " + (5+2) + " Ekisde");
@@ -44,3 +46,15 @@ System.out.println(true && false);
 System.out.println(false || false);
 System.out.println(true && true);
 System.out.println(false || true);    
+
+// Asignacion de variables
+
+int Var_Int = 12;
+float Var_Float = 12.5;
+boolean Var_Bool = true;
+char Var_Char = "a";
+String Var_String = "ElPepe";
+long Var_Long = 2.24657;
+byte Var_Byte = "2";
+short Var_Short = "5";
+double Var_Double = 2.123;

@@ -10,7 +10,6 @@
 
 // ? NODOS DE OPERACIONES ARITMETICAS -----------------------------------------------------------------
 
-// ! Nodo Operacion, hace todo lo necesario para operaciones aritmeticas y relacionales
 Nodo* Suma(int Op, Nodo* Izq, Nodo* Der) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_SUMA;
@@ -58,6 +57,19 @@ Nodo* Modulo(int Op, Nodo* Izq, Nodo* Der) {
 
 // ? ------------------------------------------------------------------------------------------------------------
 
+// ? NODOS DE MANEJO DE VARIABLES E IDENTIFICADORES --------------------------------------------------------------
+
+// ! Declaracion de variable con valor
+Nodo* Var_Declaration(char* Tipo, char* Nombre, Nodo* Izq) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_DECLARATION;
+    n->nombre = strdup(Nombre);
+    n->valor.varType = strdup(Tipo);
+    n->izq = Izq;
+    n->der = NULL;
+    return n;
+}
+
 // ! Nodo para identificador de variable { Nombre de variable }
 Nodo* Identificador_Ref(char* nombre) {
     Nodo* n = malloc(sizeof(Nodo));
@@ -66,6 +78,8 @@ Nodo* Identificador_Ref(char* nombre) {
     n->izq = n->der = NULL;
     return n;
 }
+
+// ? ------------------------------------------------------------------------------------------------------------
 
 // ! Nodo Booleano, hace la logica de las operaciones booleanas
 Nodo* And(Nodo* Izq, Nodo* Der) {
@@ -138,16 +152,6 @@ Nodo* Variable_Ref(char* nombre) {
     return n;
 }
 
-// ! Declaracion de variable con valor
-/*Nodo* Declaration_Var(char* nombre, Nodo* valor) {
-    Nodo* n = malloc(sizeof(Nodo));
-    n->tipo = NODO_DECLARATION;
-    n->nombre = strdup(nombre);
-    n->izq = valor;
-    n->der = NULL;
-    return n;
-} */
-
 // ! Booleano normal * * * * 
 Nodo* Terminal_Bool(int valor) {
     Nodo* n = malloc(sizeof(Nodo));
@@ -172,14 +176,6 @@ Nodo* Terminal_Null(char* valor) {
     n->tipo = NODO_NULL;
     n->valor.null_val = valor;
     n->izq = n->der = NULL;
-    return n;
-}
-
-Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto) {
-    Nodo* n = malloc(sizeof(Nodo));
-    n->tipo = NODO_LISTA;
-    n->izq = instr;
-    n->der = resto;
     return n;
 }
 
@@ -236,5 +232,13 @@ Nodo* Nodo_Vacio(const char* mensaje) {
     n->tipo = NODO_NULL;
     n->valor.s_val = strdup(mensaje);
     n->izq = n->der = NULL;
+    return n;
+}
+
+Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_LISTA;
+    n->izq = instr;
+    n->der = resto;
     return n;
 }

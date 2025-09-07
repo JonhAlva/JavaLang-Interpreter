@@ -16,7 +16,7 @@ typedef enum {
     NODO_FLOAT,             // *
     NODO_STRING,            // *
     NODO_IDENTIFICADOR,     // *
-    //NODO_DECLARATION,
+    NODO_DECLARATION,
     NODO_BOOL,              // *
     NODO_CHAR,              // *
     NODO_PRINT,             // *
@@ -27,11 +27,11 @@ typedef enum {
     NODO_MODULO,            // *
     NODO_NOT,               // *
     NODO_NULL,              // *
-    NODO_AND,
-    NODO_OR,                
-    NODO_LISTA,              // *
-    NODO_MENOR_A,            // *
-    NODO_MAYOR_A,            // *
+    NODO_AND,               // *
+    NODO_OR,                // *
+    NODO_LISTA,             // *
+    NODO_MENOR_A,           // *
+    NODO_MAYOR_A,           // *
     NODO_MENOR_IGUAL_A,     // *
     NODO_MAYOR_IGUAL_A,     // *
     NODO_IGUAL_IGUAL,       // *
@@ -50,6 +50,7 @@ typedef struct Nodo {
         int op;
         char* op_bool;
         char* null_val;
+        char* varType;   // Tipo de dato de la variable (int, float, etc.)
     } valor;
     struct Nodo* izq;
     struct Nodo* der;
@@ -80,10 +81,10 @@ Nodo* Diferente_Que(Nodo* Izq, Nodo* Der);
 Nodo* Not(Nodo* Neg);
 Nodo* And(Nodo* Izq, Nodo* Der);
 Nodo* Or(Nodo* Izq, Nodo* Der);
-
-Nodo* Print(Nodo* expr);
 Nodo* Identificador_Ref(char* nombre);
 
+Nodo* Var_Declaration(char* Tipo, char* Nombre, Nodo* Izq);
+Nodo* Print(Nodo* expr);
 Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto);
 Nodo* Nodo_Vacio(const char* mensaje);
 

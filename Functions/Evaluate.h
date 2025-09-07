@@ -5,12 +5,14 @@
 #define EVALUATE_H
 
 typedef enum {
+    // ! AGREGAR EL OTRO TIPO DE DATOS QUE SE ACEPTAN
     VAL_INT, 
     VAL_FLOAT, 
     VAL_BOOL, 
     VAL_STRING, 
     VAL_CHAR, 
-    VAL_NULL
+    VAL_NULL,
+    VAL_DOUBLE
 } TipoValor;
 
 typedef struct {
@@ -23,6 +25,7 @@ typedef struct {
         int b_val;      // valor booleano 0 false | 1 true
         int op;         //operador
         char* null_val; //valor nulo
+        char* varType;   // Tipo de dato de la variable (int, float, etc.)
     };
 } Valor;
 

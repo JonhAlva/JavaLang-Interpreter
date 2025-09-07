@@ -12,16 +12,16 @@
 "//".*                  {/* Ignora comentarios de una linea*/}
 "/*"([^*]|\n)*"*/"      { /* Ignora comentario multilinea */ }
 
-"int"                   { return DATA_TYPE; }                           /* Reconocimiento de  palabras reservadas */
-"float"                 { return DATA_TYPE; }
-"boolean"               { return DATA_TYPE; }
-"char"                  { return DATA_TYPE; }
-"String"                { return DATA_TYPE; }
-"long"                  { return DATA_TYPE; }
-"byte"                  { return DATA_TYPE; }
-"short"                 { return DATA_TYPE; }
-"double"                { return DATA_TYPE; }
-"void"                  { return DATA_TYPE; }
+"int"                   { yylval.data_type = strdup(yytext); return DATA_TYPE; }                           /* Reconocimiento de  palabras reservadas */
+"float"                 { yylval.data_type = strdup(yytext); return DATA_TYPE; }
+"boolean"               { yylval.data_type = strdup(yytext); return DATA_TYPE; }
+"char"                  { yylval.data_type = strdup(yytext); return DATA_TYPE; }
+"String"                { yylval.data_type = strdup(yytext); return DATA_TYPE; }
+"long"                  { yylval.data_type = strdup(yytext); return DATA_TYPE; }
+"byte"                  { yylval.data_type = strdup(yytext); return DATA_TYPE; }
+"short"                 { yylval.data_type = strdup(yytext); return DATA_TYPE; }
+"double"                { yylval.data_type = strdup(yytext); return DATA_TYPE; }
+"void"                  { yylval.data_type = strdup(yytext); return DATA_TYPE; }
 "System.out.println"    { return PRINT_SENTENCE; }
 ".equals"               { return FUNC_EQUALS; }
 ".length"               { return FUNC_LENGTH; }
