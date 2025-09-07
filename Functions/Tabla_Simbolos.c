@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "Tabla_Simbolos.h"
+
+Variable tabla_Variables[MAX_VARS];
+int num_vars = 0;
 
 // ! Asignacion de variable INT
 void AsignarVariable_Int(char* Nombre, int valor) {

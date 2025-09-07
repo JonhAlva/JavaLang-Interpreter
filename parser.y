@@ -1,7 +1,6 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
-    #include "./Functions/Tabla_Simbolos.h"
     #include "./Functions/AST.h"
 
     extern int yylex();

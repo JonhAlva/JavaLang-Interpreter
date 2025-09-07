@@ -1,7 +1,8 @@
 #include "AST.h"
+#include "Evaluate.h"
+#include "Tabla_Simbolos.h"
 #include <string.h>
 #include <stdlib.h>
-#include "Evaluate.h"
 #include <math.h>
 
 // * Este indice servira para hacer las acciones correspondientes
@@ -448,27 +449,49 @@ Valor Evaluar(Nodo* n) {
             // * Valor asignado en "izq.[Atributo segun tipo]"
             // Validar si el tipo declarado en varType es igual al tipo del valor evaluado
             if (strcmp(n->valor.varType, "int") == 0) {
-                printf(" »   Tipo de dato declarado es INT \n");
+                if (izq.tipo == VAL_INT) {
+                    AsignarVariable_Int(n->nombre, izq.i_val);
+                    printf(" »   Variable '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
+                } else {
+                    printf(" »   Error: Tipo de dato no coincide \n");
+                }
+
             } else if (strcmp(n->valor.varType, "float") == 0) {
-                printf(" »   Tipo de dato declarado es FLOAT \n");
+                if (izq.tipo == VAL_FLOAT) {
+                    AsignarVariable_Float(n->nombre, izq.f_val);
+                    printf(" »   Variable '%s' asignada con valor: %f \n", n->nombre, izq.f_val);
+                } else {
+                    printf(" »   Error: Tipo de dato no coincide \n");
+                }
+
             } else if (strcmp(n->valor.varType, "String") == 0) {
-                printf(" »   Tipo de dato declarado es STRING \n");
+                if (izq.tipo == VAL_STRING) {
+                    AsignarVariable_String(n->nombre, izq.s_val);
+                    printf(" »   Variable '%s' asignada con valor: %s \n", n->nombre, izq.s_val);
+                } else {
+                    printf(" »   Error: Tipo de dato no coincide \n");
+                }
+
             } else if (strcmp(n->valor.varType, "boolean") == 0) {
                 printf(" »   Tipo de dato declarado es BOOL \n");
+
             } else if (strcmp(n->valor.varType, "char") == 0) {
                 printf(" »   Tipo de dato declarado es CHAR \n");
+
             } else if (strcmp(n->valor.varType, "long") == 0) {
                 printf(" »   Tipo de dato declarado es LONG \n");
+
             } else if (strcmp(n->valor.varType, "short") == 0) {
                 printf(" »   Tipo de dato declarado es SHORT \n");
+
             } else if (strcmp(n->valor.varType, "double") == 0) {
                 printf(" »   Tipo de dato declarado es DOUBLE \n");
+
             } else if (strcmp(n->valor.varType, "byte") == 0) {
                 printf(" »   Tipo de dato declarado es BYTE \n");
             } else {
                 printf(" »   Tipo de dato desconocido en declaracion * \n");
             }
-            // ! Manejo de declaraciones se hace en otro lado
             break;
         }
 

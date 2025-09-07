@@ -51,10 +51,13 @@ System.out.println(false || true);
 
 int Var_Int = 12;
 float Var_Float = 12.5;
+String Var_String = "ElPepe";
+
+/*
 boolean Var_Bool = true;
 char Var_Char = "a";
-String Var_String = "ElPepe";
 long Var_Long = 2.24657;
 byte Var_Byte = "2";
 short Var_Short = "5";
 double Var_Double = 2.123;
+*/

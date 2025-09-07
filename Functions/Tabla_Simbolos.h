@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 
 #ifndef TABLA_SIMBOLOS_H
 #define TABLA_SIMBOLOS_H
+#define MAX_VARS 500
 
 // ? Struct de tipo de variables --------------------------------------------
 typedef enum {
@@ -25,7 +25,7 @@ typedef struct {
     union {
         int i_valor;
         float f_valor;
-        bool b_valor;
+        int b_valor;
         char* c_valor; // ? string y byte incluido aqui
         long l_valor;
         short sh_valor;
@@ -34,14 +34,17 @@ typedef struct {
 } Variable ;    // ? Nombre del struct de VARIABLE
 
 // ! Tabla de simbolos que almacena las variables
-Variable tabla_Variables[150];
-int num_vars = 0;
+extern Variable tabla_Variables[MAX_VARS];
+extern int num_vars;
 // ! -----------------------------------------------
 
 // ? Funciones que estaran publicas y en este paquete
 void AsignarVariable_Int(char* Nombre, int valor);
 void AsignarVariable_Float(char* Nombre, float valor);
 void AsignarVariable_String(char* Nombre, char* valor);
+
+
+
 void imprimirVariable(char* Nombre);
 void Imprimir_System_out(char* Texto);
 
