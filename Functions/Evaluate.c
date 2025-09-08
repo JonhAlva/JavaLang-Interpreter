@@ -32,6 +32,7 @@ Valor Evaluar(Nodo* n) {
         case NODO_FLOAT: // * ----------------------------------------------------------------------------------------
             v.tipo = VAL_FLOAT;
             v.f_val = n->valor.f_val;
+            printf(" »   Nodo solo FLOAT con valor: %f \n", v.f_val);
             return v;
 
         case NODO_STRING: // * ----------------------------------------------------------------------------------------
@@ -451,48 +452,84 @@ Valor Evaluar(Nodo* n) {
             if (strcmp(n->valor.varType, "int") == 0) {
                 if (izq.tipo == VAL_INT) {
                     AsignarVariable_Int(n->nombre, izq.i_val);
-                    printf(" »   Variable '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
                 } else {
-                    printf(" »   Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
                 }
 
             } else if (strcmp(n->valor.varType, "float") == 0) {
                 if (izq.tipo == VAL_FLOAT) {
                     AsignarVariable_Float(n->nombre, izq.f_val);
-                    printf(" »   Variable '%s' asignada con valor: %f \n", n->nombre, izq.f_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %f \n", n->nombre, izq.f_val);
                 } else {
-                    printf(" »   Error: Tipo de dato no coincide \n");
+                    printf(" »   Float Error: Tipo de dato no coincide \n");
                 }
 
             } else if (strcmp(n->valor.varType, "String") == 0) {
                 if (izq.tipo == VAL_STRING) {
                     AsignarVariable_String(n->nombre, izq.s_val);
-                    printf(" »   Variable '%s' asignada con valor: %s \n", n->nombre, izq.s_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %s \n", n->nombre, izq.s_val);
                 } else {
-                    printf(" »   Error: Tipo de dato no coincide \n");
+                    printf(" »   String Error: Tipo de dato no coincide \n");
                 }
 
             } else if (strcmp(n->valor.varType, "boolean") == 0) {
-                printf(" »   Tipo de dato declarado es BOOL \n");
+                if (izq.tipo == VAL_BOOL) {
+                    AsignarVariable_Boolean(n->nombre, izq.b_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.b_val ? 1 : 0);
+                } else {
+                    printf(" »   Boolean Error: Tipo de dato no coincide \n");
+                }
 
             } else if (strcmp(n->valor.varType, "char") == 0) {
-                printf(" »   Tipo de dato declarado es CHAR \n");
+                if (izq.tipo == VAL_CHAR) {
+                    AsignarVariable_Char(n->nombre, izq.c_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %c \n", n->nombre, izq.c_val);
+                } else {
+                    printf(" »   Char Error: Tipo de dato no coincide \n");
+                }
 
             } else if (strcmp(n->valor.varType, "long") == 0) {
-                printf(" »   Tipo de dato declarado es LONG \n");
+                if (izq.tipo == VAL_INT) {
+                    AsignarVariable_Long(n->nombre, izq.i_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
+                } else {
+                    printf(" »   Long Error: Tipo de dato no coincide \n");
+                }
 
             } else if (strcmp(n->valor.varType, "short") == 0) {
-                printf(" »   Tipo de dato declarado es SHORT \n");
+                if (izq.tipo == VAL_INT) {
+                    AsignarVariable_Short(n->nombre, izq.i_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
+                } else {
+                    printf(" »   Short Error: Tipo de dato no coincide \n");
+                }
 
             } else if (strcmp(n->valor.varType, "double") == 0) {
-                printf(" »   Tipo de dato declarado es DOUBLE \n");
+                if (izq.tipo == VAL_FLOAT) {
+                    AsignarVariable_Double(n->nombre, izq.f_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %f \n", n->nombre, izq.f_val);
+                } else {
+                    printf(" »   Double Error: Tipo de dato no coincide \n");
+                }
 
             } else if (strcmp(n->valor.varType, "byte") == 0) {
-                printf(" »   Tipo de dato declarado es BYTE \n");
+                if (izq.tipo == VAL_CHAR) {
+                    AsignarVariable_Byte(n->nombre, izq.c_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %c \n", n->nombre, izq.c_val);
+                } else {
+                    printf(" »   Byte Error: Tipo de dato no coincide \n");
+                }
             } else {
                 printf(" »   Tipo de dato desconocido en declaracion * \n");
             }
             break;
+        }
+
+        case NODO_IDENTIFICADOR: { // * ----------------------------------------------------------------------------------------
+            // * Buscar variable en tabla de simbolos y retornar su valor
+            Valor resultado = Acceso_Variable(n->nombre);
+            return resultado;
         }
 
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------

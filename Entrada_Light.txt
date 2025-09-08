@@ -1,6 +1,8 @@
 
 // Operaciones aritmeticas funcionales
 
+/*
+
 System.out.println("Operaciones aritmeticas y concatenacion: ------------------------");
 System.out.println(2+5);
 System.out.println(5-2);
@@ -47,17 +49,27 @@ System.out.println(false || false);
 System.out.println(true && true);
 System.out.println(false || true);    
 
+*/
+
 // Asignacion de variables
 
-int Var_Int = 12;
-float Var_Float = 12.5;
+int Var_Int = 12+25;
+float Var_Float = 12.7;
 String Var_String = "ElPepe";
-
-/*
 boolean Var_Bool = true;
 char Var_Char = "a";
-long Var_Long = 2.24657;
-byte Var_Byte = "2";
-short Var_Short = "5";
+long Var_Long = 24564;
+short Var_Short = 2;
 double Var_Double = 2.123;
-*/
+byte Var_Byte = "a";
+
+// Acceso de las variables
+//System.out.println("El valor de Var_Int es: " + Var_Int);
+System.out.println("El valor de Var_float: " + Var_Float);
+//System.out.println("El valor de Var_String es: " + Var_String);
+//System.out.println("El valor de Var_Bool es: " + Var_Bool);
+//System.out.println("El valor de Var_Char es: " + Var_Char);
+//System.out.println("El valor de Var_Long es: " + Var_Long);
+//System.out.println("El valor de Var_Short es: " + Var_Short);
+//System.out.println("El valor de Var_Doble es: " + Var_Double);
+//System.out.println("El valor de Var_Byte es: " + Var_Byte);

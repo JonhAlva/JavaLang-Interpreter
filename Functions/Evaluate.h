@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include "AST.h"
 
 #ifndef EVALUATE_H
 #define EVALUATE_H

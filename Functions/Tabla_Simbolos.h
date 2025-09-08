@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include "Evaluate.h"
+#include "AST.h"
 
 #ifndef TABLA_SIMBOLOS_H
 #define TABLA_SIMBOLOS_H
@@ -23,13 +25,14 @@ typedef struct {
     char nombreVariable[64];    // ? Nombre de la variable
     TipoDato tipo_Variable;     // ? Tipo de la variable
     union {
-        int i_valor;
-        float f_valor;
-        int b_valor;
-        char* c_valor; // ? string y byte incluido aqui
-        long l_valor;
-        short sh_valor;
-        double d_valor;
+        int i_val;
+        float f_val;
+        double d_val;    // Agregar campo específico para double
+        char* s_val;
+        char c_val;
+        int b_val;      // valor booleano 0 false | 1 true
+        char* null_val;
+        char* varType;   // Tipo de dato de la variable (int, float, etc.)
     } valor;  // ? Tipos de valores que tomara
 } Variable ;    // ? Nombre del struct de VARIABLE
 
@@ -42,10 +45,13 @@ extern int num_vars;
 void AsignarVariable_Int(char* Nombre, int valor);
 void AsignarVariable_Float(char* Nombre, float valor);
 void AsignarVariable_String(char* Nombre, char* valor);
+void AsignarVariable_Boolean(char* Nombre, int valor);
+void AsignarVariable_Char(char* Nombre, char valor);
+void AsignarVariable_Long(char* Nombre, int valor);
+void AsignarVariable_Short(char* Nombre, int valor);
+void AsignarVariable_Double(char* Nombre, float valor);
+void AsignarVariable_Byte(char* Nombre, char valor);
 
-
-
-void imprimirVariable(char* Nombre);
-void Imprimir_System_out(char* Texto);
+Valor Acceso_Variable(char* Nombre);
 
 #endif
