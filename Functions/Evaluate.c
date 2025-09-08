@@ -32,13 +32,31 @@ Valor Evaluar(Nodo* n) {
         case NODO_FLOAT: // * ----------------------------------------------------------------------------------------
             v.tipo = VAL_FLOAT;
             v.f_val = n->valor.f_val;
-            printf(" »   Nodo solo FLOAT con valor: %f \n", v.f_val);
             return v;
 
-        case NODO_STRING: // * ----------------------------------------------------------------------------------------
-            v.tipo = VAL_STRING;
-            v.s_val = n->valor.s_val;
+        case NODO_DOUBLE: // * ----------------------------------------------------------------------------------------
+            v.tipo = VAL_DOUBLE;
+            v.d_val = n->valor.d_val;
             return v;
+
+        case NODO_STRING: {// * ----------------------------------------------------------------------------------------
+            v.tipo = VAL_STRING;
+            // Obtener longitud del string
+            size_t len = strlen(n->valor.s_val);
+            
+            // Verificar si tiene comillas al inicio y al final
+            if (len >= 2 && n->valor.s_val[0] == '"' && n->valor.s_val[len-1] == '"') {
+                // Crear nuevo string sin comillas
+                char* contenido = malloc(len - 1); // -2 por las comillas +1 por el null terminator
+                strncpy(contenido, n->valor.s_val + 1, len - 2); // Copiar sin primera y última comilla
+                contenido[len - 2] = '\0'; // Agregar null terminator
+                v.s_val = contenido;
+            } else {
+                // Si no tiene comillas, copiar tal cual
+                v.s_val = strdup(n->valor.s_val);
+            }
+            return v;
+        }
 
         case NODO_BOOL: // * ----------------------------------------------------------------------------------------
             v.tipo = VAL_BOOL;
@@ -100,6 +118,80 @@ Valor Evaluar(Nodo* n) {
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
+            // * Concatenacion de valores en + si son strings o valores variables
+            if (izq.tipo == VAL_STRING || der.tipo == VAL_STRING) {
+                v.tipo = VAL_STRING;
+                char temp[100];  // ! Buffer temporal para conversiones
+                char* str_izq;
+                char* str_der;
+
+                // Convertir valor izquierdo a string
+                switch(izq.tipo) {
+                    case VAL_STRING:
+                        str_izq = strdup(izq.s_val);
+                        break;
+                    case VAL_INT:
+                        sprintf(temp, "%d", izq.i_val);
+                        str_izq = strdup(temp);
+                        break;
+                    case VAL_FLOAT:
+                        sprintf(temp, "%f", izq.f_val);
+                        str_izq = strdup(temp);
+                        break;
+                    case VAL_DOUBLE:
+                        sprintf(temp, "%lf", izq.d_val);
+                        str_izq = strdup(temp);
+                        break;
+                    case VAL_BOOL:
+                        str_izq = strdup(izq.b_val ? "true" : "false");
+                        break;
+                    case VAL_CHAR:
+                        sprintf(temp, "%c", izq.c_val);
+                        str_izq = strdup(temp);
+                        break;
+                    case VAL_NULL:
+                        str_izq = strdup("null");
+                        break;
+                }
+
+                // Convertir valor derecho a string
+                switch(der.tipo) {
+                    case VAL_STRING:
+                        str_der = strdup(der.s_val);
+                        break;
+                    case VAL_INT:
+                        sprintf(temp, "%d", der.i_val);
+                        str_der = strdup(temp);
+                        break;
+                    case VAL_FLOAT:
+                        sprintf(temp, "%f", der.f_val);
+                        str_der = strdup(temp);
+                        break;
+                    case VAL_DOUBLE:
+                        sprintf(temp, "%lf", der.d_val);
+                        str_der = strdup(temp);
+                        break;
+                    case VAL_BOOL:
+                        str_der = strdup(der.b_val ? "true" : "false");
+                        break;
+                    case VAL_CHAR:
+                        sprintf(temp, "%c", der.c_val);
+                        str_der = strdup(temp);
+                        break;
+                    case VAL_NULL:
+                        str_der = strdup("null");
+                        break;
+                }
+                // Concatenar strings
+            v.s_val = malloc(strlen(str_izq) + strlen(str_der) + 1);
+            strcpy(v.s_val, str_izq);
+            strcat(v.s_val, str_der);
+            // Liberar memoria temporal
+            free(str_izq);
+            free(str_der);
+            return v;
+        }
+
             // * Comprobar si son enteros
             if (izq.tipo == VAL_INT && der.tipo == VAL_INT) {
                 v.tipo = VAL_INT;
@@ -116,63 +208,6 @@ Valor Evaluar(Nodo* n) {
                 return v;
             }
 
-            // * Concatenacion de valores en + si son strings o valores variables
-            if (izq.tipo == VAL_STRING || der.tipo == VAL_STRING) {
-                v.tipo = VAL_STRING;
-                char temp[100];  // ! Buffer temporal para conversiones
-                char* str_izq;
-                char* str_der;
-
-                // ! Convertir izquierda a string si no lo es
-                if (izq.tipo == VAL_STRING) {
-                    str_izq = izq.s_val;
-                } else {
-                    switch(izq.tipo) {
-                        case VAL_INT:
-                            sprintf(temp, "%d", izq.i_val);
-                            break;
-                        case VAL_FLOAT:
-                            sprintf(temp, "%f", izq.f_val);
-                            break;
-                        case VAL_BOOL:
-                            sprintf(temp, "%s", izq.b_val ? "true" : "false");
-                            break;
-                        default:
-                            sprintf(temp, " ");
-                    }
-                    str_izq = strdup(temp);
-                }
-
-                // ! Convertir derecha a string si no lo es
-                if (der.tipo == VAL_STRING) {
-                    str_der = der.s_val;
-                } else {
-                    switch(der.tipo) {
-                        case VAL_INT:
-                            sprintf(temp, "%d", der.i_val);
-                            break;
-                        case VAL_FLOAT:
-                            sprintf(temp, "%f", der.f_val);
-                            break;
-                        case VAL_BOOL:
-                            sprintf(temp, "%s", der.b_val ? "true" : "false");
-                            break;
-                        default:
-                            sprintf(temp, " ");
-                    }
-                    str_der = strdup(temp);
-                }
-
-                // ! Concatenar los strings
-                v.s_val = malloc(strlen(str_izq) + strlen(str_der) + 1);
-                strcpy(v.s_val, str_izq);
-                strcat(v.s_val, str_der);
-
-                // ! Liberar memoria si fue asignada dinámicamente
-                if (izq.tipo != VAL_STRING) free(str_izq);
-                if (der.tipo != VAL_STRING) free(str_der);
-                return v;
-            }
         }
 
         case NODO_RESTA: { // * ----------------------------------------------------------------------------------------
@@ -506,9 +541,9 @@ Valor Evaluar(Nodo* n) {
                 }
 
             } else if (strcmp(n->valor.varType, "double") == 0) {
-                if (izq.tipo == VAL_FLOAT) {
-                    AsignarVariable_Double(n->nombre, izq.f_val);
-                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %f \n", n->nombre, izq.f_val);
+                if (izq.tipo == VAL_DOUBLE) {
+                    AsignarVariable_Double(n->nombre, izq.d_val);
+                    printf(" » 💾 Variable Registrada: '%s' asignada con valor: %f \n", n->nombre, izq.d_val);
                 } else {
                     printf(" »   Double Error: Tipo de dato no coincide \n");
                 }
@@ -528,8 +563,14 @@ Valor Evaluar(Nodo* n) {
 
         case NODO_IDENTIFICADOR: { // * ----------------------------------------------------------------------------------------
             // * Buscar variable en tabla de simbolos y retornar su valor
-            Valor resultado = Acceso_Variable(n->nombre);
-            return resultado;
+            Nodo* varNodo = Acceso_Variable(n->nombre);
+            if (varNodo != NULL) {
+                return Evaluar(varNodo);
+            } else {
+                v.tipo = VAL_NULL;
+                v.null_val = "-Var Not Found Err"; // Error de variable no encontrada
+                return v;
+            }
         }
 
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
@@ -545,6 +586,10 @@ Valor Evaluar(Nodo* n) {
                 printf(" »   %f\n", resultado.f_val);
                 break;
 
+            case VAL_DOUBLE:
+                printf(" »   %lf\n", resultado.d_val);
+                break;
+            
             case VAL_STRING:
                 printf(" »   %s\n", resultado.s_val);
                 break;

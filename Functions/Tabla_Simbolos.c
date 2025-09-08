@@ -143,56 +143,54 @@ void AsignarVariable_Byte(char* Nombre, char valor) {
     num_vars++;
 }
 
-Valor Acceso_Variable(char* Nombre) {
-    Valor v;
+Nodo* Acceso_Variable(char* Nombre) {
+    Nodo* n = malloc(sizeof(Nodo));
     for (int i = 0; i < num_vars; i++) {
         if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
             switch (tabla_Variables[i].tipo_Variable) {
                 case TIPO_INT:
-                    v.tipo = VAL_INT;
-                    v.i_val = tabla_Variables[i].valor.i_val;
-                    return v;
-                case TIPO_FLOAT:
-                    v.tipo = VAL_FLOAT;
-                    v.f_val = tabla_Variables[i].valor.f_val;
-                    return v;
-                case TIPO_STRING:
-                    v.tipo = VAL_STRING;
-                    v.s_val = tabla_Variables[i].valor.s_val;
-                    return v;
-                case TIPO_BOOLEAN:
-                    v.tipo = VAL_BOOL;
-                    v.b_val = tabla_Variables[i].valor.b_val;
-                    return v;
-                case TIPO_CHAR:
-                    v.tipo = VAL_CHAR;
-                    v.c_val = tabla_Variables[i].valor.c_val;
-                    printf(" »   Accediendo a variable CHAR: '%s' con valor: %c \n", Nombre, v.c_val);
-                    return v;
-                case TIPO_LONG:
-                    v.tipo = VAL_INT; // Usamos VAL_INT para representar long
-                    v.i_val = (int)tabla_Variables[i].valor.i_val; // Convertir long a int
-                    return v;
-                case TIPO_SHORT:
-                    v.tipo = VAL_INT; // Usamos VAL_INT para representar short
-                    v.i_val = (int)tabla_Variables[i].valor.i_val; // Convertir short a int
-                    return v;
-                case TIPO_DOUBLE:
-                    v.tipo = VAL_FLOAT; // Usamos VAL_FLOAT para representar double
-                    v.f_val = (float)tabla_Variables[i].valor.d_val; // Convertir double a float
-                    printf(" »   Accediendo a variable DOUBLE: '%s' con valor: %f \n", Nombre, v.f_val);
-                    return v;
-                case TIPO_BYTE:
-                    v.tipo = VAL_CHAR; // Usamos VAL_CHAR para representar byte
-                    v.c_val = tabla_Variables[i].valor.c_val; // Asumimos que es un solo byte
-                    return v;
-                default:
+                    n->tipo = NODO_INT;
+                    n->valor.i_val = tabla_Variables[i].valor.i_val;
                     break;
-            }
+                case TIPO_FLOAT:
+                    n->tipo = NODO_FLOAT;
+                    n->valor.f_val = tabla_Variables[i].valor.f_val;
+                    break;
+                case TIPO_STRING:
+                    n->tipo = NODO_STRING;
+                    n->valor.s_val = strdup(tabla_Variables[i].valor.s_val);
+                    break;
+                case TIPO_BOOLEAN:
+                    n->tipo = NODO_BOOL;
+                    n->valor.b_val = tabla_Variables[i].valor.b_val;
+                    break;
+                case TIPO_CHAR:
+                    n->tipo = NODO_CHAR;
+                    n->valor.c_val = tabla_Variables[i].valor.c_val;
+                    break;
+                case TIPO_LONG:
+                    n->tipo = NODO_INT; // Usamos NODO_INT para representar long
+                    n->valor.i_val = tabla_Variables[i].valor.i_val;
+                    break;
+                case TIPO_SHORT:
+                    n->tipo = NODO_INT; // Usamos NODO_INT para representar short
+                    n->valor.i_val = tabla_Variables[i].valor.i_val;
+                    break;
+                case TIPO_DOUBLE:
+                    n->tipo = NODO_DOUBLE; // Usamos NODO_DOUBLE para representar double
+                    n->valor.d_val = tabla_Variables[i].valor.d_val;
+                    break;
+                case TIPO_BYTE:
+                    n->tipo = NODO_CHAR; // Usamos NODO_CHAR para representar byte
+                    n->valor.c_val = tabla_Variables[i].valor.c_val;
+                    break;
+                }
+            n->izq = n->der = NULL;
+            return n;
         }
     }
-    // Si no se encuentra la variable, retornar un valor nulo
-    v.tipo = VAL_NULL;
-    v.null_val = "null";
-    return v;
+    n->tipo = NODO_NULL;
+    n->valor.null_val = "-Var Not Found Err"; // Error de variable no encontrada
+    n->izq = n->der = NULL;
+    return n;
 }

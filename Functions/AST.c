@@ -134,6 +134,15 @@ Nodo* Terminal_Float(float valor) {
     return n;
 }
 
+// ! Numero double normal * * * *
+Nodo* Terminal_Double(float valor) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_DOUBLE;  
+    n->valor.d_val = (double)valor;
+    n->izq = n->der = NULL;
+    return n;
+}
+
 // ! Cadena string normal * * * *
 Nodo* Terminal_String(char* valor) {
     Nodo* n = malloc(sizeof(Nodo));

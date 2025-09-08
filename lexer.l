@@ -47,6 +47,7 @@
 "true"                  { yylval.bool_true = 1; return BOOL_VALUE; }
 "false"                 { yylval.bool_true = 0; return BOOL_VALUE; }
 "null"                  { yylval.null_value = "-null"; return NULL_VALUE; }
+"f"                     { return FLOAT_SUFFIX; }
 
 ";"                     { return S_PUNTO_COMA; }
 ":"                     { return S_PUNTO_PUNTO; }

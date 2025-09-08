@@ -54,7 +54,7 @@ System.out.println(false || true);
 // Asignacion de variables
 
 int Var_Int = 12+25;
-float Var_Float = 12.7;
+float Var_Float = 12.7f;
 String Var_String = "ElPepe";
 boolean Var_Bool = true;
 char Var_Char = "a";
@@ -64,12 +64,12 @@ double Var_Double = 2.123;
 byte Var_Byte = "a";
 
 // Acceso de las variables
-//System.out.println("El valor de Var_Int es: " + Var_Int);
-System.out.println("El valor de Var_float: " + Var_Float);
-//System.out.println("El valor de Var_String es: " + Var_String);
-//System.out.println("El valor de Var_Bool es: " + Var_Bool);
-//System.out.println("El valor de Var_Char es: " + Var_Char);
-//System.out.println("El valor de Var_Long es: " + Var_Long);
-//System.out.println("El valor de Var_Short es: " + Var_Short);
-//System.out.println("El valor de Var_Doble es: " + Var_Double);
-//System.out.println("El valor de Var_Byte es: " + Var_Byte);
+System.out.println("El valor de Var_Int es: " + Var_Int);
+System.out.println("El valor de float es: " + Var_Float);
+System.out.println("El valor de Var_String es: " + Var_String);
+System.out.println("El valor de Var_Bool es: " + Var_Bool);
+System.out.println("El valor de char es: " + Var_Char);
+System.out.println("El valor de Var_Long es: " + Var_Long);
+System.out.println("El valor de Var_Short es: " + Var_Short);
+System.out.println("El valor de double es: " + Var_Double);
+System.out.println("El valor de Var_Byte es: " + Var_Byte + "pedro pascal");

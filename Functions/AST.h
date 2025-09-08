@@ -14,6 +14,7 @@
 typedef enum {
     NODO_INT,               // *
     NODO_FLOAT,             // *
+    NODO_DOUBLE,
     NODO_STRING,            // *
     NODO_IDENTIFICADOR,     // *
     NODO_DECLARATION,
@@ -44,6 +45,7 @@ typedef struct Nodo {
     union {
         int i_val;
         float f_val;
+        double d_val;
         char* s_val;
         char c_val;
         int b_val;      // valor booleano 0 false | 1 true
@@ -60,6 +62,7 @@ typedef struct Nodo {
 
 Nodo* Terminal_Int(int valor);
 Nodo* Terminal_Float(float valor);
+Nodo* Terminal_Double(float valor);
 Nodo* Terminal_String(char* valor);
 Nodo* Terminal_Bool(int valor);
 Nodo* Terminal_Char(char valor);

@@ -21,6 +21,7 @@ typedef struct {
     union {
         int i_val;
         float f_val;
+        double d_val;
         char* s_val; //string
         char c_val;     //char
         int b_val;      // valor booleano 0 false | 1 true

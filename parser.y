@@ -29,7 +29,7 @@
 %token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL
 %token PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
 %token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING JOIN_STRING
-%token ARRAY_INDEX FUNC_LENGTH FUNC_ADD MAIN_STRING
+%token ARRAY_INDEX FUNC_LENGTH FUNC_ADD MAIN_STRING FLOAT_SUFFIX
 
 //Tokens con tipo de dato
 %token <int_number>         LOGIC_NOT INT_NUMBER OP_MENOR_A OP_MAYOR_A '+' '-' '/' '*' '%'
@@ -292,7 +292,8 @@ expr:
     | expr '%' expr                             { $$ = Modulo($2, $1, $3); }
     | PARENTESIS_OPEN expr PARENTESIS_CLOSE     { $$ = $2; }
     | INT_NUMBER                                { $$ = Terminal_Int($1); }
-    | FLOAT_NUMBER                              { $$ = Terminal_Float($1); }
+    | FLOAT_NUMBER FLOAT_SUFFIX                 { $$ = Terminal_Float($1); }
+    | FLOAT_NUMBER                              { $$ = Terminal_Double($1); }
     | STRING_COMILLAS                           { if (strlen($1) == 3) { $$ = Terminal_Char($1[1]); } else { $$ = Terminal_String($1); }} // ! Agregar verificacion si es un char o no
     | BOOL_VALUE                                { $$ = Terminal_Bool($1); }
     | NULL_VALUE                                { $$ = Terminal_Null($1); } // ! Cambiar a "-null" si no lo procesa bien

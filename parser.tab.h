@@ -98,22 +98,23 @@ extern int yydebug;
     FUNC_LENGTH = 299,             /* FUNC_LENGTH  */
     FUNC_ADD = 300,                /* FUNC_ADD  */
     MAIN_STRING = 301,             /* MAIN_STRING  */
-    LOGIC_NOT = 302,               /* LOGIC_NOT  */
-    INT_NUMBER = 303,              /* INT_NUMBER  */
-    OP_MENOR_A = 304,              /* OP_MENOR_A  */
-    OP_MAYOR_A = 305,              /* OP_MAYOR_A  */
-    FLOAT_NUMBER = 306,            /* FLOAT_NUMBER  */
-    STRING_COMILLAS = 307,         /* STRING_COMILLAS  */
-    BOOL_VALUE = 308,              /* BOOL_VALUE  */
-    NULL_VALUE = 309,              /* NULL_VALUE  */
-    OP_MENOR_IGUAL_A = 310,        /* OP_MENOR_IGUAL_A  */
-    OP_MAYOR_IGUAL_A = 311,        /* OP_MAYOR_IGUAL_A  */
-    OP_IGUAL_IGUAL = 312,          /* OP_IGUAL_IGUAL  */
-    OP_DISTINTO_A = 313,           /* OP_DISTINTO_A  */
-    LOGIC_AND = 314,               /* LOGIC_AND  */
-    LOGIC_OR = 315,                /* LOGIC_OR  */
-    IDENTIFICADOR = 316,           /* IDENTIFICADOR  */
-    DATA_TYPE = 317                /* DATA_TYPE  */
+    FLOAT_SUFFIX = 302,            /* FLOAT_SUFFIX  */
+    LOGIC_NOT = 303,               /* LOGIC_NOT  */
+    INT_NUMBER = 304,              /* INT_NUMBER  */
+    OP_MENOR_A = 305,              /* OP_MENOR_A  */
+    OP_MAYOR_A = 306,              /* OP_MAYOR_A  */
+    FLOAT_NUMBER = 307,            /* FLOAT_NUMBER  */
+    STRING_COMILLAS = 308,         /* STRING_COMILLAS  */
+    BOOL_VALUE = 309,              /* BOOL_VALUE  */
+    NULL_VALUE = 310,              /* NULL_VALUE  */
+    OP_MENOR_IGUAL_A = 311,        /* OP_MENOR_IGUAL_A  */
+    OP_MAYOR_IGUAL_A = 312,        /* OP_MAYOR_IGUAL_A  */
+    OP_IGUAL_IGUAL = 313,          /* OP_IGUAL_IGUAL  */
+    OP_DISTINTO_A = 314,           /* OP_DISTINTO_A  */
+    LOGIC_AND = 315,               /* LOGIC_AND  */
+    LOGIC_OR = 316,                /* LOGIC_OR  */
+    IDENTIFICADOR = 317,           /* IDENTIFICADOR  */
+    DATA_TYPE = 318                /* DATA_TYPE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -122,7 +123,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 15 "parser.y"
+#line 14 "parser.y"
 
     struct Nodo* nodo;
     int int_number;
@@ -134,7 +135,7 @@ union YYSTYPE
     char* null_value;
     char* data_type;
 
-#line 138 "parser.tab.h"
+#line 139 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
