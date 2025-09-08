@@ -572,6 +572,19 @@ Valor Evaluar(Nodo* n) {
                 return v;
             }
         }
+        
+        case NODO_ASIGNACION: { // * ----------------------------------------------------------------------------------------
+            Valor izq = Evaluar(n->izq);
+            Nodo* varNodo = Acceso_Variable(n->nombre);
+            // * Nombre de variable en "n->nombre"
+            // * Valor asignado en "izq.[Atributo segun tipo]"
+            // Buscar si la variable ya existe
+            if (varNodo != NULL) {
+                Actualizar_Variable(n->nombre, izq);
+            }
+            
+            break;
+        }
 
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             Valor resultado = Evaluar(n->izq);

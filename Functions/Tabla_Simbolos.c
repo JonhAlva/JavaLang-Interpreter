@@ -194,3 +194,84 @@ Nodo* Acceso_Variable(char* Nombre) {
     n->izq = n->der = NULL;
     return n;
 }
+
+void Actualizar_Variable(char* Nombre, Valor nuevo_valor) {
+
+    // Verificar si la variable existe
+    int variable_encontrada = 0;
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
+            variable_encontrada = 1;
+            break;
+        }
+    }
+
+    // Si la variable no fue encontrada
+    if (!variable_encontrada) {
+        printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Nombre);
+        return;
+    }
+    // Actualizar el valor de la variable según su tipo
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
+            switch (tabla_Variables[i].tipo_Variable) {
+                case TIPO_INT:
+                    if (nuevo_valor.tipo == VAL_INT) {
+                        tabla_Variables[i].valor.i_val = nuevo_valor.i_val;
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+                case TIPO_FLOAT:
+                    if (nuevo_valor.tipo == VAL_FLOAT) {
+                        tabla_Variables[i].valor.f_val = nuevo_valor.f_val;
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+                case TIPO_STRING:
+                    if (nuevo_valor.tipo == VAL_STRING) {
+                        free(tabla_Variables[i].valor.s_val); // Liberar memoria anterior
+                        tabla_Variables[i].valor.s_val = strdup(nuevo_valor.s_val);
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+                case TIPO_BOOLEAN:
+                    if (nuevo_valor.tipo == VAL_BOOL) {
+                        tabla_Variables[i].valor.b_val = nuevo_valor.b_val;
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+                case TIPO_CHAR:
+                    if (nuevo_valor.tipo == VAL_CHAR) {
+                        tabla_Variables[i].valor.c_val = nuevo_valor.c_val;
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+                case TIPO_LONG:
+                    if (nuevo_valor.tipo == VAL_INT) {
+                        tabla_Variables[i].valor.i_val = nuevo_valor.i_val;
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+                case TIPO_SHORT:
+                    if (nuevo_valor.tipo == VAL_INT) {
+                        tabla_Variables[i].valor.i_val = nuevo_valor.i_val;
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+                case TIPO_DOUBLE:
+                    if (nuevo_valor.tipo == VAL_DOUBLE) {
+                        tabla_Variables[i].valor.d_val = nuevo_valor.d_val;
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+                case TIPO_BYTE:
+                    if (nuevo_valor.tipo == VAL_CHAR) {
+                        tabla_Variables[i].valor.c_val = nuevo_valor.c_val;
+                        printf(" » 🔄 Variable '%s' Actualizada! \n", Nombre);
+                    }
+                    break;
+            }
+            return;
+        }
+    }
+}

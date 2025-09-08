@@ -24,9 +24,8 @@
 }
 
 //Aqui tiene que ir el nombre del return del lexer para cada token
-%token S_PUNTO_COMA S_IGUAL PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
-%token OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
-%token OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL
+%token S_PUNTO_COMA PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
+%token DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
 %token PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
 %token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING JOIN_STRING
 %token ARRAY_INDEX FUNC_LENGTH FUNC_ADD MAIN_STRING FLOAT_SUFFIX
@@ -38,14 +37,15 @@
 %token <bool_true>          BOOL_VALUE
 %token <null_value>         NULL_VALUE
 %token <operador>           OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A OP_IGUAL_IGUAL OP_DISTINTO_A LOGIC_AND LOGIC_OR
-%token <identificador>      IDENTIFICADOR
+%token <identificador>      IDENTIFICADOR S_IGUAL OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL
 %token <data_type>          DATA_TYPE
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
 //%type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence
-//%type <nodo> for_sentence switch_case switch_case_list switch_default native_func variable_access vector matriz
+//%type <nodo> for_sentence switch_case switch_case_list switch_default native_func  vector matriz
 //%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
-%type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence
+%type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
+%type <identificador> op_expr
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -72,7 +72,7 @@ lista_instrucciones:
 
 instruccion:
             declaration             { $$ = $1; }
-            | asignation            { $$ = Nodo_Vacio("ASIGNACION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
+            | asignation            { $$ = $1; }
             | print                 { $$ = $1; }
             | if_sentence           { $$ = Nodo_Vacio("IF NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
             | native_func           { $$ = Nodo_Vacio("FUNCION NATIVA NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
@@ -177,29 +177,29 @@ dynamic_data_declaration:
 // * ASIGNACION DE VARIABLES ------------------------------------------------------------------------------------
 
 asignation:
-            IDENTIFICADOR op_expr expr_bridge S_PUNTO_COMA             { /* 'OPERADOR ASIGNACION' PARA UNA VARIABLE Y ASIGNACION NORMAL*/ }
-            | variable_access S_IGUAL expr S_PUNTO_COMA                { /* ASIGNACION DE UN VALOR VECTOR, MATRIZ*/}
+            IDENTIFICADOR op_expr expr_bridge S_PUNTO_COMA             { $$ = Asignacion_Variable($1, $2, $3); /* 'OPERADOR ASIGNACION' PARA UNA VARIABLE Y ASIGNACION NORMAL*/ }
+            | variable_access S_IGUAL expr S_PUNTO_COMA                { $$ = Nodo_Vacio("VAR ACCEESS NO IMPLEMENTADO AUN");}
 ;
 
 // ! PRODUCCION ENCARGADA DE DECIDIR SI SOLO VIENE UNA EXPRESION O ALGUN VALOR DE ASIGNACION DE VECTORES
 expr_bridge:
-        expr
-        | variable_access
+        expr                    { $$ = $1; }
+        | variable_access       { $$ = $1; }
 ;
 
 // ! OPERADORES DE ASIGNACION POSIBLES CASOS
 op_expr:
-        S_IGUAL
-        | OP_MAS_IGUAL
-        | OP_MENOS_IGUAL
-        | OP_MULTI_IGUAL
-        | OP_DIV_IGUAL
-        | OP_MOD_IGUAL
-        | OP_AND_IGUAL
-        | OP_OR_IGUAL
-        | OP_POT_IGUAL
-        | OP_MAYOR_IGUAL
-        | OP_MENOR_IGUAL
+        S_IGUAL                 { $$ = "="; }
+        | OP_MAS_IGUAL          { $$ = "+="; }
+        | OP_MENOS_IGUAL        { $$ = "-="; }
+        | OP_MULTI_IGUAL        { $$ = "*="; }
+        | OP_DIV_IGUAL          { $$ = "/="; }
+        | OP_MOD_IGUAL          { $$ = "%="; }
+        | OP_AND_IGUAL          { $$ = "&="; }
+        | OP_OR_IGUAL           { $$ = "|="; }
+        | OP_POT_IGUAL          { $$ = "^="; }
+        | OP_MAYOR_IGUAL        { $$ = ">>="; }
+        | OP_MENOR_IGUAL        { $$ = "<<="; }
 ;
 
 // * FUNCIONES ESPECIALES O NATIVAS -------------------------------------------------------------------------------------
@@ -217,8 +217,8 @@ native_func:
 
 // ! PRODUCCION QUE MANEJA LA FORMA DE ESCRITURA DE LOS VECTORES Y LAS MATRICES
 variable_access:
-                IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE                 {/* ACCESO A VALOR EN UN VECTOR*/}
-                | IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE     {/* ACCESO A VALOR EN UNA MATRIZ */}
+                IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE                 {$$ = Nodo_Vacio("VECTOR NO IMPLEMENTADO AUN");/* ACCESO A VALOR EN UN VECTOR*/}
+                | IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE     {$$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN");/* ACCESO A VALOR EN UNA MATRIZ */}
 ;
 
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------

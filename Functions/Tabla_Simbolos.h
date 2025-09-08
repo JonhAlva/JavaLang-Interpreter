@@ -52,6 +52,8 @@ void AsignarVariable_Short(char* Nombre, int valor);
 void AsignarVariable_Double(char* Nombre, float valor);
 void AsignarVariable_Byte(char* Nombre, char valor);
 
+void Actualizar_Variable(char* Nombre, Valor nuevo_valor);
+
 Nodo* Acceso_Variable(char* Nombre);
 
 #endif

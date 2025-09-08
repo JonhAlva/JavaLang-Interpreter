@@ -79,6 +79,16 @@ Nodo* Identificador_Ref(char* nombre) {
     return n;
 }
 
+Nodo* Asignacion_Variable(char* Nombre, char* Op, Nodo* Izq) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_ASIGNACION; 
+    n->nombre = strdup(Nombre);
+    n->valor.op_bool = strdup(Op);
+    n->izq = Izq;
+    n->der = NULL;
+    return n;
+}
+
 // ? ------------------------------------------------------------------------------------------------------------
 
 // ! Nodo Booleano, hace la logica de las operaciones booleanas

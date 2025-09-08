@@ -14,10 +14,11 @@
 typedef enum {
     NODO_INT,               // *
     NODO_FLOAT,             // *
-    NODO_DOUBLE,
+    NODO_DOUBLE,            // *
     NODO_STRING,            // *
     NODO_IDENTIFICADOR,     // *
-    NODO_DECLARATION,
+    NODO_DECLARATION,       // *
+    NODO_ASIGNACION,        
     NODO_BOOL,              // *
     NODO_CHAR,              // *
     NODO_PRINT,             // *
@@ -87,6 +88,7 @@ Nodo* Or(Nodo* Izq, Nodo* Der);
 Nodo* Identificador_Ref(char* nombre);
 
 Nodo* Var_Declaration(char* Tipo, char* Nombre, Nodo* Izq);
+Nodo* Asignacion_Variable(char* Nombre, char* Op, Nodo* Izq);
 Nodo* Print(Nodo* expr);
 Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto);
 Nodo* Nodo_Vacio(const char* mensaje);

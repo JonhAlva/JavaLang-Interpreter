@@ -1,75 +1,79 @@
 
-// Operaciones aritmeticas funcionales
 
-/*
+    System.out.println("Inicio del programa **********************************************************************************");
+    // Operaciones aritmeticas funcionales
 
-System.out.println("Operaciones aritmeticas y concatenacion: ------------------------");
-System.out.println(2+5);
-System.out.println(5-2);
-System.out.println(100-10);
-System.out.println(100/10);
-System.out.println(10%3);
-System.out.println("n"%"d");
-System.out.println("d"%6);
-System.out.println("SI llega acá");
-System.out.println("Hola" + "Hola2");
-System.out.println("El resultado es: " + (5+2) + " Ekisde");
+    System.out.println("Operaciones aritmeticas y concatenacion: ------------------------");
+    System.out.println(2+5);
+    System.out.println(5-2);
+    System.out.println(100-10);
+    System.out.println(100/10);
+    System.out.println(10%3);
+    System.out.println("n"%"d");
+    System.out.println("d"%6);
+    System.out.println("SI llega acá");
+    System.out.println("Hola" + "Hola2");
+    System.out.println("El resultado es: " + (5+2) + " Ekisde");
 
-System.out.println("Comparacion mayor menor ------------------------");
-System.out.println("a">"b");
-System.out.println("a"<"b");
-System.out.println(5>2);
-System.out.println(5<2);
+    System.out.println("Comparacion mayor menor ------------------------");
+    System.out.println("a">"b");
+    System.out.println("a"<"b");
+    System.out.println(5>2);
+    System.out.println(5<2);
 
-System.out.println("Comparacion mayor menor igual ------------------------");
-System.out.println(1 >= 2);
-System.out.println(5 >= 5);
-System.out.println("n" <= "b");
-System.out.println("a" <= "a");
+    System.out.println("Comparacion mayor menor igual ------------------------");
+    System.out.println(1 >= 2);
+    System.out.println(5 >= 5);
+    System.out.println("n" <= "b");
+    System.out.println("a" <= "a");
 
-System.out.println("Coparacion igual igual ------------------------");
-System.out.println(1 == 2);
-System.out.println(5 == 5);
-System.out.println("n" == "b");
-System.out.println("a" == "a");
-System.out.println("Hola" == "Hola");
+    System.out.println("Coparacion igual igual ------------------------");
+    System.out.println(1 == 2);
+    System.out.println(5 == 5);
+    System.out.println("n" == "b");
+    System.out.println("a" == "a");
+    System.out.println("Hola" == "Hola");
 
-System.out.println("Coparacion distinto que ------------------------");
-System.out.println(1 != 2);
-System.out.println(5 != 5);
-System.out.println("n" != "b");
-System.out.println("a" != "a");
-System.out.println("Hola" != "HolA");
+    System.out.println("Coparacion distinto que ------------------------");
+    System.out.println(1 != 2);
+    System.out.println(5 != 5);
+    System.out.println("n" != "b");
+    System.out.println("a" != "a");
+    System.out.println("Hola" != "HolA");
 
-System.out.println("Operadores Boleanos ------------------------");
-System.out.println(!true); 
-System.out.println(!false);
-System.out.println(true && false);
-System.out.println(false || false);
-System.out.println(true && true);
-System.out.println(false || true);    
+    System.out.println("Operadores Boleanos ------------------------");
+    System.out.println(!true); 
+    System.out.println(!false);
+    System.out.println(true && false);
+    System.out.println(false || false);
+    System.out.println(true && true);
+    System.out.println(false || true);    
 
-*/
+    // Asignacion de variables
 
-// Asignacion de variables
+    int Var_Int = 12+25;
+    float Var_Float = 12.7f;
+    String Var_String = "ElPepe";
+    boolean Var_Bool = true;
+    char Var_Char = "a";
+    long Var_Long = 24564;
+    short Var_Short = 2;
+    double Var_Double = 2.123;
+    byte Var_Byte = "a";
 
-int Var_Int = 12+25;
-float Var_Float = 12.7f;
-String Var_String = "ElPepe";
-boolean Var_Bool = true;
-char Var_Char = "a";
-long Var_Long = 24564;
-short Var_Short = 2;
-double Var_Double = 2.123;
-byte Var_Byte = "a";
+    // Acceso de las variables
+    System.out.println("El valor de Var_Int mas 3 es: " + (Var_Int + 3));
 
-// Acceso de las variables
-System.out.println("El valor de Var_Int es: " + Var_Int);
-System.out.println("El valor de float es: " + Var_Float);
-System.out.println("El valor de Var_String es: " + Var_String);
-System.out.println("El valor de Var_Bool es: " + Var_Bool);
-System.out.println("El valor de char es: " + Var_Char);
-System.out.println("El valor de Var_Long es: " + Var_Long);
-System.out.println("El valor de Var_Short es: " + Var_Short);
-System.out.println("El valor de double es: " + Var_Double);
-System.out.println("El valor de Var_Byte es: " + Var_Byte + "pedro pascal");
+    // Reasignacion de variables
+
+    Var_Int = 25;
+    Var_Float = 25.25f;
+    Var_String = "El Chepe";
+    Var_Bool = false;
+    Var_Char = "z";
+    Var_Long = 111111;
+    Var_Short = 7;
+    Var_Double = 3.1416;
+    Var_Byte = "p";
+    System.out.println("El nuevo valor es: " + Var_Byte);
+    
