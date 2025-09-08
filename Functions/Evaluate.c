@@ -488,6 +488,10 @@ Valor Evaluar(Nodo* n) {
                 if (izq.tipo == VAL_INT) {
                     AsignarVariable_Int(n->nombre, izq.i_val);
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
+                } else if (izq.tipo == VAL_FLOAT) {
+                    // Permitir asignar un float eliminando la parte fraccionaria
+                    AsignarVariable_Int(n->nombre, (int)izq.f_val);
+                    printf(" » 💾 Variable Registrada (int -> float): '%s' asignada con valor: %d \n", n->nombre, (int)izq.f_val);
                 } else {
                     printf(" »   Int Error: Tipo de dato no coincide \n");
                 }
@@ -496,6 +500,10 @@ Valor Evaluar(Nodo* n) {
                 if (izq.tipo == VAL_FLOAT) {
                     AsignarVariable_Float(n->nombre, izq.f_val);
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %f \n", n->nombre, izq.f_val);
+                } else if (izq.tipo == VAL_DOUBLE) {
+                    // perimitir asignar un double eliminando la parte fraccionaria extra
+                    AsignarVariable_Float(n->nombre, (float)izq.d_val);
+                    printf(" » 💾 Variable Registrada (float -> double): '%s' asignada con valor: %f \n", n->nombre, (float)izq.d_val);
                 } else {
                     printf(" »   Float Error: Tipo de dato no coincide \n");
                 }
@@ -520,6 +528,14 @@ Valor Evaluar(Nodo* n) {
                 if (izq.tipo == VAL_CHAR) {
                     AsignarVariable_Char(n->nombre, izq.c_val);
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %c \n", n->nombre, izq.c_val);
+                } else if (izq.tipo == VAL_INT) {
+                    // Permitir asignar un int a un char si el int está en el rango ASCII
+                    if (izq.i_val >= 0 && izq.i_val <= 255) {
+                        AsignarVariable_Char(n->nombre, (char)izq.i_val);
+                        printf(" » 💾 Variable Registrada (char -> int): '%s' asignada con valor: %c \n", n->nombre, (char)izq.i_val);
+                    } else {
+                        printf(" »   Char Error: Valor entero fuera del rango ASCII \n");
+                    }
                 } else {
                     printf(" »   Char Error: Tipo de dato no coincide \n");
                 }
@@ -580,9 +596,15 @@ Valor Evaluar(Nodo* n) {
             // * Valor asignado en "izq.[Atributo segun tipo]"
             // Buscar si la variable ya existe
             if (varNodo != NULL) {
-                Actualizar_Variable(n->nombre, izq);
+                if (strcmp(n->valor.op_bool, "=") == 0) {
+                    Actualizar_Variable(n->nombre, izq);
+                    break;
+                } else {
+                    Asignacion_Especial(n->nombre, n->valor.op_bool, izq);
+                    break;
+                }
             }
-            
+
             break;
         }
 

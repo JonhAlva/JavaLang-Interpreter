@@ -42,17 +42,18 @@ extern int num_vars;
 // ! -----------------------------------------------
 
 // ? Funciones que estaran publicas y en este paquete
-void AsignarVariable_Int(char* Nombre, int valor);
-void AsignarVariable_Float(char* Nombre, float valor);
+void AsignarVariable_Int(char* Nombre, int valor);      // ? int -> float
+void AsignarVariable_Float(char* Nombre, float valor);  // * float -> double
 void AsignarVariable_String(char* Nombre, char* valor);
 void AsignarVariable_Boolean(char* Nombre, int valor);
-void AsignarVariable_Char(char* Nombre, char valor);
+void AsignarVariable_Char(char* Nombre, char valor);    // ? char -> int
 void AsignarVariable_Long(char* Nombre, int valor);
 void AsignarVariable_Short(char* Nombre, int valor);
 void AsignarVariable_Double(char* Nombre, float valor);
 void AsignarVariable_Byte(char* Nombre, char valor);
 
 void Actualizar_Variable(char* Nombre, Valor nuevo_valor);
+void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor);
 
 Nodo* Acceso_Variable(char* Nombre);
 

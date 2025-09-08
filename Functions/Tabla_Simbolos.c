@@ -67,7 +67,7 @@ void AsignarVariable_Boolean(char* Nombre, int valor) {
     num_vars++;
 }
 
-void AsignarVariable_Char(char* Nombre, char valor) { // ? ---------------------------
+void AsignarVariable_Char(char* Nombre, char valor) {
     for (int i = 0; i < num_vars; i++) {
         if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
             tabla_Variables[i].tipo_Variable = TIPO_CHAR;
@@ -196,7 +196,6 @@ Nodo* Acceso_Variable(char* Nombre) {
 }
 
 void Actualizar_Variable(char* Nombre, Valor nuevo_valor) {
-
     // Verificar si la variable existe
     int variable_encontrada = 0;
     for (int i = 0; i < num_vars; i++) {
@@ -273,5 +272,77 @@ void Actualizar_Variable(char* Nombre, Valor nuevo_valor) {
             }
             return;
         }
+    }
+}
+
+void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor) {
+    // Verificar si la variable existe
+    int variable_encontrada = 0;
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
+            variable_encontrada = 1;
+            break;
+        }
+    }
+
+    // Si la variable no fue encontrada
+    if (!variable_encontrada) {
+        printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Nombre);
+        return;
+    }
+
+    //Verificar si la variable es de tipo int solamente
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
+            if (tabla_Variables[i].tipo_Variable != TIPO_INT) {
+                printf(" ❌ Error: La variable '%s' no es de tipo int, no se puede usar operador especial\n", Nombre);
+                return;
+            }
+            break;
+        }
+    }
+
+    //Variable que hace una copia del valor actual de la variable
+    int valor_actual;
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
+            valor_actual = tabla_Variables[i].valor.i_val;
+            break;
+        }
+    }
+
+    // Dependiendo el operador se hara la operacion correspondiente
+    if (strcmp(operador, "+=") == 0) {
+        valor_actual += nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, "-=") == 0) {
+        valor_actual -= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, "*=") == 0) {
+        valor_actual *= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, "/=") == 0) {
+        valor_actual /= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, "%=") == 0) {
+        valor_actual %= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, "^=") == 0) {
+        valor_actual ^= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, "&=") == 0) {
+        valor_actual &= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, "|=") == 0) {
+        valor_actual |= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, "<<=") == 0) {
+        valor_actual <<= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else if (strcmp(operador, ">>=") == 0) {
+        valor_actual >>= nuevo_valor.i_val;
+        Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
+    } else {
+        printf(" ❌ Error: Operador '%s' no reconocido para asignacion\n", operador);
     }
 }
