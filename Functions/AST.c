@@ -59,6 +59,27 @@ Nodo* Modulo(int Op, Nodo* Izq, Nodo* Der) {
 
 // ? NODOS DE MANEJO DE VARIABLES E IDENTIFICADORES --------------------------------------------------------------
 
+// ! Nodo para comparar string con equals
+Nodo* Equals_Compare(char* Identificador, Nodo* Izq) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_EQUALS_COMPARE;
+    n->nombre = strdup(Identificador);
+    n->izq = Izq;
+    n->der = NULL;
+    return n;
+}
+
+// ! declaracion de casteo narrowing
+Nodo* Casteo_Narrowing(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_CASTEO_NARROWING;
+    n->nombre = strdup(ParseType);
+    n->valor.varType = strdup(Tipo1);
+    n->izq = Variable_Ref(Identificador);
+    n->der = Variable_Ref(Identificador2);
+    return n;
+}
+
 // ! Declaracion de variable con valor
 Nodo* Var_Declaration(char* Tipo, char* Nombre, Nodo* Izq) {
     Nodo* n = malloc(sizeof(Nodo));

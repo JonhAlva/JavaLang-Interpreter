@@ -484,6 +484,14 @@ Valor Evaluar(Nodo* n) {
             // * Tipo de variable en "n->valor.varType"
             // * Valor asignado en "izq.[Atributo segun tipo]"
             // Validar si el tipo declarado en varType es igual al tipo del valor evaluado
+
+            if (izq.tipo == VAL_NULL) {
+                Asignacion_Default(n->nombre, n->valor.varType);
+                printf(" » 💾 Variable Registrada: '%s' asignada con valor por defecto\n", n->nombre);
+                break;
+            }
+
+
             if (strcmp(n->valor.varType, "int") == 0) {
                 if (izq.tipo == VAL_INT) {
                     AsignarVariable_Int(n->nombre, izq.i_val);
@@ -594,7 +602,8 @@ Valor Evaluar(Nodo* n) {
             Nodo* varNodo = Acceso_Variable(n->nombre);
             // * Nombre de variable en "n->nombre"
             // * Valor asignado en "izq.[Atributo segun tipo]"
-            // Buscar si la variable ya existe
+            // * Buscar si la variable ya existe
+            
             if (varNodo != NULL) {
                 if (strcmp(n->valor.op_bool, "=") == 0) {
                     Actualizar_Variable(n->nombre, izq);
@@ -608,41 +617,67 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
+        case NODO_CASTEO_NARROWING: {
+            Valor izq = Evaluar(n->izq);
+            Valor der = Evaluar(n->der);
+
+            char* identificador = izq.s_val;
+            char* identificador2 = der.s_val;
+            char* tipo1 = n->valor.varType;
+            char* parseType = n->nombre;
+
+            Casteo_Narrow(tipo1, identificador, parseType, identificador2);
+            break;
+        }
+
+        case NODO_EQUALS_COMPARE: { // * ----------------------------------------------------------------------------------------
+
+            Nodo* Verificacion = Compare_Equals(n->nombre, n->izq);
+
+            Valor izq = Evaluar(Verificacion);
+
+            v.tipo = VAL_BOOL;
+            v.b_val = izq.b_val;
+            return v;
+
+        }
+
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
+            // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
             Valor resultado = Evaluar(n->izq);
 
             switch (resultado.tipo) {
 
             case VAL_INT:
-                printf(" »   %d\n", resultado.i_val);
+                printf(" » 🖨️  » %d\n", resultado.i_val);
                 break;
 
             case VAL_FLOAT:
-                printf(" »   %f\n", resultado.f_val);
+                printf(" » 🖨️  »  %f\n", resultado.f_val);
                 break;
 
             case VAL_DOUBLE:
-                printf(" »   %lf\n", resultado.d_val);
+                printf(" » 🖨️  »  %lf\n", resultado.d_val);
                 break;
             
             case VAL_STRING:
-                printf(" »   %s\n", resultado.s_val);
+                printf(" » 🖨️  »  %s\n", resultado.s_val);
                 break;
 
             case VAL_BOOL:
                 if (resultado.b_val == 1) {
-                    printf(" »   True \n");
+                    printf(" » 🖨️  »  True \n");
                 } else {
-                    printf(" »   False \n");
+                    printf(" » 🖨️  »  False \n");
                 }
                 break;
 
             case VAL_CHAR:
-                printf(" »   %c\n", resultado.c_val);
+                printf(" » 🖨️ »  %c\n", resultado.c_val);
                 break;
 
             case VAL_NULL:
-                printf(" »   %s\n", resultado.null_val);
+                printf(" » 🖨️ »  %s\n", resultado.null_val);
                 break;
 
             default:

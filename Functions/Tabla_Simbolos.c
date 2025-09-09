@@ -346,3 +346,182 @@ void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor) {
         printf(" ❌ Error: Operador '%s' no reconocido para asignacion\n", operador);
     }
 }
+
+void Casteo_Narrow(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2) {
+    // Verificar si la variable existe
+    int variable_encontrada = 0;
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Identificador2) == 0) {
+            variable_encontrada = 1;
+            break;
+        }
+    }
+
+    // Si la variable no fue encontrada
+    if (!variable_encontrada) {
+        printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Identificador2);
+        return;
+    }
+
+    // Verificar si el tipo de dato es compatible para casteo narrowing
+    int tipo_compatible = 0;
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Identificador2) == 0) {
+            if ((strcmp(Tipo1, "int") == 0 && tabla_Variables[i].tipo_Variable == TIPO_FLOAT) ||    // 1 EN INT
+                (strcmp(Tipo1, "char") == 0 && tabla_Variables[i].tipo_Variable == TIPO_INT) ||     // 0 EN INT
+                (strcmp(Tipo1, "float") == 0 && tabla_Variables[i].tipo_Variable == TIPO_DOUBLE)) {  // 8 EN INT
+                // * printf(" » Variable '%s' encontrada con tipo compatible: %d\n", Identificador2, tabla_Variables[i].tipo_Variable);
+                tipo_compatible = 1;
+            }
+            break;
+        }
+    }
+
+    if (!tipo_compatible) {
+        printf(" ❌ Error: No se puede realizar casteo narrowing de '%s' a '%s'\n", ParseType, Tipo1);
+        return;
+    }
+
+    // ! Realizar el casteo narrowing y asignar como nueva variable
+
+    // float -> int
+    if (strcmp(Tipo1, "int") == 0) {
+        // Buscar Identificador2 y castear su valor
+        for (int i = 0; i < num_vars; i++) {
+            if (strcmp(tabla_Variables[i].nombreVariable, Identificador2) == 0 && tabla_Variables[i].tipo_Variable == TIPO_FLOAT) {
+                int valor_casteado = (int)tabla_Variables[i].valor.f_val;
+                AsignarVariable_Int(Identificador, valor_casteado);
+                printf(" » ↩️  Casteo Narrowing realizado: float -> int para variable '%s'\n", Identificador);
+                return;
+            }
+        }
+    }
+    // int -> char
+    else if (strcmp(Tipo1, "char") == 0) {
+        for (int i = 0; i < num_vars; i++) {
+            if (strcmp(tabla_Variables[i].nombreVariable, Identificador2) == 0 && tabla_Variables[i].tipo_Variable == TIPO_INT) {
+                char valor_casteado = (char)tabla_Variables[i].valor.i_val;
+                AsignarVariable_Char(Identificador, valor_casteado);
+                printf(" » ↩️  Casteo Narrowing realizado: int -> char para variable '%s'\n", Identificador);
+                return;
+            }
+        }
+    }
+    // double -> float
+    else if (strcmp(Tipo1, "float") == 0) {
+        for (int i = 0; i < num_vars; i++) {
+            if (strcmp(tabla_Variables[i].nombreVariable, Identificador2) == 0 && tabla_Variables[i].tipo_Variable == TIPO_DOUBLE) {
+                float valor_casteado = (float)tabla_Variables[i].valor.d_val;
+                AsignarVariable_Float(Identificador, valor_casteado);
+                printf(" » ↩️  Casteo Narrowing realizado: double -> float para variable '%s'\n", Identificador);
+                return;
+            }
+        }
+    }
+}
+
+Nodo* Compare_Equals(char* Identificador, Nodo* Izq) {
+    
+    // Verificar si la variable existe
+    int variable_encontrada = 0;
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Identificador) == 0) {
+            variable_encontrada = 1;
+            break;
+        }
+    }
+
+    // Si la variable no fue encontrada
+    if (!variable_encontrada) {
+        printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Identificador);
+        Nodo* n = malloc(sizeof(Nodo));
+        n->tipo = NODO_NULL;
+        n->valor.null_val = "-Var Not Found Err"; // Error de variable no encontrada
+        n->izq = n->der = NULL;
+        return n;
+    }
+
+    // Verificar si el tipo de dato es String
+    int es_string = 0;
+    if (Izq->tipo != NODO_STRING) {
+        es_string = 1;
+    } 
+
+    if (!es_string) {
+        printf(" ❌ Error: La funcion .equals solo es compatible con tipo String\n");
+        Nodo* n = malloc(sizeof(Nodo));
+        n->tipo = NODO_NULL;
+        n->valor.null_val = "-Var Not String Err"; // Error de variable no encontrada
+        n->izq = n->der = NULL;
+        return n;
+    }
+
+    //Evaluar el contenido del nodo y compararlo con s_val del identificador
+    Valor valor_izq = Evaluar(Izq);
+
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Identificador) == 0) {
+            if (tabla_Variables[i].tipo_Variable == TIPO_STRING) {
+                // ! printf(" » Comparando '%s' con '%s'\n", tabla_Variables[i].valor.s_val, valor_izq.s_val);
+                if (strcmp(tabla_Variables[i].valor.s_val, valor_izq.s_val) == 0) {
+                    Nodo* n = malloc(sizeof(Nodo));
+                    n->tipo = NODO_BOOL;
+                    n->valor.b_val = 1;
+                    n->izq = n->der = NULL;
+                    return n;
+                } else {
+                    Nodo* n = malloc(sizeof(Nodo));
+                    n->tipo = NODO_BOOL;
+                    n->valor.b_val = 0;
+                    n->izq = n->der = NULL;
+                    return n;
+                }
+            }
+            break;
+        }
+    }
+
+}
+
+void Asignacion_Default(char* Nombre, char* Tipo) {
+    // Asignar valor por defecto según el tipo de dato
+    if (strcmp(Tipo, "int") == 0) {
+        AsignarVariable_Int(Nombre, 0);
+    } else if (strcmp(Tipo, "float") == 0) {
+        AsignarVariable_Float(Nombre, 0.0f);
+    } else if (strcmp(Tipo, "boolean") == 0) {
+        AsignarVariable_Boolean(Nombre, 0); // false
+    } else if (strcmp(Tipo, "char") == 0) {
+        AsignarVariable_Char(Nombre, 78); // Carácter nulo "N"
+    } else if (strcmp(Tipo, "String") == 0) {
+        AsignarVariable_String(Nombre, "-null");
+    } else if (strcmp(Tipo, "long") == 0) {
+        AsignarVariable_Long(Nombre, 0L);
+    } else if (strcmp(Tipo, "byte") == 0) {
+        AsignarVariable_Byte(Nombre, 0);
+    } else if (strcmp(Tipo, "short") == 0) {
+        AsignarVariable_Short(Nombre, 0);
+    } else if (strcmp(Tipo, "double") == 0) {
+        AsignarVariable_Double(Nombre, 0.0);
+    } else {
+        printf(" »   Tipo de dato desconocido en declaracion * \n");
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -45,6 +45,7 @@
 //%type <nodo> for_sentence switch_case switch_case_list switch_default native_func  vector matriz
 //%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
+%type <nodo> native_func
 %type <identificador> op_expr
 
 // Precedencia de Operadores
@@ -75,7 +76,7 @@ instruccion:
             | asignation            { $$ = $1; }
             | print                 { $$ = $1; }
             | if_sentence           { $$ = Nodo_Vacio("IF NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
-            | native_func           { $$ = Nodo_Vacio("FUNCION NATIVA NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
+            | native_func           { $$ = $1; }
             | switch_case           { $$ = Nodo_Vacio("SWITCH CASE NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
             | while_sentence        { $$ = Nodo_Vacio("WHILE NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
             | for_sentence          { $$ = Nodo_Vacio("FOR NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
@@ -86,19 +87,21 @@ instruccion:
 
 print:
     PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA               { $$ = Print($3); }
-    | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA      { $$ = Nodo_Vacio("NATIVE FUNCION NO IMPLEMENTADA AUN"); /* VECTOR */ };
+    | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA      { $$ = Print($3); }
 
 
 // * DECLARACION DE VARIABLES Y ESTRUCTURAS DE DATOS -----------------------------------------------------------------------------------
 
 declaration:
             DATA_TYPE IDENTIFICADOR S_PUNTO_COMA 
-            {  $$ = Nodo_Vacio("VARIABLE SIN VALOR NO IMPLEMENTADO AUN"); /* VARIABLE SIN VALOR*/ }
+            {  $$ = Var_Declaration($1, $2, Terminal_Null("DEFAULT")); /* VARIABLE SIN VALOR*/ }
 
             | DATA_TYPE IDENTIFICADOR S_IGUAL expr S_PUNTO_COMA                  
             { $$ = Var_Declaration($1, $2, $4); }  
 
-            | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA { /* CASTEO NARROWING*/ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA 
+            { $$ = Casteo_Narrowing($1, $2, $5, $7); /* CASTEO NARROWING*/ }
+
             | vector                { $$ = Nodo_Vacio("VECTOR NO IMPLEMENTADO AUN"); /* VECTOR */ }
             | matriz                { $$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN"); /* MATRIZ */ }
             | dynamic_array         { $$ = Nodo_Vacio("DYNAMIC_ARRAY NO IMPLEMENTADO AUN"); /* DYNAMIC_ARRAY */ }
@@ -205,13 +208,15 @@ op_expr:
 // * FUNCIONES ESPECIALES O NATIVAS -------------------------------------------------------------------------------------
 
 native_func:
-            IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN expr PARENTESIS_CLOSE            {/* PRINT FUNC .EQUALS PARA UNA VARIABLE */}
+            IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN expr PARENTESIS_CLOSE            
+            { $$ = Equals_Compare($1, $4); /* PRINT FUNC .EQUALS PARA UNA VARIABLE */ }
+
             | IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
             | IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA                                          {/* REDUCTOR DE VARIABLE PARA BUCLES*/}
-            | CONTINUE_WORD S_PUNTO_COMA
-            | BREAK_WORD S_PUNTO_COMA
-            | RETURN_WORD S_PUNTO_COMA
-            | RETURN_WORD expr S_PUNTO_COMA
+            | CONTINUE_WORD S_PUNTO_COMA                               { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* CONTINUE PARA CICLOS */ }
+            | BREAK_WORD S_PUNTO_COMA                                   { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* BREAK PARA CICLOS */ }
+            | RETURN_WORD S_PUNTO_COMA                                  { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
+            | RETURN_WORD expr S_PUNTO_COMA                             { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
             | IDENTIFICADOR PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_COMA               { /** LLAMADA A FUNCION SIN PARAMETROS */ }
 ;
 

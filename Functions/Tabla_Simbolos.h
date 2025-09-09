@@ -42,19 +42,22 @@ extern int num_vars;
 // ! -----------------------------------------------
 
 // ? Funciones que estaran publicas y en este paquete
-void AsignarVariable_Int(char* Nombre, int valor);      // ? int -> float
-void AsignarVariable_Float(char* Nombre, float valor);  // * float -> double
+void AsignarVariable_Int(char* Nombre, int valor);      // ? Widening{int -> float} * NARROWING{int -> char}
+void AsignarVariable_Float(char* Nombre, float valor);  // ? Widening{float -> double} * NARROWING{float -> int}
 void AsignarVariable_String(char* Nombre, char* valor);
 void AsignarVariable_Boolean(char* Nombre, int valor);
-void AsignarVariable_Char(char* Nombre, char valor);    // ? char -> int
+void AsignarVariable_Char(char* Nombre, char valor);    // ? Widening{char -> int}
 void AsignarVariable_Long(char* Nombre, int valor);
 void AsignarVariable_Short(char* Nombre, int valor);
-void AsignarVariable_Double(char* Nombre, float valor);
+void AsignarVariable_Double(char* Nombre, float valor); // * NARROWING{double -> float}
 void AsignarVariable_Byte(char* Nombre, char valor);
 
 void Actualizar_Variable(char* Nombre, Valor nuevo_valor);
 void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor);
+void Asignacion_Default(char* Nombre, char* Tipo);
+void Casteo_Narrow(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2);
 
+Nodo* Compare_Equals(char* Identificador, Nodo* Izq);
 Nodo* Acceso_Variable(char* Nombre);
 
 #endif

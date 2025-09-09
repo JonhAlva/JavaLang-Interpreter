@@ -18,13 +18,15 @@ typedef enum {
     NODO_STRING,            // *
     NODO_IDENTIFICADOR,     // *
     NODO_DECLARATION,       // *
-    NODO_ASIGNACION,        
+    NODO_ASIGNACION,        // *
+    NODO_EQUALS_COMPARE,    // *
     NODO_BOOL,              // *
     NODO_CHAR,              // *
     NODO_PRINT,             // *
     NODO_SUMA,              // *
     NODO_RESTA,             // *
     NODO_MULTIPLICACION,    // *
+    NODO_CASTEO_NARROWING,  // *
     NODO_DIVISION,          // *
     NODO_MODULO,            // *
     NODO_NOT,               // *
@@ -92,6 +94,9 @@ Nodo* Asignacion_Variable(char* Nombre, char* Op, Nodo* Izq);
 Nodo* Print(Nodo* expr);
 Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto);
 Nodo* Nodo_Vacio(const char* mensaje);
+
+Nodo* Casteo_Narrowing(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2);
+Nodo* Equals_Compare(char* Identificador, Nodo* Izq);
 
 // ? Funciones de limpieza
 //void ImprimirNodo(Nodo* nodo, int nivel);

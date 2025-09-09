@@ -1,15 +1,3 @@
-/*
-
-    Archivo de prueba para compiladores
-    y orden de las Operaciones
-
-*/
-
-// Sentencia Main de funcion *-*-*-*-*-*-
-
-void main(String[] args) {
-        System.out.println("Inicio del programa");
-}
 
 // 4.5 Declaracion de vaiables -----------------------
 int Variable = 12;
@@ -29,10 +17,14 @@ int counter = 0;
 float counter2 = counter;
 
         /* Narrowing */
-float block = 0.5;
-int blockInt = (int) block;
-int blockInt = (float) block;
-int blockInt = (String) block;
+double narrow1 = 0.5;
+float blockInt = (float) narrow1;
+
+float narrow2 = 0.7f;
+int blockInt2 = (int) narrow2;
+
+int narrow3 = 75;
+char blockInt3 = (char) narrow3;
 
 // 4.5.1.2 Operaciones Aritmeticas --------------------------
 int suma = 5+5;
@@ -77,6 +69,18 @@ System.out.println(n1.equals(n2));
 System.out.println(x || y);
 System.out.println(x && y);
 System.out.println(!x);
+
+        // Funcion Endebida Sout concatenada      -------------------------------------------------------------------------------------
+
+System.out.println("Resultado: " + total);
+System.out.println(5+2);
+System.out.println("Mensaje: " + cadena + " Caraj0");
+System.out.println(cadena.equals("Hola")); //True o False solo compara texto
+
+
+
+
+/*
 
 // 4.5.1.5 Sentencias de Control de flujo --------------------------------------
 
@@ -204,11 +208,7 @@ int total = suma(4, 5);
 String cadena = concatenar("Hola", "Mundo", "Laboral");
 saludo();
 
-        // Funcion Endebida Sout concatenada      -------------------------------------------------------------------------------------
-System.out.println("Resultado: " + total);
-System.out.println(5+2);
-System.out.println("Mensaje: " + cadena + " Caraj0");
-System.out.println(cadena.equals("Hola")); //True o False solo compara texto
+
 
         // Parseo de tipos          -------------------------------------------------------------------------------------------------
 int edad = Integer.parseInt("25"); //Error si la wea entre parentesis no es un numero
@@ -242,3 +242,5 @@ int tam = numeros.length;       // Resultado: tam == 4
         // Array Add - Añade el elemento al ultimo lugar del array ---------------------------------------------------------------
 int nuevoVAL = 11;
 int[] extendido_Numeros = numeros.add(nuevoVAL); // Resultado del add: numeros = 1, 2, 3, 4, 11
+
+*/
