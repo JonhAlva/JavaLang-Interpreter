@@ -52,6 +52,8 @@ void AsignarVariable_Short(char* Nombre, int valor);
 void AsignarVariable_Double(char* Nombre, float valor); // ? NARROWING{double -> float}
 void AsignarVariable_Byte(char* Nombre, char valor);
 
+void AsignarParseo_Variable(char* Nombre, char* Tipo, char* Parse_Type, Valor valor);
+
 void Actualizar_Variable(char* Nombre, Valor nuevo_valor);
 void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor);
 void Asignacion_Default(char* Nombre, char* Tipo);

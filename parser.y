@@ -28,13 +28,13 @@
 %token S_PUNTO_COMA PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
 %token DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
 %token PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
-%token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING JOIN_STRING
+%token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA JOIN_STRING
 %token ARRAY_INDEX FUNC_LENGTH FUNC_ADD MAIN_STRING FLOAT_SUFFIX
 
 //Tokens con tipo de dato
 %token <int_number>         LOGIC_NOT INT_NUMBER OP_MENOR_A OP_MAYOR_A '+' '-' '/' '*' '%'
 %token <float_number>       FLOAT_NUMBER
-%token <string_comillas>    STRING_COMILLAS
+%token <string_comillas>    STRING_COMILLAS PARSE_INT PARSE_FLOAT PARSE_DOUBLE PARSE_STRING
 %token <bool_true>          BOOL_VALUE
 %token <null_value>         NULL_VALUE
 %token <operador>           OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A OP_IGUAL_IGUAL OP_DISTINTO_A LOGIC_AND LOGIC_OR
@@ -47,7 +47,7 @@
 //%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
 %type <nodo> native_func vector_type string_join
-%type <identificador> op_expr
+%type <identificador> op_expr parse_expretion
 %type <lista_nodos> vector_values
 
 // Precedencia de Operadores
@@ -107,18 +107,24 @@ declaration:
             | vector                { $$ = Nodo_Vacio("VECTOR NO IMPLEMENTADO AUN"); /* VECTOR */ }
             | matriz                { $$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN"); /* MATRIZ */ }
             | dynamic_array         { $$ = Nodo_Vacio("DYNAMIC_ARRAY NO IMPLEMENTADO AUN"); /* DYNAMIC_ARRAY */ }
-            | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA      { $$ = Nodo_Vacio("Variable acceso NO IMPLEMENTADO AUN"); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
-            | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters PARENTESIS_CLOSE S_PUNTO_COMA  { $$ = Nodo_Vacio("DECLARACION DE FUNCION NO IMPLEMENTADO AUN"); /* DECLARACION DE FUNCIONES */ }
-            | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA { $$ = Nodo_Vacio("PARSEO DE TIPOS NO IMPLEMENTADO AUN"); /* PARSEO DE TIPOS */ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA      
+            { $$ = Nodo_Vacio("Variable acceso NO IMPLEMENTADO AUN"); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
+
+            | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters PARENTESIS_CLOSE S_PUNTO_COMA  
+            { $$ = Nodo_Vacio("DECLARACION DE FUNCION NO IMPLEMENTADO AUN"); /* DECLARACION DE FUNCIONES */ }
+
+            | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA 
+            { $$ = Parse_Expression($2, $1, $4, $6); /* PARSEO DE TIPOS */ }
+
             | string_join  { $$ = $1; }
             | DATA_TYPE IDENTIFICADOR S_IGUAL array_funcs S_PUNTO_COMA  { $$ = Nodo_Vacio("ARRAY FUNCS NO IMPLEMENTADO AUN"); /* FUNCIONES DE ARRAYS */ }
 ;
 
 parse_expretion:
-                PARSE_INT
-                | PARSE_DOUBLE
-                | PARSE_FLOAT
-                | PARSE_STRING
+                PARSE_INT            { $$ = "int"; }
+                | PARSE_DOUBLE       { $$ = "double"; }
+                | PARSE_FLOAT        { $$ = "float"; }
+                | PARSE_STRING       { $$ = "String"; }
 ;
 
 string_join:

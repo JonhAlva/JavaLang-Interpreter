@@ -84,6 +84,31 @@ System.out.println(cadena.equals(comp)); //True o False solo compara texto de va
 String s = String.join("-", "2025", "08", "03"); //Resultado: "2025-08-03"
 System.out.println(s);
 
+String numsx = String.join("|", "01", "02", "03");  //Resultado: "1 | 2 | 3"
+System.out.println(numsx);
+
+        // Parseo de tipos          -------------------------------------------------------------------------------------------------
+int edad = Integer.parseInt("25"); //Error si la wea entre parentesis no es un numero
+System.out.println(edad);
+
+double pi = Double.parseDouble("3.1416"); //Error si no es el tipo esperado
+System.out.println(pi);
+
+float temp = Float.parseFloat("36.5"); //Error si no es el tipo esperado
+System.out.println(temp);
+
+String s1 = String.valueOf(123);
+String s2 = String.valueOf(true);
+String s3 = String.valueOf(2.25f);
+System.out.println(s1);
+System.out.println(s2);
+System.out.println(s3);
+
+
+
+
+
+
 
 
 
@@ -214,23 +239,10 @@ String cadena = concatenar("Hola", "Mundo", "Laboral");
 saludo();
 
 
-
-        // Parseo de tipos          -------------------------------------------------------------------------------------------------
-int edad = Integer.parseInt("25"); //Error si la wea entre parentesis no es un numero
-
-double pi = Double.parseDouble("3.1416"); //Error si no es el tipo esperado
-
-float temp = Float.parseFloat("36.5"); //Error si no es el tipo esperado
-
-String s1 = String.valueOf(123);
-String s2 = String.valueOf(true);
-
         // String tipo JOIN - Concatena los strings dados     ----------------------------------------------------------------------
 
 String[] frutas = {"manzana", "pera", "uvas"};
 String csv = String.join(",", frutas);          //Resultado: "manzana,pera,uvas"
-
-String nums = String.join("|", "1", "2", "3");  //Resultado: "1 | 2 | 3"
 
         // Arrays Index Of - Busca un elemento dentro de una lista y devuelve el numero del indice donde está ------------------------
 int[] numeros = {1, 2, 3, 4};

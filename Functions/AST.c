@@ -334,3 +334,14 @@ Nodo* Make_StringJoin(char* tipo, char* Separador, Nodo** lista) {
     n->izq = n->der = NULL;
     return n;
 }
+
+Nodo* Parse_Expression(char* Identificador, char* TipoVar, char* ParseType, Nodo* expr) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_PARSEO;
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(TipoVar);
+    n->valor.op_bool = strdup(ParseType);
+    n->izq = expr;
+    n->der = NULL;
+    return n;
+}

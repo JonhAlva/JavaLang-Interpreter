@@ -642,6 +642,17 @@ Valor Evaluar(Nodo* n) {
 
         }
 
+        case NODO_PARSEO: { // * ----------------------------------------------------------------------------------------
+
+            Valor izq = Evaluar(n->izq);
+            char* tipoVariable = n->valor.varType;
+            char* Identificador = n->nombre;
+            char* ParseType = n->valor.op_bool;
+
+            AsignarParseo_Variable(Identificador, tipoVariable, ParseType, izq);
+            break;
+        }
+
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
             Valor resultado = Evaluar(n->izq);
