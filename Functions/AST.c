@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "AST.h"
+#include "Evaluate.h"
 
 // ? NODOS DE OPERACIONES ARITMETICAS -----------------------------------------------------------------
 
@@ -280,5 +281,56 @@ Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto) {
     n->tipo = NODO_LISTA;
     n->izq = instr;
     n->der = resto;
+    return n;
+}
+
+Nodo** Lista_Vector(Nodo* valor) {
+    Nodo** lista = malloc(2 * sizeof(Nodo*)); // Espacio para 1 elemento + NULL
+    lista[0] = valor;
+    lista[1] = NULL; // Marcador de fin de lista
+    return lista;
+}
+
+Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor) {
+    // Reasignar memoria para la nueva lista
+    int i = 0;
+    while (lista[i] != NULL) i++; // Contar elementos actuales
+    lista = realloc(lista, (i + 2) * sizeof(Nodo*)); // +1 para el nuevo elemento +1 para NULL
+    lista[i] = valor; // Agregar nuevo valor
+    lista[i + 1] = NULL; // Mantener el marcador de fin de lista
+    return lista;
+}
+
+Nodo* Make_StringJoin(char* tipo, char* Separador, Nodo** lista) {
+    // Quitar las comillas del separador si existen
+    char separador_str[256];
+    size_t len = strlen(Separador);
+    if (len >= 2 && Separador[0] == '"' && Separador[len - 1] == '"') {
+        strncpy(separador_str, Separador + 1, len - 2);
+        separador_str[len - 2] = '\0';
+    } else {
+        strncpy(separador_str, Separador, sizeof(separador_str) - 1);
+        separador_str[sizeof(separador_str) - 1] = '\0';
+    }
+
+    printf("el separador es: '%s'\n", separador_str);
+
+    //evaluar la lista de nodos y concatenar sus valores en una sola cadena
+    char resultado[1000] = ""; // Cadena para almacenar el resultado final
+    for (int i = 0; lista[i] != NULL; i++) {
+        Valor val = Evaluar(lista[i]);
+        if (val.tipo == VAL_STRING) {
+            strcat(resultado, val.s_val);
+            if (lista[i + 1] != NULL) {
+                strcat(resultado, separador_str); // Agregar el separador entre elementos
+            }
+        }
+    }
+
+    // Asignar el resultado final al nodo y retornarlo
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_STRING;
+    n->valor.s_val = strdup(resultado);
+    n->izq = n->der = NULL;
     return n;
 }

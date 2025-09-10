@@ -21,6 +21,7 @@
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
     char* data_type;
+    struct Nodo** lista_nodos;
 }
 
 //Aqui tiene que ir el nombre del return del lexer para cada token
@@ -45,8 +46,9 @@
 //%type <nodo> for_sentence switch_case switch_case_list switch_default native_func  vector matriz
 //%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
-%type <nodo> native_func
+%type <nodo> native_func vector_type string_join
 %type <identificador> op_expr
+%type <lista_nodos> vector_values
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -108,7 +110,7 @@ declaration:
             | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA      { $$ = Nodo_Vacio("Variable acceso NO IMPLEMENTADO AUN"); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
             | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters PARENTESIS_CLOSE S_PUNTO_COMA  { $$ = Nodo_Vacio("DECLARACION DE FUNCION NO IMPLEMENTADO AUN"); /* DECLARACION DE FUNCIONES */ }
             | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA { $$ = Nodo_Vacio("PARSEO DE TIPOS NO IMPLEMENTADO AUN"); /* PARSEO DE TIPOS */ }
-            | DATA_TYPE IDENTIFICADOR S_IGUAL string_join S_PUNTO_COMA  { $$ = Nodo_Vacio("JOIN DE STRINGS NO IMPLEMENTADO AUN"); /* JOIN DE STRINGS */ }
+            | string_join  { $$ = $1; }
             | DATA_TYPE IDENTIFICADOR S_IGUAL array_funcs S_PUNTO_COMA  { $$ = Nodo_Vacio("ARRAY FUNCS NO IMPLEMENTADO AUN"); /* FUNCIONES DE ARRAYS */ }
 ;
 
@@ -120,7 +122,8 @@ parse_expretion:
 ;
 
 string_join:
-            JOIN_STRING PARENTESIS_OPEN expr COMA vector_values PARENTESIS_CLOSE
+            DATA_TYPE IDENTIFICADOR S_IGUAL JOIN_STRING PARENTESIS_OPEN STRING_COMILLAS COMA vector_values PARENTESIS_CLOSE S_PUNTO_COMA
+            { $$ = Var_Declaration($1, $2, Make_StringJoin($1, $6, $8)); }
 ;
 
 array_funcs:
@@ -142,7 +145,9 @@ vector_type:
 // ! RECURSIVA PARA VECTOR, TOMAR VALORES INGRESADOS POR COMAS
 vector_values:
             vector_values COMA expr
+            { $$ = Add_Valor_Vector($1, $3); }
             | expr
+            { $$ = Lista_Vector($1); }
 ;
 
 // ! DECLARACION DE MATRIZ

@@ -510,8 +510,7 @@ void Asignacion_Default(char* Nombre, char* Tipo) {
 }
 
 
-
-
+// ! FUNCIONES DE APOYO PARA LA TABLA DE SIMBOLOS --------------------
 
 
 

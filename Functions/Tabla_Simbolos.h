@@ -42,14 +42,14 @@ extern int num_vars;
 // ! -----------------------------------------------
 
 // ? Funciones que estaran publicas y en este paquete
-void AsignarVariable_Int(char* Nombre, int valor);      // ? Widening{int -> float} * NARROWING{int -> char}
-void AsignarVariable_Float(char* Nombre, float valor);  // ? Widening{float -> double} * NARROWING{float -> int}
+void AsignarVariable_Int(char* Nombre, int valor);      // ? Widening{int -> float} ? NARROWING{int -> char}
+void AsignarVariable_Float(char* Nombre, float valor);  // ? Widening{float -> double} ? NARROWING{float -> int}
 void AsignarVariable_String(char* Nombre, char* valor);
 void AsignarVariable_Boolean(char* Nombre, int valor);
 void AsignarVariable_Char(char* Nombre, char valor);    // ? Widening{char -> int}
 void AsignarVariable_Long(char* Nombre, int valor);
 void AsignarVariable_Short(char* Nombre, int valor);
-void AsignarVariable_Double(char* Nombre, float valor); // * NARROWING{double -> float}
+void AsignarVariable_Double(char* Nombre, float valor); // ? NARROWING{double -> float}
 void AsignarVariable_Byte(char* Nombre, char valor);
 
 void Actualizar_Variable(char* Nombre, Valor nuevo_valor);
@@ -59,5 +59,9 @@ void Casteo_Narrow(char* Tipo1, char* Identificador, char* ParseType, char* Iden
 
 Nodo* Compare_Equals(char* Identificador, Nodo* Izq);
 Nodo* Acceso_Variable(char* Nombre);
+
+//FUNCION QUE RETORNE UNA LISTA INICIALIZADA DE NODOS
+Nodo** Lista_Vector(Nodo* valor);
+Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);
 
 #endif

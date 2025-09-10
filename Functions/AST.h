@@ -39,7 +39,8 @@ typedef enum {
     NODO_MENOR_IGUAL_A,     // *
     NODO_MAYOR_IGUAL_A,     // *
     NODO_IGUAL_IGUAL,       // *
-    NODO_DIFERENTE_QUE      // *
+    NODO_DIFERENTE_QUE,      // *
+    NODO_VALORES_VECTOR      // *
 } TipoNodo;
 
 typedef struct Nodo {
@@ -97,6 +98,10 @@ Nodo* Nodo_Vacio(const char* mensaje);
 
 Nodo* Casteo_Narrowing(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2);
 Nodo* Equals_Compare(char* Identificador, Nodo* Izq);
+
+Nodo** Lista_Vector(Nodo* valor);
+Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);
+Nodo* Make_StringJoin(char* tipo, char* Separador, Nodo** lista);
 
 // ? Funciones de limpieza
 //void ImprimirNodo(Nodo* nodo, int nivel);

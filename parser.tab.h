@@ -134,8 +134,9 @@ union YYSTYPE
     int bool_true;  /* 0 = false, 1 = true */
     char* null_value;
     char* data_type;
+    struct Nodo** lista_nodos;
 
-#line 139 "parser.tab.h"
+#line 140 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
