@@ -421,6 +421,13 @@ Valor Evaluar(Nodo* n) {
             v.b_val = (strcmp(izq.s_val, der.s_val) == 0) ? 1 : 0;
             return v;
             }
+
+            //Comparacion de booleanos
+            if (izq.tipo == VAL_BOOL && der.tipo == VAL_BOOL) {
+            v.tipo = VAL_BOOL;
+            v.b_val = (izq.b_val == der.b_val) ? 1 : 0;
+            return v;
+            }
         }
 
         case NODO_DIFERENTE_QUE:{// * ----------------------------------------------------------------------------------------
@@ -460,6 +467,8 @@ Valor Evaluar(Nodo* n) {
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
+            // ! printf("LOs valores que vienen en AND son: %d y %d \n", izq.b_val, der.b_val);
+
             if (izq.tipo == VAL_BOOL && der.tipo == VAL_BOOL) {
                 v.tipo = VAL_BOOL;
                 v.b_val = (izq.b_val == 1 && der.b_val == 1) ? 1 : 0;
@@ -470,6 +479,8 @@ Valor Evaluar(Nodo* n) {
         case NODO_OR: { // * ----------------------------------------------------------------------------------------
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
+
+            // ! printf("Los valores que vienen en OR son: %d y %d \n", izq.b_val, der.b_val);
 
             if (izq.tipo == VAL_BOOL && der.tipo == VAL_BOOL) {
                 v.tipo = VAL_BOOL;
@@ -589,7 +600,9 @@ Valor Evaluar(Nodo* n) {
             // * Buscar variable en tabla de simbolos y retornar su valor
             Nodo* varNodo = Acceso_Variable(n->nombre);
             if (varNodo != NULL) {
-                return Evaluar(varNodo);
+                Valor result = Evaluar(varNodo);
+                //! Print_Specific_Variable(n->nombre);
+                return result;
             } else {
                 v.tipo = VAL_NULL;
                 v.null_val = "-Var Not Found Err"; // Error de variable no encontrada
@@ -661,10 +674,30 @@ Valor Evaluar(Nodo* n) {
                 if (condicion.b_val == 1) {
                     printf(" » 🆗 Ejecutando If Simple >_______________________________________________________________\n");
                     Evaluar(n->der); // Ejecutar el bloque si la condición es verdadera
-                    printf("____________________________________________________________________________________________\n");
+                    printf("____________________________________________________________________________________________\n\n");
                 }
             } else {
                 printf(" » ❌  Error If: La condición no es booleana \n");
+            }
+            break;
+        }
+
+        case NODO_IF_ELSE: { // * -----------------------------------------------------------------------------------------
+
+            Valor condicion = Evaluar(n->izq);
+
+            if (condicion.tipo == VAL_BOOL) {
+                if (condicion.b_val == 1) {
+                    printf(" » 🆗 Ejecutando If >_________________________________________________________________________\n");
+                    Evaluar(n->der); // Ejecutar el bloque if si la condición es verdadera
+                    printf("____________________________________________________________________________________________\n\n");
+                } else {
+                    printf(" » 🆗 Ejecutando Else >_______________________________________________________________________\n");
+                    Evaluar(n->nodo_else); // Ejecutar el bloque else si la condición es falsa
+                    printf("____________________________________________________________________________________________\n\n");
+                }
+            } else {
+                printf(" » ❌  Error If-Else: La condición no es booleana \n");
             }
             break;
         }

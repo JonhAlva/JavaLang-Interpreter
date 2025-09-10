@@ -355,3 +355,13 @@ Nodo* Sentencia_If_Simple(Nodo* condicion, Nodo* instrucciones) {
     return n;
 }
 
+Nodo* Sentencia_If_Else(Nodo* condicion, Nodo* instrucciones_if, Nodo* instrucciones_else) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_IF_ELSE;
+    n->izq = condicion;
+    n->der = instrucciones_if;
+    n->nodo_else = instrucciones_else; // Usamos valor.nodo_else para almacenar las instrucciones else
+    n->nombre = NULL;
+    return n;
+}
+

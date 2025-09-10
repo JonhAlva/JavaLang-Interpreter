@@ -66,4 +66,7 @@ Nodo* Acceso_Variable(char* Nombre);
 Nodo** Lista_Vector(Nodo* valor);
 Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);
 
+// ! DEBUG FUNCTIONS
+void Print_Specific_Variable(char* Nombre);
+
 #endif

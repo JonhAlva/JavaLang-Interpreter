@@ -240,7 +240,8 @@ variable_access:
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------
 if_sentence:
             IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE    { $$ = Sentencia_If_Simple($3, $6); }
-            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE { $$ = Nodo_Vacio("IF ELSE NO IMPLEMENTADO AUN"); }
+            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE 
+            { $$ = Sentencia_If_Else($3, $6, $10); }
 ;
 
 // * CICLO FOR ----------------------------------------------------------------------------------------------------------

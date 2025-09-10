@@ -108,7 +108,7 @@ System.out.println(s3);
 
         // Sentencia IF solo  -------------------------------------------------------------------------------------- 
 
-int Nu_mero = 5;
+int Nu_mero = 4;
 int varrr = 2;
 if ( Nu_mero >= 5 ) {
     System.out.println("Ejecutando If unico");
@@ -120,29 +120,30 @@ if ( Nu_mero >= 5 ) {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         // Sentencia IF and ELSE ------------------------------------------------------------------------------------
-/*
-boolean _ValBol = true;
-if ( _ValBol == false ) {
-    System.out.println("La sentencia es falsa");
+boolean ValBol1 = false;
+boolean ValBol2 = false;
+
+if ( ValBol1 == false ) {
+    System.out.println("El IF se cumplió correctamente");
 } else {
-    System.out.println("La sentencia es verdadera");
+    System.out.println("Condicion no se cumplió en el IF");
     float LoL = 2.5;
 }
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Sentencia SWITCH - CASE -----------------------------------------------------------------------------------
 /*

@@ -162,7 +162,7 @@ Nodo* Acceso_Variable(char* Nombre) {
                     break;
                 case TIPO_BOOLEAN:
                     n->tipo = NODO_BOOL;
-                    n->valor.b_val = tabla_Variables[i].valor.b_val;
+                    n->valor.b_val = tabla_Variables[i].valor.b_val ? 1 : 0; // Condicion añadida para saber si es true o false
                     break;
                 case TIPO_CHAR:
                     n->tipo = NODO_CHAR;
@@ -578,7 +578,46 @@ void AsignarParseo_Variable(char* Nombre, char* Tipo, char* Parse_Type, Valor va
 }
 
 // ! FUNCIONES DE APOYO PARA LA TABLA DE SIMBOLOS --------------------
-
+void Print_Specific_Variable(char* Nombre) {
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
+            printf(" » Variable: %s | Tipo: %d | Valor: ", tabla_Variables[i].nombreVariable, tabla_Variables[i].tipo_Variable);
+            switch (tabla_Variables[i].tipo_Variable) {
+                case TIPO_INT:
+                    printf("%d\n", tabla_Variables[i].valor.i_val);
+                    break;
+                case TIPO_FLOAT:
+                    printf("%f\n", tabla_Variables[i].valor.f_val);
+                    break;
+                case TIPO_STRING:
+                    printf("%s\n", tabla_Variables[i].valor.s_val);
+                    break;
+                case TIPO_BOOLEAN:
+                    printf("%s\n", tabla_Variables[i].valor.b_val ? "true" : "false");
+                    break;
+                case TIPO_CHAR:
+                    printf("%c\n", tabla_Variables[i].valor.c_val);
+                    break;
+                case TIPO_LONG:
+                    printf("%ld\n", (long)tabla_Variables[i].valor.i_val);
+                    break;
+                case TIPO_SHORT:
+                    printf("%d\n", (short)tabla_Variables[i].valor.i_val);
+                    break;
+                case TIPO_DOUBLE:
+                    printf("%lf\n", tabla_Variables[i].valor.d_val);
+                    break;
+                case TIPO_BYTE:
+                    printf("%d\n", (unsigned char)tabla_Variables[i].valor.c_val);
+                    break;
+                default:
+                    printf("Tipo desconocido\n");
+            }
+            return;
+        }
+    }
+    printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Nombre);
+}
 
 
 

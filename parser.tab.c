@@ -609,11 +609,11 @@ static const yytype_int16 yyrline[] =
      161,   166,   167,   172,   173,   178,   182,   183,   187,   188,
      194,   195,   200,   201,   206,   207,   208,   209,   210,   211,
      212,   213,   214,   215,   216,   222,   225,   226,   227,   228,
-     229,   230,   231,   236,   237,   242,   243,   248,   253,   254,
-     255,   260,   265,   266,   271,   272,   277,   282,   287,   288,
-     293,   294,   295,   299,   300,   304,   305,   306,   307,   308,
-     309,   310,   311,   312,   313,   314,   315,   316,   317,   318,
-     319,   320,   321,   322,   323,   324,   325
+     229,   230,   231,   236,   237,   242,   243,   249,   254,   255,
+     256,   261,   266,   267,   272,   273,   278,   283,   288,   289,
+     294,   295,   296,   300,   301,   305,   306,   307,   308,   309,
+     310,   311,   312,   313,   314,   315,   316,   317,   318,   319,
+     320,   321,   322,   323,   324,   325,   326
 };
 #endif
 
@@ -1857,169 +1857,169 @@ yyreduce:
     break;
 
   case 76: /* if_sentence: IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE  */
-#line 243 "parser.y"
-                                                                                                                                                            { (yyval.nodo) = Nodo_Vacio("IF ELSE NO IMPLEMENTADO AUN"); }
+#line 244 "parser.y"
+            { (yyval.nodo) = Sentencia_If_Else((yyvsp[-8].nodo), (yyvsp[-5].nodo), (yyvsp[-1].nodo)); }
 #line 1863 "parser.tab.c"
     break;
 
   case 78: /* for_condition: declaration expr S_PUNTO_COMA IDENTIFICADOR OP_AUMENTO  */
-#line 253 "parser.y"
+#line 254 "parser.y"
                                                                                                   {/* ESTRUCTURA FOR NORMAL */}
 #line 1869 "parser.tab.c"
     break;
 
   case 79: /* for_condition: declaration expr S_PUNTO_COMA IDENTIFICADOR OP_DECREMENTO  */
-#line 254 "parser.y"
+#line 255 "parser.y"
                                                                                                   {/* ESTRUCTURA FOR NORMAL */}
 #line 1875 "parser.tab.c"
     break;
 
   case 80: /* for_condition: DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR  */
-#line 255 "parser.y"
+#line 256 "parser.y"
                                                                                                   {/* ESTRUCTURA FOR EACH */}
 #line 1881 "parser.tab.c"
     break;
 
   case 86: /* while_sentence: WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE  */
-#line 277 "parser.y"
+#line 278 "parser.y"
                                                                                                             { (yyval.nodo) = Nodo_Vacio("WHILE NO IMPLEMENTADO AUN"); }
 #line 1887 "parser.tab.c"
     break;
 
   case 89: /* parameters_bridge: %empty  */
-#line 288 "parser.y"
+#line 289 "parser.y"
                       {/* vaćio */}
 #line 1893 "parser.tab.c"
     break;
 
   case 95: /* expr: expr '+' expr  */
-#line 304 "parser.y"
+#line 305 "parser.y"
                                                 { (yyval.nodo) = Suma((yyvsp[-1].int_number), (yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1899 "parser.tab.c"
     break;
 
   case 96: /* expr: expr '-' expr  */
-#line 305 "parser.y"
+#line 306 "parser.y"
                                                 { (yyval.nodo) = Resta((yyvsp[-1].int_number), (yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1905 "parser.tab.c"
     break;
 
   case 97: /* expr: expr '*' expr  */
-#line 306 "parser.y"
+#line 307 "parser.y"
                                                 { (yyval.nodo) = Multiplicacion((yyvsp[-1].int_number), (yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1911 "parser.tab.c"
     break;
 
   case 98: /* expr: expr '/' expr  */
-#line 307 "parser.y"
+#line 308 "parser.y"
                                                 { (yyval.nodo) = Division((yyvsp[-1].int_number), (yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1917 "parser.tab.c"
     break;
 
   case 99: /* expr: expr '%' expr  */
-#line 308 "parser.y"
+#line 309 "parser.y"
                                                 { (yyval.nodo) = Modulo((yyvsp[-1].int_number), (yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1923 "parser.tab.c"
     break;
 
   case 100: /* expr: PARENTESIS_OPEN expr PARENTESIS_CLOSE  */
-#line 309 "parser.y"
+#line 310 "parser.y"
                                                 { (yyval.nodo) = (yyvsp[-1].nodo); }
 #line 1929 "parser.tab.c"
     break;
 
   case 101: /* expr: INT_NUMBER  */
-#line 310 "parser.y"
+#line 311 "parser.y"
                                                 { (yyval.nodo) = Terminal_Int((yyvsp[0].int_number)); }
 #line 1935 "parser.tab.c"
     break;
 
   case 102: /* expr: FLOAT_NUMBER FLOAT_SUFFIX  */
-#line 311 "parser.y"
+#line 312 "parser.y"
                                                 { (yyval.nodo) = Terminal_Float((yyvsp[-1].float_number)); }
 #line 1941 "parser.tab.c"
     break;
 
   case 103: /* expr: FLOAT_NUMBER  */
-#line 312 "parser.y"
+#line 313 "parser.y"
                                                 { (yyval.nodo) = Terminal_Double((yyvsp[0].float_number)); }
 #line 1947 "parser.tab.c"
     break;
 
   case 104: /* expr: STRING_COMILLAS  */
-#line 313 "parser.y"
+#line 314 "parser.y"
                                                 { if (strlen((yyvsp[0].string_comillas)) == 3) { (yyval.nodo) = Terminal_Char((yyvsp[0].string_comillas)[1]); } else { (yyval.nodo) = Terminal_String((yyvsp[0].string_comillas)); }}
 #line 1953 "parser.tab.c"
     break;
 
   case 105: /* expr: BOOL_VALUE  */
-#line 314 "parser.y"
+#line 315 "parser.y"
                                                 { (yyval.nodo) = Terminal_Bool((yyvsp[0].bool_true)); }
 #line 1959 "parser.tab.c"
     break;
 
   case 106: /* expr: NULL_VALUE  */
-#line 315 "parser.y"
+#line 316 "parser.y"
                                                 { (yyval.nodo) = Terminal_Null((yyvsp[0].null_value)); }
 #line 1965 "parser.tab.c"
     break;
 
   case 107: /* expr: IDENTIFICADOR  */
-#line 316 "parser.y"
+#line 317 "parser.y"
                                                 { (yyval.nodo) = Identificador_Ref((yyvsp[0].identificador));}
 #line 1971 "parser.tab.c"
     break;
 
   case 108: /* expr: expr OP_MENOR_A expr  */
-#line 317 "parser.y"
+#line 318 "parser.y"
                                                 { (yyval.nodo) = Menor_A((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1977 "parser.tab.c"
     break;
 
   case 109: /* expr: expr OP_MAYOR_A expr  */
-#line 318 "parser.y"
+#line 319 "parser.y"
                                                 { (yyval.nodo) = Mayor_A((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1983 "parser.tab.c"
     break;
 
   case 110: /* expr: expr OP_MENOR_IGUAL_A expr  */
-#line 319 "parser.y"
+#line 320 "parser.y"
                                                 { (yyval.nodo) = Menor_Igual_A((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1989 "parser.tab.c"
     break;
 
   case 111: /* expr: expr OP_MAYOR_IGUAL_A expr  */
-#line 320 "parser.y"
+#line 321 "parser.y"
                                                 { (yyval.nodo) = Mayor_Igual_A((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 1995 "parser.tab.c"
     break;
 
   case 112: /* expr: expr OP_IGUAL_IGUAL expr  */
-#line 321 "parser.y"
+#line 322 "parser.y"
                                                 { (yyval.nodo) = Igual_Igual((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 2001 "parser.tab.c"
     break;
 
   case 113: /* expr: expr OP_DISTINTO_A expr  */
-#line 322 "parser.y"
+#line 323 "parser.y"
                                                 { (yyval.nodo) = Diferente_Que((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 2007 "parser.tab.c"
     break;
 
   case 114: /* expr: expr LOGIC_AND expr  */
-#line 323 "parser.y"
+#line 324 "parser.y"
                                                 { (yyval.nodo) = And((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 2013 "parser.tab.c"
     break;
 
   case 115: /* expr: expr LOGIC_OR expr  */
-#line 324 "parser.y"
+#line 325 "parser.y"
                                                 { (yyval.nodo) = Or((yyvsp[-2].nodo), (yyvsp[0].nodo)); }
 #line 2019 "parser.tab.c"
     break;
 
   case 116: /* expr: LOGIC_NOT expr  */
-#line 325 "parser.y"
+#line 326 "parser.y"
                                                 { (yyval.nodo) = Not((yyvsp[0].nodo)); }
 #line 2025 "parser.tab.c"
     break;
@@ -2218,7 +2218,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 328 "parser.y"
+#line 329 "parser.y"
 
 
 void yyerror(const char* s) {
