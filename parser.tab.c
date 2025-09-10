@@ -1528,7 +1528,7 @@ yyreduce:
 
   case 8: /* instruccion: if_sentence  */
 #line 80 "parser.y"
-                                    { (yyval.nodo) = Nodo_Vacio("IF NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
+                                    { (yyval.nodo) = (yyvsp[0].nodo); }
 #line 1533 "parser.tab.c"
     break;
 
@@ -1852,7 +1852,7 @@ yyreduce:
 
   case 75: /* if_sentence: IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE  */
 #line 242 "parser.y"
-                                                                                                        { (yyval.nodo) = Nodo_Vacio("IF SIMPLE NO IMPLEMENTADO AUN"); }
+                                                                                                        { (yyval.nodo) = Sentencia_If_Simple((yyvsp[-4].nodo), (yyvsp[-1].nodo)); }
 #line 1857 "parser.tab.c"
     break;
 

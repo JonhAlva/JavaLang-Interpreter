@@ -41,7 +41,8 @@ typedef enum {
     NODO_IGUAL_IGUAL,       // *
     NODO_DIFERENTE_QUE,      // *
     NODO_VALORES_VECTOR,     // *
-    NODO_PARSEO              // *
+    NODO_PARSEO,              // *
+    NODO_IF_SIMPLE
 } TipoNodo;
 
 typedef struct Nodo {
@@ -104,6 +105,8 @@ Nodo* Parse_Expression(char* Identificador, char* TipoVar, char* ParseType, Nodo
 Nodo** Lista_Vector(Nodo* valor);
 Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);
 Nodo* Make_StringJoin(char* tipo, char* Separador, Nodo** lista);
+
+Nodo* Sentencia_If_Simple(Nodo* condicion, Nodo* instrucciones);
 
 // ? Funciones de limpieza
 //void ImprimirNodo(Nodo* nodo, int nivel);

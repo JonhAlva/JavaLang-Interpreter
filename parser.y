@@ -77,7 +77,7 @@ instruccion:
             declaration             { $$ = $1; }
             | asignation            { $$ = $1; }
             | print                 { $$ = $1; }
-            | if_sentence           { $$ = Nodo_Vacio("IF NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
+            | if_sentence           { $$ = $1; }
             | native_func           { $$ = $1; }
             | switch_case           { $$ = Nodo_Vacio("SWITCH CASE NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
             | while_sentence        { $$ = Nodo_Vacio("WHILE NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
@@ -239,7 +239,7 @@ variable_access:
 
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------
 if_sentence:
-            IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE    { $$ = Nodo_Vacio("IF SIMPLE NO IMPLEMENTADO AUN"); }
+            IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE    { $$ = Sentencia_If_Simple($3, $6); }
             | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE { $$ = Nodo_Vacio("IF ELSE NO IMPLEMENTADO AUN"); }
 ;
 

@@ -653,6 +653,22 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
+        case NODO_IF_SIMPLE: { // * -----------------------------------------------------------------------------------------
+
+            Valor condicion = Evaluar(n->izq);
+
+            if (condicion.tipo == VAL_BOOL) {
+                if (condicion.b_val == 1) {
+                    printf(" » 🆗 Ejecutando If Simple >_______________________________________________________________\n");
+                    Evaluar(n->der); // Ejecutar el bloque si la condición es verdadera
+                    printf("____________________________________________________________________________________________\n");
+                }
+            } else {
+                printf(" » ❌  Error If: La condición no es booleana \n");
+            }
+            break;
+        }
+
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
             Valor resultado = Evaluar(n->izq);

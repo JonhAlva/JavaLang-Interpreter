@@ -345,3 +345,13 @@ Nodo* Parse_Expression(char* Identificador, char* TipoVar, char* ParseType, Nodo
     n->der = NULL;
     return n;
 }
+
+Nodo* Sentencia_If_Simple(Nodo* condicion, Nodo* instrucciones) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_IF_SIMPLE;
+    n->izq = condicion;
+    n->der = instrucciones;
+    n->nombre = NULL;
+    return n;
+}
+
