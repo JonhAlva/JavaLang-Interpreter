@@ -149,3 +149,27 @@
 
     int a;
     int b;
+
+    case NODO_IF_ELSE_IF: {
+            Valor condicionIf = Evaluar(n->izq);
+
+            if (condicionIf.tipo == VAL_BOOL && condicionIf.b_val == 1) {
+            printf(" » 🆗 Ejecutando If >_________________________________________________________________________\n");
+            Evaluar(n->der); // Ejecutar el bloque if si la condición es verdadera
+            printf("____________________________________________________________________________________________\n\n");
+            } else {
+                Valor condicionElseIf = Evaluar(n->siguiente->izq);
+                if (condicionElseIf.tipo == VAL_BOOL && condicionElseIf.b_val == 1) {
+                    printf(" » 🆗 Ejecutando Else If >____________________________________________________________________\n");
+                // Solo si la primera condición no se cumple, evaluar el siguiente (else if)
+                Evaluar(n->siguiente->der); // Ejecutar el bloque else if si la condición es verdadera
+                    printf("____________________________________________________________________________________________\n\n");
+                } else {
+                    // Si ninguna condición se cumple, ejecutar el else
+                    printf(" » 🆗 Ejecutando Else >_______________________________________________________________________\n");
+                    Evaluar(n->nodo_else); // Ejecutar el bloque else si la condición es falsa
+                    printf("____________________________________________________________________________________________\n\n");
+                }
+            }
+            break;
+        }

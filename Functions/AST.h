@@ -43,7 +43,10 @@ typedef enum {
     NODO_VALORES_VECTOR,     // *
     NODO_PARSEO,              // *
     NODO_IF_SIMPLE,        // *
-    NODO_IF_ELSE
+    NODO_IF_ELSE,            // *
+    NODO_IF_ELSE_ONE,    
+    NODO_ELSE_IF_LIST,
+    NODO_IF_ELSE_IF       
 } TipoNodo;
 
 typedef struct Nodo {
@@ -64,6 +67,8 @@ typedef struct Nodo {
     struct Nodo* izq;
     struct Nodo* der;
     struct Nodo* nodo_else; // Para instrucciones else en if-else
+    struct Nodo* siguiente;  // Para encadenar else-if
+    struct Nodo** lista_nodos; // Para listas de nodos (como en vectores o listas de instrucciones)
 } Nodo;
 
 // ? Constructores de las funciones
@@ -110,6 +115,11 @@ Nodo* Make_StringJoin(char* tipo, char* Separador, Nodo** lista);
 
 Nodo* Sentencia_If_Simple(Nodo* condicion, Nodo* instrucciones);
 Nodo* Sentencia_If_Else(Nodo* condicion, Nodo* instrucciones_if, Nodo* instrucciones_else);
+
+Nodo* Sentencia_ElseIf(Nodo* condicion, Nodo* instrucciones, Nodo* siguiente_else_if);
+Nodo* If_Else_One(Nodo* condicion, Nodo* instrucciones_else);
+Nodo* Sentencia_If_ElseIf_Else(Nodo* condicion, Nodo* instrucciones_if, 
+                                Nodo* instrucciones_else_if, Nodo** lista_else_if, Nodo* instrucciones_else);
 
 // ? Funciones de limpieza
 //void ImprimirNodo(Nodo* nodo, int nivel);

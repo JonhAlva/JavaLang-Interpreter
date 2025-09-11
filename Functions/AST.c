@@ -365,3 +365,35 @@ Nodo* Sentencia_If_Else(Nodo* condicion, Nodo* instrucciones_if, Nodo* instrucci
     return n;
 }
 
+// * Lista de nodos que representan las sentencias else-if
+Nodo* Sentencia_ElseIf(Nodo* condicion, Nodo* instrucciones, Nodo* siguiente_else_if) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_ELSE_IF_LIST;
+    n->izq = condicion;
+    n->der = instrucciones;
+    n->siguiente = siguiente_else_if; // Enlaza al siguiente else-if
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* If_Else_One(Nodo* condicion, Nodo* instrucciones_else) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_IF_SIMPLE; // Reutilizamos el nodo IF_SIMPLE para el else
+    n->izq = condicion;
+    n->der = instrucciones_else;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Sentencia_If_ElseIf_Else(Nodo* condicion, Nodo* instrucciones_if, 
+                                Nodo* instrucciones_else_if, Nodo** lista_else_if, Nodo* instrucciones_else) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_IF_ELSE_IF;
+    n->izq = condicion;
+    n->der = instrucciones_if;
+    n->nodo_else = instrucciones_else; // Usamos valor.nodo_else para almacenar las instrucciones else
+    n->siguiente = instrucciones_else_if; // Enlaza al primer else-if
+    n->lista_nodos = lista_else_if; // Almacena la lista de else-if
+    n->nombre = NULL;
+    return n;
+}

@@ -123,14 +123,29 @@ if ( Nu_mero >= 5 ) {
         // Sentencia IF and ELSE ------------------------------------------------------------------------------------
 boolean ValBol1 = false;
 boolean ValBol2 = false;
+boolean ValBol3 = false;
+boolean ValBol4 = false;
+boolean ValBol5 = false;
 
 if ( ValBol1 == false ) {
     System.out.println("El IF se cumplió correctamente");
 } else {
-    System.out.println("Condicion no se cumplió en el IF");
-    float LoL = 2.5;
+    System.out.println("Condicion no se cumplió en el IF ELSE simple");
 }
 
+if ( ValBol1 == true ) {
+    System.out.println("El IF se cumplió correctamente caso 1");
+} else if ( ValBol2 == true ) {
+    System.out.println("Condicion Se cumplió en el IF caso 2");
+} else if ( ValBol3 == true ) {
+    System.out.println("Condicion Se cumplió en el IF caso 3");
+} else if ( ValBol4 == true ) {
+    System.out.println("Condicion Se cumplió en el IF caso 4");
+} else if ( ValBol5 == true ) {
+    System.out.println("Condicion Se cumplió en el IF caso 5");
+} else {
+    System.out.println("Condicion no se cumplió en el IF ELSE IF en ninguno de los 5 casos");
+}
 
 
 

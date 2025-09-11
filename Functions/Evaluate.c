@@ -702,6 +702,46 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
+        case NODO_IF_ELSE_IF: {
+            Valor condicionIf = Evaluar(n->izq);
+
+            if (condicionIf.tipo == VAL_BOOL && condicionIf.b_val == 1) {
+            printf(" » 🆗 Ejecutando If >_________________________________________________________________________\n");
+            Evaluar(n->der); // Ejecutar el bloque if si la condición es verdadera
+            printf("____________________________________________________________________________________________\n\n");
+            } else {
+                // Verificar el siguiente else if
+                Valor condicionElseIf = Evaluar(n->siguiente->izq);
+                if (condicionElseIf.tipo == VAL_BOOL && condicionElseIf.b_val == 1) {
+                    printf(" » 🆗 Ejecutando Else If >____________________________________________________________________\n");
+                    Evaluar(n->siguiente->der); // Ejecutar el bloque else if si la condición es verdadera
+                    printf("____________________________________________________________________________________________\n\n");
+                } else {
+                    // Verificar lista de nodos else if adicionales
+                    int ejecutado = 0;
+                    if (n->lista_nodos != NULL) {
+                        for (int i = 0; n->lista_nodos[i] != NULL; i++) {
+                            Valor cond = Evaluar(n->lista_nodos[i]->izq);
+                            if (cond.tipo == VAL_BOOL && cond.b_val == 1) {
+                                printf(" » 🆗 Ejecutando Else If (Lista) >___________________________________________________________\n");
+                                Evaluar(n->lista_nodos[i]->der); // Ejecutar instrucciones de este else if
+                                printf("____________________________________________________________________________________________\n\n");
+                                ejecutado = 1;
+                                break; // Se encontró una condición verdadera, salir del ciclo
+                            }
+                        }
+                    }
+                    // Si ninguna condición se cumple, ejecutar el else
+                    if (!ejecutado) {
+                    printf(" » 🆗 Ejecutando Else >_______________________________________________________________________\n");
+                    Evaluar(n->nodo_else); // Ejecutar el bloque else si la condición es falsa
+                    printf("____________________________________________________________________________________________\n\n");
+                    }
+                }
+            }
+            break;
+        }
+
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
             Valor resultado = Evaluar(n->izq);

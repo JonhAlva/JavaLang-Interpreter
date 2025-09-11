@@ -46,9 +46,9 @@
 //%type <nodo> for_sentence switch_case switch_case_list switch_default native_func  vector matriz
 //%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
-%type <nodo> native_func vector_type string_join
+%type <nodo> native_func vector_type string_join if_else_one
 %type <identificador> op_expr parse_expretion
-%type <lista_nodos> vector_values
+%type <lista_nodos> vector_values if_else_chain
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -239,9 +239,47 @@ variable_access:
 
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------
 if_sentence:
-            IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE    { $$ = Sentencia_If_Simple($3, $6); }
+            IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE    
+            { $$ = Sentencia_If_Simple($3, $6); }
+
             | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE 
             { $$ = Sentencia_If_Else($3, $6, $10); }
+            
+            | IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE if_else_one if_else_chain ELSE_WORD LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+            { $$ = Sentencia_If_ElseIf_Else($3, $6, $8, $9, $12); /* IF - ELSE IF - ELSE CON LISTA DE ELSE IF */ }
+;
+
+if_else_one:
+            ELSE_WORD IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+            { $$ = If_Else_One($4, $7); /* INSTRUCCIONES DEL ELSE IF SI SOLSO VIENE UNA VEZ */ }
+;
+
+if_else_chain:
+                if_else_chain ELSE_WORD IF_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+                {  
+                    // Obtener el tamaño actual de la lista
+                    int size = 0;
+                    while ($1 && $1[size] != NULL) size++;
+                    
+                    // Crear nueva lista con un espacio adicional
+                    $$ = malloc(sizeof(Nodo*) * (size + 2));  // +1 para el nuevo nodo, +1 para NULL
+                    
+                    // Copiar nodos existentes
+                    for(int i = 0; i < size; i++) {
+                        $$[i] = $1[i];
+                    }
+                    
+                    // Agregar nuevo nodo else-if
+                    $$[size] = Sentencia_ElseIf($5, $8, NULL);
+                    $$[size + 1] = NULL;  // Terminar lista con NULL
+                }
+
+                | /* vacío */
+                { 
+                // Inicializar lista vacía
+                    $$ = malloc(sizeof(Nodo*) * 1);
+                    $$[0] = NULL;
+                }
 ;
 
 // * CICLO FOR ----------------------------------------------------------------------------------------------------------
