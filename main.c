@@ -41,6 +41,15 @@ int Analizar_Codigo(char* codigo) {
         return 0;
 }
 
+static void on_button_clicked(GtkWidget *widget, gpointer data) {
+    GtkTextBuffer *buffer = GTK_TEXT_BUFFER(data);
+
+    // Insertar texto al final
+    GtkTextIter end;
+    gtk_text_buffer_get_end_iter(buffer, &end);
+    gtk_text_buffer_insert(buffer, &end, "Texto añadido automáticamente\n", -1);
+}
+
 // funcion de accion del boton {COMPILAR} de la ventana de gtk3
 void Compile_clicked(GtkWidget *widget, gpointer textview) {
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
@@ -63,8 +72,8 @@ void Compile_clicked(GtkWidget *widget, gpointer textview) {
 static void on_activate(GtkApplication *app, gpointer user_data) {
     // Crear la ventana principal
     GtkWidget *window = gtk_application_window_new(app);
-    gtk_window_set_title(GTK_WINDOW(window), "Java Lang Compiler - ClasterJack");
-    gtk_window_set_default_size(GTK_WINDOW(window), 1500, 850);
+    gtk_window_set_title(GTK_WINDOW(window), "Simply Java Lang Compiler");
+    gtk_window_set_default_size(GTK_WINDOW(window), 1485, 850);
 
     GtkWidget *fixed = gtk_fixed_new();
     gtk_container_add(GTK_CONTAINER(window), fixed);
@@ -80,6 +89,7 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
     // Creacion de los objetos que se veran en la ventana
     GtkWidget *label = gtk_label_new("Entrada de codigo JavaLang:");
     GtkWidget *label2 = gtk_label_new("Salida: ");
+    GtkWidget *label3 = gtk_label_new("Copyright © 2025 ClasterJack");
     GtkWidget *button = gtk_button_new_with_label("Compilar");
     GtkWidget *button2 = gtk_button_new_with_label("Abrir");
     GtkWidget *button3 = gtk_button_new_with_label("Guardar");
@@ -92,12 +102,14 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
     //Nombres de los objetos para el css y configuracion
     gtk_widget_set_name(label, "EntradaLabel");
     gtk_widget_set_name(label2, "EntradaLabel");
+    gtk_widget_set_name(label3, "CopyLabel");
     gtk_widget_set_name(button, "CompileButton");
     gtk_widget_set_name(button2, "ArchivoButton");
     gtk_widget_set_name(button3, "ArchivoButton");
     gtk_widget_set_name(button4, "ReportesButton");
     gtk_widget_set_name(button5, "ReportesButton");
     gtk_widget_set_name(button6, "ReportesButton");
+    gtk_widget_set_name(window, "MainWindow");
 
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview), GTK_WRAP_NONE);
     gtk_text_view_set_monospace(GTK_TEXT_VIEW(textview), TRUE);
@@ -113,18 +125,26 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
     gtk_widget_set_size_request(scrolled2, 700, 650);
     gtk_container_add(GTK_CONTAINER(scrolled2), textview2);
 
+    //buffer para colocar texto en la salida
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview2));
+
     // Colocacion de los objetos en la ventana
-    gtk_fixed_put(GTK_FIXED(fixed), label, 45, 75);
-    gtk_fixed_put(GTK_FIXED(fixed), label2, 760, 75);
-    gtk_fixed_put(GTK_FIXED(fixed), button, 45, 790);
-    gtk_fixed_put(GTK_FIXED(fixed), button2, 45, 30);
-    gtk_fixed_put(GTK_FIXED(fixed), button3, 150, 30);
-    gtk_fixed_put(GTK_FIXED(fixed), button4, 950, 30);
-    gtk_fixed_put(GTK_FIXED(fixed), button5, 1120, 30);
-    gtk_fixed_put(GTK_FIXED(fixed), button6, 1330, 30);
+    //                                      x   y
+    gtk_fixed_put(GTK_FIXED(fixed), label, 45, 80);
+    gtk_fixed_put(GTK_FIXED(fixed), label2, 760, 80);
+    gtk_fixed_put(GTK_FIXED(fixed), label3, 1250, 800);
+    gtk_fixed_put(GTK_FIXED(fixed), button, 180, 790);  // COmpile button
+    gtk_fixed_put(GTK_FIXED(fixed), button2, 45, 25);   // Abrir archivo
+    gtk_fixed_put(GTK_FIXED(fixed), button3, 230, 25); // Guardar archivo
+    gtk_fixed_put(GTK_FIXED(fixed), button4, 910, 30); // Reporte AST
+    gtk_fixed_put(GTK_FIXED(fixed), button5, 1090, 30); // Reporte Symbols
+    gtk_fixed_put(GTK_FIXED(fixed), button6, 1300, 30); // Reporte Errs
     gtk_fixed_put(GTK_FIXED(fixed), scrolled, 35, 120);
     gtk_fixed_put(GTK_FIXED(fixed), scrolled2, 750, 120);
     
+    //Acciones de los botones
+    g_signal_connect(button, "clicked", G_CALLBACK(Compile_clicked), textview);
+    g_signal_connect(button, "clicked", G_CALLBACK(on_button_clicked), buffer);
 
     gtk_widget_show_all(window);
 }

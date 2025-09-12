@@ -1,27 +1,88 @@
+#MainWindow {
+    background: linear-gradient(to bottom, #000000, #FFD700);
+}
+
 #EntradaLabel {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     margin-bottom: 10px;
     font-family: 'Times New Roman', Times, serif;
+    text-shadow: 1px 1px 4px white; 
+}
+
+#CopyLabel {
+    font-size: 15px;
+    color: #000000;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', Times, serif;
+    text-shadow: 0px 0px 5px rgb(0, 0, 0); 
 }
 
 #CompileButton {
     font-size: 24px;
-    padding: 5px 200px;
+    padding: 5px 150px;
     font-family: 'Times New Roman', Times, serif;
-    border-color: #bbb421;
+    border-color: #000000;
     background: #3e3d0b;
-    color: #bbb421;
+    color: #b5b166;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 2.0); 
     transition: all 0.3s ease;
 }
 
 #CompileButton:hover {
+    background: #000000;
+    color: #d4d4d4;
+    border-color: white;
+    -gtk-icon-transform: scale(0.15);
+}
+
+#CompileButton:active {
+    background: #bbb421;
+    border-color: #3e3d0b;
+    color: black;
+    -gtk-icon-transform: scale(0.15);
+}
+
+#ArchivoButton {
+    font-size: 19px;
+    padding: 5px 50px;
+    font-family: 'Times New Roman', Times, serif;
+    border-color: #bbb421;
+    background: #3e3d0b;
+    color: #bbb421;
+    box-shadow: 0px 0px 5px rgba(239, 252, 160, 0.8); 
+    transition: all 0.3s ease;
+}
+#ArchivoButton:hover {
+    background: #bbb421;
+    color: #3e3d0b;
+    -gtk-icon-transform: scale(0.15);
+}
+#ArchivoButton:active {
+    background: #000000;
+    border-color: #d4d4d4;
+    color: white;
+    -gtk-icon-transform: scale(0.15);
+}
+
+#ReportesButton {
+    font-size: 17px;
+    padding: 5px 30px;
+    font-family: 'Times New Roman', Times, serif;
+    border-color: #bbb421;
+    background: #3e3d0b;
+    color: #bbb421;
+    box-shadow: 0px 0px 5px rgba(239, 252, 160, 0.8); 
+    transition: all 0.3s ease;
+}
+
+#ReportesButton:hover {
     background: #bbb421;
     color: #3e3d0b;
     -gtk-icon-transform: scale(0.15);
 }
 
-#CompileButton:active {
+#ReportesButton:active {
     background: #000000;
     border-color: #d4d4d4;
     color: white;
@@ -35,9 +96,9 @@ textview {
     font-family: "Monospace";  
     font-size: 16px;
     padding: 10px;
-    border: 2px solid #585858;
+    border: 3px solid #ffffff;
     border-radius: 5px;
-    border-color: #ff0000;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 1.5); 
 }
 
 /* Selección de texto */
