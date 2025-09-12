@@ -7,6 +7,8 @@
 Variable tabla_Variables[MAX_VARS];
 int num_vars = 0;
 
+//! implementar una condicion para saber si hay una variable repetida
+
 // ! Asignacion de variable INT
 void AsignarVariable_Int(char* Nombre, int valor) {
     // ? for para recorrer el tamaño de la tabla

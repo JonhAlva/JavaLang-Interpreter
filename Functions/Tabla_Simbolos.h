@@ -6,6 +6,7 @@
 #ifndef TABLA_SIMBOLOS_H
 #define TABLA_SIMBOLOS_H
 #define MAX_VARS 500
+#define MAX_VECTORES 100
 
 // ? Struct de tipo de variables --------------------------------------------
 typedef enum {
@@ -36,10 +37,19 @@ typedef struct {
     } valor;  // ? Tipos de valores que tomara
 } Variable ;    // ? Nombre del struct de VARIABLE
 
+typedef struct {
+    char nombreVector[64];    // ? Nombre del vector
+    TipoDato tipo_Vector;     // ? Tipo de la variable
+    Nodo** valores;           // ? Lista de nodos que contiene los valores del vector
+    int size;                 // ? Tamaño actual del vector
+} Vectores ;    // ? Nombre del struct de VECTOR
+
 // ! Tabla de simbolos que almacena las variables
 extern Variable tabla_Variables[MAX_VARS];
 extern int num_vars;
 // ! -----------------------------------------------
+extern Vectores lista_Vectores[MAX_VECTORES];
+extern int num_vectores;
 
 // ? Funciones que estaran publicas y en este paquete
 void AsignarVariable_Int(char* Nombre, int valor);      // ? Widening{int -> float} ? NARROWING{int -> char}

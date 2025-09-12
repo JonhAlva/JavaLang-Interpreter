@@ -1096,7 +1096,7 @@ YY_RULE_SETUP
 case 32:
 YY_RULE_SETUP
 #line 43 "lexer.l"
-{ return NEW_WORD;}
+{ yylval.data_type = strdup(yytext); return NEW_WORD;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP

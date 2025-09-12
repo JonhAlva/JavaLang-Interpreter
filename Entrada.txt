@@ -147,7 +147,25 @@ if ( ValBol1 == true ) {
     System.out.println("Condicion no se cumplió en el IF ELSE IF en ninguno de los 5 casos");
 }
 
+// Estructuras de Datos -----------------------------------------------------------------------------------------------------------
 
+        // Declaracion de Vectores - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo -----------------------
+int[] nums = new int[5];
+
+        // Declaracion de Vectores - Añadiendo sus elementos        ------------------------------------------------------------------
+String[] letters = {"a", "b", "c", "d", "e"};
+int[] numbers = {23, 56, 12, 124, 21};
+
+        // Declaracion de Matrices - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo  -----------------------
+float[][] mat = new float[3][3];
+
+        // SOLO RECONOCE EL PATRON DE MATRIZ PERO NO LA GUARDA
+        // Declaracion de Matrices - Añadiendo sus elementos  ----------------------------------------------------------------------
+int[][] board = {
+    {0, 1, 0},
+    {1, 0, 1},
+    {0, 1, 0}
+};
 
 
 
@@ -161,7 +179,7 @@ if ( ValBol1 == true ) {
 
 
         // Sentencia SWITCH - CASE -----------------------------------------------------------------------------------
-/*
+
 int dia = 3;
 
 switch( dia ) {
@@ -183,20 +201,20 @@ switch( dia ) {
             System.out.println("Ejecutando If unico");
         }
 }
-*/
+
 
         // Sentencia WHILE            -------------------------------------------------------------------------
-/*
+
 int condition = 0;
 
 while( condition < 7 ) {
     System.out.println("Ejecutando");
     condition++;
 }
-*/
+
 
         // Sentencia FOR - NORMAL            ---------------------------------------------------------------
-/*
+
 for( int id = 0; i < 5; i++) {
     System.out.println("Repeticion for normal");
 }
@@ -205,7 +223,7 @@ for( int id = 0; i < 5; i++) {
 for ( int num : numeros ) {
     System.out.println("Repeticion for each");
 }
-*/
+
     /*
         Sentencias de transferencia, break, continue
         Estas madres pueden venir dentro de un ciclo solamente
@@ -214,25 +232,6 @@ for ( int num : numeros ) {
         lo que se indique
     */
 
-
-// Estructuras de Datos -----------------------------------------------------------------------------------------------------------
-/*
-        // Declaracion de Vectores - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo -----------------------
-int[] nums = new int[5];
-
-        // Declaracion de Vectores - Añadiendo sus elementos        ------------------------------------------------------------------
-String[] letters = {"a", "b", "c", "d", "e"};
-int[] numbers = {23, 56, 12, 124, 21};
-
-        // Declaracion de Matrices - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo  -----------------------
-float[][] mat = new float[3][3];
-
-        // Declaracion de Matrices - Añadiendo sus elementos  ----------------------------------------------------------------------
-int[][] board = {
-    {0, 1, 0},
-    {1, 0, 1},
-    {0, 1, 0}
-};
 
         // Acceso a un valor de una matriz o vector y asignacion de un valor  ------------------------------------------------------
 int nums_val = nums[1];
@@ -261,14 +260,14 @@ int contatenar(String a, String b, String c) {
 void saludo() {
         System.out.println("Hola mundo");
 }
-*/
+
         /*
                 FUNCIONES RECURSIVAS,
                 AHI VEMOS SI LAS IMPLEMENTAMOS XD
         */ 
 
         // Llamada  a funciones CON parametros   ------------------------------------------------------------------------------------
-/*
+
 int total = suma(4, 5);
 String cadena = concatenar("Hola", "Mundo", "Laboral");
 saludo();
@@ -293,4 +292,3 @@ int tam = numeros.length;       // Resultado: tam == 4
         // Array Add - Añade el elemento al ultimo lugar del array ---------------------------------------------------------------
 int nuevoVAL = 11;
 int[] extendido_Numeros = numeros.add(nuevoVAL); // Resultado del add: numeros = 1, 2, 3, 4, 11
-*/

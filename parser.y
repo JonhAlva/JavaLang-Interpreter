@@ -28,7 +28,7 @@
 %token S_PUNTO_COMA PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_PUNTO SWITCH_WORD CASE_WORD BREAK_WORD
 %token DEFAULT_WORD WHILE_WORD OP_AUMENTO OP_DECREMENTO
 %token PRINT_SENTENCE FUNC_EQUALS IF_WORD LLAVE_OPEN LLAVE_CLOSE ELSE_WORD FOR_WORD
-%token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE NEW_WORD COMA JOIN_STRING
+%token CONTINUE_WORD RETURN_WORD CORCHETE_OPEN CORCHETE_CLOSE COMA JOIN_STRING
 %token ARRAY_INDEX FUNC_LENGTH FUNC_ADD MAIN_STRING FLOAT_SUFFIX
 
 //Tokens con tipo de dato
@@ -39,16 +39,16 @@
 %token <null_value>         NULL_VALUE
 %token <operador>           OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A OP_IGUAL_IGUAL OP_DISTINTO_A LOGIC_AND LOGIC_OR
 %token <identificador>      IDENTIFICADOR S_IGUAL OP_MAS_IGUAL OP_MENOS_IGUAL OP_MULTI_IGUAL OP_DIV_IGUAL OP_MOD_IGUAL OP_AND_IGUAL OP_OR_IGUAL OP_POT_IGUAL OP_MAYOR_IGUAL OP_MENOR_IGUAL
-%token <data_type>          DATA_TYPE
+%token <data_type>          DATA_TYPE NEW_WORD
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
 //%type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence
 //%type <nodo> for_sentence switch_case switch_case_list switch_default native_func  vector matriz
 //%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
-%type <nodo> native_func vector_type string_join if_else_one
+%type <nodo> native_func vector_type string_join if_else_one vector matriz_type matriz
 %type <identificador> op_expr parse_expretion
-%type <lista_nodos> vector_values if_else_chain
+%type <lista_nodos> vector_values if_else_chain matriz_values 
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -104,9 +104,12 @@ declaration:
             | DATA_TYPE IDENTIFICADOR S_IGUAL PARENTESIS_OPEN DATA_TYPE PARENTESIS_CLOSE IDENTIFICADOR S_PUNTO_COMA 
             { $$ = Casteo_Narrowing($1, $2, $5, $7); /* CASTEO NARROWING*/ }
 
-            | vector                { $$ = Nodo_Vacio("VECTOR NO IMPLEMENTADO AUN"); /* VECTOR */ }
-            | matriz                { $$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN"); /* MATRIZ */ }
+            | vector                { $$ = $1; /* DECLARATION VECTOR */ }
+
+            | matriz                { $$ = $1; /* MATRIZ */ }
+
             | dynamic_array         { $$ = Nodo_Vacio("DYNAMIC_ARRAY NO IMPLEMENTADO AUN"); /* DYNAMIC_ARRAY */ }
+
             | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA      
             { $$ = Nodo_Vacio("Variable acceso NO IMPLEMENTADO AUN"); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
 
@@ -117,6 +120,7 @@ declaration:
             { $$ = Parse_Expression($2, $1, $4, $6); /* PARSEO DE TIPOS */ }
 
             | string_join  { $$ = $1; }
+
             | DATA_TYPE IDENTIFICADOR S_IGUAL array_funcs S_PUNTO_COMA  { $$ = Nodo_Vacio("ARRAY FUNCS NO IMPLEMENTADO AUN"); /* FUNCIONES DE ARRAYS */ }
 ;
 
@@ -140,11 +144,16 @@ array_funcs:
 // ! DECLARACION DE VECTOR
 vector:
         DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL vector_type 
+        { $$ = Declaration_Vector($1, $4, $6); /* REGRESAMOS EL NODO QUE GENERA */ }
 
 // ! LAS DOS MANERAS DE QUE PUEDEN INGRESAR UN VECTOR
 vector_type:
-            NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA { /* VECTOR AUTO */ }
-            | LLAVE_OPEN vector_values LLAVE_CLOSE S_PUNTO_COMA         { /* VECTOR CON VALORES */ }
+            NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA 
+            { $$ = Vector_Auto($1, $2, $4); }
+
+            | LLAVE_OPEN vector_values LLAVE_CLOSE S_PUNTO_COMA         
+            { $$ = Valores_Vector($2); /* VECTOR CON VALORES */ }
+
             | IDENTIFICADOR FUNC_ADD PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA { /* FUNCION ADD EN VECTORES*/}
 ;
 
@@ -159,18 +168,24 @@ vector_values:
 // ! DECLARACION DE MATRIZ
 matriz:
         DATA_TYPE CORCHETE_OPEN CORCHETE_CLOSE CORCHETE_OPEN CORCHETE_CLOSE IDENTIFICADOR S_IGUAL matriz_type
+        { $$ = Declaration_Matriz($1, $6, $8); /* REGRESAMOS EL NODO QUE GENERA */ }
 ;
 
 // ! LAS DOS MANERAS QUE PUEDEN INGRESAR UNA MATRIZ
 matriz_type:
             NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA
+            { $$ = Matriz_Auto($2, $4, $7); /* valores definidos en matriz*/ }
+
             | LLAVE_OPEN matriz_values LLAVE_CLOSE S_PUNTO_COMA
+            { $$ = Nodo_Vacio("VALORES DE MATRIZ NO IMPLEMENTADO AUN"); /* valores definidos en matriz*/ }
 ;
 
 // ! RECURSIVA PARA MATRIZ, TOMAR VALORES INGRESADOS EN APARTADOS POR COMAS
 matriz_values:
             matriz_values COMA LLAVE_OPEN vector_values LLAVE_CLOSE 
+
             | LLAVE_OPEN vector_values LLAVE_CLOSE 
+            { /* valores definidos en matriz*/}
 ;
 
 // ! DECLARACION DE ARRAY MULTIDIMENSIONAL
@@ -219,10 +234,9 @@ op_expr:
 // * FUNCIONES ESPECIALES O NATIVAS -------------------------------------------------------------------------------------
 
 native_func:
-            IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN expr PARENTESIS_CLOSE            
-            { $$ = Equals_Compare($1, $4); /* PRINT FUNC .EQUALS PARA UNA VARIABLE */ }
+            
 
-            | IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
+            IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
             | IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA                                          {/* REDUCTOR DE VARIABLE PARA BUCLES*/}
             | CONTINUE_WORD S_PUNTO_COMA                               { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* CONTINUE PARA CICLOS */ }
             | BREAK_WORD S_PUNTO_COMA                                   { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* BREAK PARA CICLOS */ }
@@ -362,6 +376,10 @@ expr:
     | expr LOGIC_AND expr                       { $$ = And($1, $3); }
     | expr LOGIC_OR expr                        { $$ = Or($1, $3); }
     | LOGIC_NOT expr                            { $$ = Not($2); }
+    | IDENTIFICADOR FUNC_EQUALS PARENTESIS_OPEN expr PARENTESIS_CLOSE 
+    { $$ = Equals_Compare($1, $4); /* PRINT FUNC .EQUALS PARA UNA VARIABLE */ }
+    | STRING_COMILLAS FUNC_EQUALS PARENTESIS_OPEN expr PARENTESIS_CLOSE 
+    { $$ = Equals_Compare($1, $4); /* PRINT FUNC .EQUALS PARA UNA VARIABLE */ }
 ;
 
 %%

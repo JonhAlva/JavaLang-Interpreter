@@ -313,7 +313,7 @@ Nodo* Make_StringJoin(char* tipo, char* Separador, Nodo** lista) {
         separador_str[sizeof(separador_str) - 1] = '\0';
     }
 
-    printf("el separador es: '%s'\n", separador_str);
+    // ! printf("el separador es: '%s'\n", separador_str);
 
     //evaluar la lista de nodos y concatenar sus valores en una sola cadena
     char resultado[1000] = ""; // Cadena para almacenar el resultado final
@@ -395,5 +395,53 @@ Nodo* Sentencia_If_ElseIf_Else(Nodo* condicion, Nodo* instrucciones_if,
     n->siguiente = instrucciones_else_if; // Enlaza al primer else-if
     n->lista_nodos = lista_else_if; // Almacena la lista de else-if
     n->nombre = NULL;
+    return n;
+}
+
+Nodo* Vector_Auto(char* Instruccion, char* TipoDato, Nodo* LlenadoAuto) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_VECTOR_AUTO;
+    n->nombre = strdup(Instruccion);
+    n->izq = LlenadoAuto;
+    n->der = NULL;
+    n->valor.varType = strdup(TipoDato);
+    return n;
+}
+
+Nodo* Declaration_Vector(char* DataType, char* Identificador, Nodo* TipoVector) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_DECLARATION_VECTOR;
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(DataType);
+    n->izq = TipoVector;
+    n->der = NULL;
+    return n;
+}
+
+Nodo* Valores_Vector(Nodo** lista) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_VALORES_VECTOR_LIST;
+    n->lista_nodos = lista;
+    n->izq = n->der = NULL;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Matriz_Auto(char* Tipo, Nodo* Val1, Nodo* Val2) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MATRIZ_AUTO;
+    n->nombre = strdup(Tipo);
+    n->izq = Val1;
+    n->der = Val2;
+    return n;
+}
+
+Nodo* Declaration_Matriz(char* DataType, char* Identificador, Nodo* TipoMatriz) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_DECLARATION_MATRIX;
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(DataType);
+    n->izq = TipoMatriz;
+    n->der = NULL;
     return n;
 }

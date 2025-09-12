@@ -40,7 +40,7 @@
 "break"                 { return BREAK_WORD; }
 "continue"              { return CONTINUE_WORD; }
 "return"                { return RETURN_WORD; }
-"new"                   { return NEW_WORD;}
+"new"                   { yylval.data_type = strdup(yytext); return NEW_WORD;}
 "default"               { return DEFAULT_WORD; }
 "while"                 { return WHILE_WORD; }
 "for"                   { return FOR_WORD; }

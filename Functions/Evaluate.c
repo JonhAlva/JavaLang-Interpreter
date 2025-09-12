@@ -120,69 +120,69 @@ Valor Evaluar(Nodo* n) {
 
             // * Concatenacion de valores en + si son strings o valores variables
             if (izq.tipo == VAL_STRING || der.tipo == VAL_STRING) {
-                v.tipo = VAL_STRING;
-                char temp[100];  // ! Buffer temporal para conversiones
-                char* str_izq;
-                char* str_der;
+            v.tipo = VAL_STRING;
+            char temp[100];  // ! Buffer temporal para conversiones
+            char* str_izq;
+            char* str_der;
 
-                // Convertir valor izquierdo a string
-                switch(izq.tipo) {
-                    case VAL_STRING:
-                        str_izq = strdup(izq.s_val);
-                        break;
-                    case VAL_INT:
-                        sprintf(temp, "%d", izq.i_val);
-                        str_izq = strdup(temp);
-                        break;
-                    case VAL_FLOAT:
-                        sprintf(temp, "%f", izq.f_val);
-                        str_izq = strdup(temp);
-                        break;
-                    case VAL_DOUBLE:
-                        sprintf(temp, "%lf", izq.d_val);
-                        str_izq = strdup(temp);
-                        break;
-                    case VAL_BOOL:
-                        str_izq = strdup(izq.b_val ? "true" : "false");
-                        break;
-                    case VAL_CHAR:
-                        sprintf(temp, "%c", izq.c_val);
-                        str_izq = strdup(temp);
-                        break;
-                    case VAL_NULL:
-                        str_izq = strdup("null");
-                        break;
-                }
+            // Convertir valor izquierdo a string
+            switch(izq.tipo) {
+                case VAL_STRING:
+                str_izq = strdup(izq.s_val);
+                break;
+                case VAL_INT:
+                sprintf(temp, "%d", izq.i_val);
+                str_izq = strdup(temp);
+                break;
+                case VAL_FLOAT:
+                sprintf(temp, "%f", izq.f_val);
+                str_izq = strdup(temp);
+                break;
+                case VAL_DOUBLE:
+                sprintf(temp, "%lf", izq.d_val);
+                str_izq = strdup(temp);
+                break;
+                case VAL_BOOL:
+                str_izq = strdup(izq.b_val ? "true" : "false");
+                break;
+                case VAL_CHAR:
+                sprintf(temp, "%c", izq.c_val);
+                str_izq = strdup(temp);
+                break;
+                case VAL_NULL:
+                str_izq = strdup("null");
+                break;
+            }
 
-                // Convertir valor derecho a string
-                switch(der.tipo) {
-                    case VAL_STRING:
-                        str_der = strdup(der.s_val);
-                        break;
-                    case VAL_INT:
-                        sprintf(temp, "%d", der.i_val);
-                        str_der = strdup(temp);
-                        break;
-                    case VAL_FLOAT:
-                        sprintf(temp, "%f", der.f_val);
-                        str_der = strdup(temp);
-                        break;
-                    case VAL_DOUBLE:
-                        sprintf(temp, "%lf", der.d_val);
-                        str_der = strdup(temp);
-                        break;
-                    case VAL_BOOL:
-                        str_der = strdup(der.b_val ? "true" : "false");
-                        break;
-                    case VAL_CHAR:
-                        sprintf(temp, "%c", der.c_val);
-                        str_der = strdup(temp);
-                        break;
-                    case VAL_NULL:
-                        str_der = strdup("null");
-                        break;
-                }
-                // Concatenar strings
+            // Convertir valor derecho a string
+            switch(der.tipo) {
+                case VAL_STRING:
+                str_der = strdup(der.s_val);
+                break;
+                case VAL_INT:
+                sprintf(temp, "%d", der.i_val);
+                str_der = strdup(temp);
+                break;
+                case VAL_FLOAT:
+                sprintf(temp, "%f", der.f_val);
+                str_der = strdup(temp);
+                break;
+                case VAL_DOUBLE:
+                sprintf(temp, "%lf", der.d_val);
+                str_der = strdup(temp);
+                break;
+                case VAL_BOOL:
+                str_der = strdup(der.b_val ? "true" : "false");
+                break;
+                case VAL_CHAR:
+                sprintf(temp, "%c", der.c_val);
+                str_der = strdup(temp);
+                break;
+                case VAL_NULL:
+                str_der = strdup("null");
+                break;
+            }
+            // Concatenar strings
             v.s_val = malloc(strlen(str_izq) + strlen(str_der) + 1);
             strcpy(v.s_val, str_izq);
             strcat(v.s_val, str_der);
@@ -194,9 +194,9 @@ Valor Evaluar(Nodo* n) {
 
             // * Comprobar si son enteros
             if (izq.tipo == VAL_INT && der.tipo == VAL_INT) {
-                v.tipo = VAL_INT;
-                v.i_val = izq.i_val + der.i_val;
-                return v;
+            v.tipo = VAL_INT;
+            v.i_val = izq.i_val + der.i_val;
+            return v;
             }
 
             // * Si viene un float, entonces tirar float
@@ -208,6 +208,17 @@ Valor Evaluar(Nodo* n) {
                 return v;
             }
 
+            // * Si viene un double, entonces tirar double
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+                v.tipo = VAL_DOUBLE;
+                double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val : 
+                        (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+                double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                        (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
+                v.d_val = izq_val + der_val;
+                return v;
+            }
+
         }
 
         case NODO_RESTA: { // * ----------------------------------------------------------------------------------------
@@ -216,18 +227,29 @@ Valor Evaluar(Nodo* n) {
 
             // * Comprobar si son enteros
             if (izq.tipo == VAL_INT && der.tipo == VAL_INT) {
-                v.tipo = VAL_INT;
-                v.i_val = izq.i_val - der.i_val;
-                return v;
+            v.tipo = VAL_INT;
+            v.i_val = izq.i_val - der.i_val;
+            return v;
             }
 
             // * Si viene un float, entonces tirar float
             if (izq.tipo == VAL_FLOAT || der.tipo == VAL_FLOAT) {
-                v.tipo = VAL_FLOAT;
-                float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
-                float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
-                v.f_val = izq_val - der_val;
-                return v;
+            v.tipo = VAL_FLOAT;
+            float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
+            float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
+            v.f_val = izq_val - der_val;
+            return v;
+            }
+
+            // * Si viene un double, entonces tirar double
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+            v.tipo = VAL_DOUBLE;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val : 
+                (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
+            v.d_val = izq_val - der_val;
+            return v;
             }
         }
 
@@ -304,6 +326,16 @@ Valor Evaluar(Nodo* n) {
             return v;
             }
 
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+            v.tipo = VAL_BOOL;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val :
+                (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
+            v.b_val = (izq_val > der_val) ? 1 : 0;
+            return v;
+            }
+
             // Comparación de caracteres
             if (izq.tipo == VAL_CHAR && der.tipo == VAL_CHAR) {
             v.tipo = VAL_BOOL;
@@ -330,6 +362,15 @@ Valor Evaluar(Nodo* n) {
             return v;
             }
 
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+            v.tipo = VAL_BOOL;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val :
+                (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
+            v.b_val = (izq_val < der_val) ? 1 : 0;
+            return v;
+            }
             // Comparación de caracteres
             if (izq.tipo == VAL_CHAR && der.tipo == VAL_CHAR) {
             v.tipo = VAL_BOOL;
@@ -352,6 +393,16 @@ Valor Evaluar(Nodo* n) {
             v.tipo = VAL_BOOL;
             float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
             float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
+            v.b_val = (izq_val >= der_val) ? 1 : 0;
+            return v;
+            }
+
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+            v.tipo = VAL_BOOL;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val : 
+                    (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                    (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
             v.b_val = (izq_val >= der_val) ? 1 : 0;
             return v;
             }
@@ -382,6 +433,16 @@ Valor Evaluar(Nodo* n) {
             return v;
             }
 
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+            v.tipo = VAL_BOOL;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val :
+                (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
+            v.b_val = (izq_val <= der_val) ? 1 : 0;
+            return v;
+            }
+
             // Comparación de caracteres
             if (izq.tipo == VAL_CHAR && der.tipo == VAL_CHAR) {
             v.tipo = VAL_BOOL;
@@ -404,6 +465,16 @@ Valor Evaluar(Nodo* n) {
             v.tipo = VAL_BOOL;
             float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
             float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
+            v.b_val = (izq_val == der_val) ? 1 : 0;
+            return v;
+            }
+
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+            v.tipo = VAL_BOOL;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val : 
+                   (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                   (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
             v.b_val = (izq_val == der_val) ? 1 : 0;
             return v;
             }
@@ -448,6 +519,16 @@ Valor Evaluar(Nodo* n) {
             return v;
             }
 
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+            v.tipo = VAL_BOOL;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val : 
+               (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+               (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
+            v.b_val = (izq_val != der_val) ? 1 : 0;
+            return v;
+            }
+
             // Comparación de caracteres
             if (izq.tipo == VAL_CHAR && der.tipo == VAL_CHAR) {
             v.tipo = VAL_BOOL;
@@ -461,30 +542,54 @@ Valor Evaluar(Nodo* n) {
             v.b_val = (strcmp(izq.s_val, der.s_val) != 0) ? 1 : 0;
             return v;
             }
+
+
         }
 
         case NODO_AND: { // * ----------------------------------------------------------------------------------------
             Valor izq = Evaluar(n->izq);
+            
+            // Si el primer operando es falso, no evaluamos el segundo
+            if (izq.tipo == VAL_BOOL && izq.b_val == 0) {
+                v.tipo = VAL_BOOL;
+                v.b_val = 0;
+                return v;
+            }
+            
             Valor der = Evaluar(n->der);
-
-            // ! printf("LOs valores que vienen en AND son: %d y %d \n", izq.b_val, der.b_val);
 
             if (izq.tipo == VAL_BOOL && der.tipo == VAL_BOOL) {
                 v.tipo = VAL_BOOL;
-                v.b_val = (izq.b_val == 1 && der.b_val == 1) ? 1 : 0;
+                v.b_val = (izq.b_val && der.b_val);
+                return v;
+            } else {
+                printf(" » ❌ Error AND: Los operandos deben ser booleanos\n");
+                v.tipo = VAL_BOOL;
+                v.b_val = 0;
                 return v;
             }
         }
 
         case NODO_OR: { // * ----------------------------------------------------------------------------------------
             Valor izq = Evaluar(n->izq);
+            
+            // Si el primer operando es verdadero, no evaluamos el segundo
+            if (izq.tipo == VAL_BOOL && izq.b_val == 1) {
+                v.tipo = VAL_BOOL;
+                v.b_val = 1;
+                return v;
+            }
+            
             Valor der = Evaluar(n->der);
-
-            // ! printf("Los valores que vienen en OR son: %d y %d \n", izq.b_val, der.b_val);
 
             if (izq.tipo == VAL_BOOL && der.tipo == VAL_BOOL) {
                 v.tipo = VAL_BOOL;
-                v.b_val = (izq.b_val == 1 || der.b_val == 1) ? 1 : 0;
+                v.b_val = (izq.b_val || der.b_val);
+                return v;
+            } else {
+                printf(" » ❌ Error OR: Los operandos deben ser booleanos\n");
+                v.tipo = VAL_BOOL;
+                v.b_val = 0;
                 return v;
             }
         }
@@ -645,6 +750,22 @@ Valor Evaluar(Nodo* n) {
 
         case NODO_EQUALS_COMPARE: { // * ----------------------------------------------------------------------------------------
 
+            // agregar condicion cuando el nodo sea un tipo val_string
+            if (n->nombre[0] == '"' && n->nombre[strlen(n->nombre)-1] == '"') {
+                Valor izq = Evaluar(n->izq);
+
+                // quitar comillas del texto
+                char* str_without_quotes = malloc(strlen(n->nombre) - 1);
+                strncpy(str_without_quotes, n->nombre + 1, strlen(n->nombre) - 2);
+                str_without_quotes[strlen(n->nombre) - 2] = '\0';
+
+                v.tipo = VAL_BOOL;
+                v.b_val = (strcmp(izq.s_val, str_without_quotes) == 0) ? 1 : 0;
+                
+                free(str_without_quotes);
+                return v;
+            }
+
             Nodo* Verificacion = Compare_Equals(n->nombre, n->izq);
 
             Valor izq = Evaluar(Verificacion);
@@ -737,6 +858,42 @@ Valor Evaluar(Nodo* n) {
                     Evaluar(n->nodo_else); // Ejecutar el bloque else si la condición es falsa
                     printf("____________________________________________________________________________________________\n\n");
                     }
+                }
+            }
+            break;
+        }
+
+        case NODO_DECLARATION_VECTOR: { // * ----------------------------------------------------------------------------------------
+            // * Nombre de variable en "n->nombre"
+            // * Tipo de variable en "n->valor.varType"
+            // * Tipo del vector en "n->izq"
+
+            // del nodo izq ver que tipo de vector viene
+            if (n->izq != NULL) {
+                if (n->izq->tipo == NODO_VECTOR_AUTO) {
+                    printf(" * * *  Vector Registrado: '%s' de tipo Auto \n", n->nombre);
+                } else if (n->izq->tipo == NODO_VALORES_VECTOR_LIST) {
+                    printf(" * * *  Vector Registrado: '%s' de tipo Explicito con valores definidos \n", n->nombre);
+                } else {
+                    printf(" »   Tipo de dato desconocido en declaracion de vector * \n");
+                }
+            }
+            break;
+        }
+
+        case NODO_DECLARATION_MATRIX: { // * ----------------------------------------------------------------------------------------
+            // * Nombre de variable en "n->nombre"
+            // * Tipo de variable en "n->valor.varType"
+            // * Tipo del vector en "n->izq"
+
+            // del nodo izq ver que tipo de vector viene
+            if (n->izq != NULL) {
+                if (n->izq->tipo == NODO_MATRIZ_AUTO) {
+                    printf(" * * *  Matriz Registrada: '%s' de tipo Auto \n", n->nombre);
+
+                    //AÑADIR UN ELSE IF PARA EL OTRO TIPO DE MATRIZ CON LOS VALORES DEFINIDOS
+                } else {
+                    printf(" »   Tipo de dato desconocido en declaracion de matriz * \n");
                 }
             }
             break;

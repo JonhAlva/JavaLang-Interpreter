@@ -44,9 +44,14 @@ typedef enum {
     NODO_PARSEO,              // *
     NODO_IF_SIMPLE,        // *
     NODO_IF_ELSE,            // *
-    NODO_IF_ELSE_ONE,    
-    NODO_ELSE_IF_LIST,
-    NODO_IF_ELSE_IF       
+    NODO_IF_ELSE_ONE,       // *
+    NODO_ELSE_IF_LIST,    // *
+    NODO_IF_ELSE_IF,         // * 
+    NODO_VECTOR_AUTO,
+    NODO_VALORES_VECTOR_LIST, // *
+    NODO_DECLARATION_VECTOR,   // *
+    NODO_MATRIZ_AUTO,
+    NODO_DECLARATION_MATRIX,
 } TipoNodo;
 
 typedef struct Nodo {
@@ -103,6 +108,11 @@ Nodo* Var_Declaration(char* Tipo, char* Nombre, Nodo* Izq);
 Nodo* Asignacion_Variable(char* Nombre, char* Op, Nodo* Izq);
 Nodo* Print(Nodo* expr);
 Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto);
+Nodo* Vector_Auto(char* Instruccion, char* TipoDato, Nodo* LlenadoAuto);
+Nodo* Declaration_Vector(char* DataType, char* Identificador, Nodo* TipoVector);
+Nodo* Valores_Vector(Nodo** lista);
+Nodo* Matriz_Auto(char* Tipo, Nodo* Val1, Nodo* Val2);
+Nodo* Declaration_Matriz(char* DataType, char* Identificador, Nodo* TipoMatriz);
 Nodo* Nodo_Vacio(const char* mensaje);
 
 Nodo* Casteo_Narrowing(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2);
