@@ -15,3 +15,20 @@ if (resultadoIgualdad1 == true && resultadoIgualdad2 == false &&
         } else {
             System.out.println("X Igualdad: incorrecto");
         }
+
+/*
+gcc parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c main.c -o analizador
+gcc `pkg-config --cflags gtk+-3.0` parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c main.c -o app `pkg-config --libs gtk+-3.0`
+*/
+
+GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    gtk_container_add(GTK_CONTAINER(window), box);
+
+    // Área de texto
+    GtkWidget *textview = gtk_text_view_new();
+    gtk_box_pack_start(GTK_BOX(box), textview, TRUE, TRUE, 0);
+
+    // Botón
+    GtkWidget *button = gtk_button_new_with_label("Compilar");
+    g_signal_connect(button, "clicked", G_CALLBACK(Compile_clicked), textview);
+    gtk_box_pack_start(GTK_BOX(box), button, FALSE, FALSE, 0);
