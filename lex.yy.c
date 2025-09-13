@@ -1316,7 +1316,7 @@ YY_RULE_SETUP
 case 76:
 YY_RULE_SETUP
 #line 92 "lexer.l"
-{ yylval.float_number = atof(yytext); return FLOAT_NUMBER; } /* Reconocimiento de identificadores */
+{ yylval.float_number = strtod(yytext, NULL); printf("Float detected: %f\n", yylval.float_number); return FLOAT_NUMBER; } /* Reconocimiento de identificadores */
 	YY_BREAK
 case 77:
 YY_RULE_SETUP

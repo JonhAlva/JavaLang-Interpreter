@@ -4,7 +4,9 @@
 #include <stdbool.h>
 #include "Functions/AST.h"
 #include "Functions/Evaluate.h"
+#include "Functions/PrintBuffer.h"
 #include <gtk/gtk.h>
+#include <locale.h>
 
 // Prototipo de parser
 int yyparse(void);
@@ -16,53 +18,83 @@ extern void yyrestart(FILE *input_file);
 
 extern Nodo* raiz;
 
+typedef struct {
+    GtkWidget *input;
+    GtkWidget *output;
+} CompileData;
+
 //Funcion de compilacion
-int Analizar_Codigo(char* codigo) {
+int Analizar_Codigo(char* codigo, GtkWidget *textview2) {
     //Escribir Exit para salir del bucle
         if (strncmp(codigo, "exit", 4) == 0) {
             return 1;
         }
 
+        setlocale(LC_NUMERIC, "C"); // Solo punto como decimal
+
+        init_print_buffer(); // Inicializar el buffer de impresión
+
+        printf(">> Texto recibido desde GTK: '%s'\n", codigo);
+
+        for (int i = 0; i < strlen(codigo); i++) {
+            printf("Byte[%d] = %d ('%c')\n", i, (unsigned char)codigo[i], codigo[i]);
+        }
+
         // Crear un archivo temporal en memoria con la entrada
-        FILE *f = fmemopen(codigo, strlen(codigo), "r");
+        FILE *f = fmemopen(codigo, strlen(codigo), "rb");
+
         yyrestart(f);
         yyin = f;
-
+        printf(" 🚀 Iniciando análisis sintáctico... \n");
         if (yyparse() == 0) {
             printf(" ✅ Análisis sintáctico terminado con éxito \n");
             if (raiz != NULL ) {
                 Evaluar(raiz);
+
+                int count;
+                char** mensajes = get_print_buffer(&count);
+
+                GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview2));
+                gtk_text_buffer_set_text(buffer, "", 0); // Limpiar el buffer
+
+                for (int i = 0; i < count; i++) {
+                    gtk_text_buffer_insert_at_cursor(buffer, mensajes[i], -1);
+                    free(mensajes[i]);
+                }
+
+
+                free(mensajes);
             }
         } else {
             printf(" ❌ Se encontraron errores durante el análisis \n");
+            return 1;
         }
 
         fclose(f);
         return 0;
 }
 
-static void on_button_clicked(GtkWidget *widget, gpointer data) {
-    GtkTextBuffer *buffer = GTK_TEXT_BUFFER(data);
-
-    // Insertar texto al final
-    GtkTextIter end;
-    gtk_text_buffer_get_end_iter(buffer, &end);
-    gtk_text_buffer_insert(buffer, &end, "Texto añadido automáticamente\n", -1);
+static void destroy_compile_data(gpointer data, GClosure *closure) {
+    g_free(data);
 }
 
 // funcion de accion del boton {COMPILAR} de la ventana de gtk3
-void Compile_clicked(GtkWidget *widget, gpointer textview) {
-    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
+void Compile_clicked(GtkWidget *widget, gpointer user_data) {
+    CompileData *data = (CompileData*)user_data;
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(data->input));
     GtkTextIter start, end;
     gtk_text_buffer_get_bounds(buffer, &start, &end);
     gchar *texto = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 
-    int r = Analizar_Codigo(texto);
+    // entrada que se esta mandando a Analizar_Codigo
+    // ! printf("Input code to analyze:\n%s\n", texto);
+
+    int r = Analizar_Codigo(texto, data->output);
 
     if (r == 0) {
-        g_print("Compilación exitosa!\n");
-    } else {
-        g_print("Error en el código!\n");
+        g_print(" 🌐 Ejecución de código exitosa!\n");
+    } else if (r == 5) {
+        g_print(" 🟥 Error en la ejecucion del código!\n");
     }
 
     g_free(texto);
@@ -110,6 +142,8 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
     gtk_widget_set_name(button5, "ReportesButton");
     gtk_widget_set_name(button6, "ReportesButton");
     gtk_widget_set_name(window, "MainWindow");
+    gtk_widget_set_name(textview, "Entrada");
+    gtk_widget_set_name(textview2, "Salida");
 
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview), GTK_WRAP_NONE);
     gtk_text_view_set_monospace(GTK_TEXT_VIEW(textview), TRUE);
@@ -136,30 +170,47 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
     gtk_fixed_put(GTK_FIXED(fixed), button, 180, 790);  // COmpile button
     gtk_fixed_put(GTK_FIXED(fixed), button2, 45, 25);   // Abrir archivo
     gtk_fixed_put(GTK_FIXED(fixed), button3, 230, 25); // Guardar archivo
-    gtk_fixed_put(GTK_FIXED(fixed), button4, 910, 30); // Reporte AST
-    gtk_fixed_put(GTK_FIXED(fixed), button5, 1090, 30); // Reporte Symbols
-    gtk_fixed_put(GTK_FIXED(fixed), button6, 1300, 30); // Reporte Errs
+    gtk_fixed_put(GTK_FIXED(fixed), button4, 880, 30); // Reporte AST
+    gtk_fixed_put(GTK_FIXED(fixed), button5, 1060, 30); // Reporte Symbols
+    gtk_fixed_put(GTK_FIXED(fixed), button6, 1270, 30); // Reporte Errs
     gtk_fixed_put(GTK_FIXED(fixed), scrolled, 35, 120);
     gtk_fixed_put(GTK_FIXED(fixed), scrolled2, 750, 120);
     
     //Acciones de los botones
-    g_signal_connect(button, "clicked", G_CALLBACK(Compile_clicked), textview);
-    g_signal_connect(button, "clicked", G_CALLBACK(on_button_clicked), buffer);
+    //g_signal_connect(button, "clicked", G_CALLBACK(Compile_clicked), textview);
+    //g_signal_connect_data(button, "clicked", G_CALLBACK(Compile_clicked), 
+    //                textview2, NULL, G_CONNECT_AFTER);
+    // Crear la estructura con los datos
+    CompileData *data = g_new(CompileData, 1);
+    data->input = textview;
+    data->output = textview2;
+
+    // Conectar la señal una sola vez
+    g_signal_connect_data(button, "clicked", 
+                        G_CALLBACK(Compile_clicked), 
+                        data, 
+                        destroy_compile_data, 
+                        G_CONNECT_AFTER);
 
     gtk_widget_show_all(window);
 }
 
 int main(int argc, char **argv) {
-    char input[1024];
+
+    setlocale(LC_NUMERIC, "C"); // Solo punto como decimal
+    gtk_init(&argc, &argv);
     
     GtkApplication *app = gtk_application_new("org.ejemplo.compilador", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "activate", G_CALLBACK(on_activate), NULL);
     int status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
     return status;
-
     
-/*
+
+    /*
+    init_print_buffer(); // Inicializar el buffer de impresión
+
+    char input[1024];
     printf("    $ Ingresar una entrada \n");
     if (argc > 1 ) {
 
@@ -169,16 +220,6 @@ int main(int argc, char **argv) {
             perror("El archivo no se pudo leer!");
             return 1;
         }
-
-        // Mostrar contenido del archivo
-        /*printf("\n=== Contenido del archivo '%s' ===\n", filename);
-        int c;
-        FILE *temp = fopen(filename, "r");
-        while ((c = fgetc(temp)) != EOF) {
-            putchar(c);
-        }
-        fclose(temp);
-        printf("\n=================================\n\n"); ***********
 
         // Iniciar análisis
         if (yyparse() == 0) {
@@ -194,32 +235,7 @@ int main(int argc, char **argv) {
         fclose(yyin);
         return 0;
     }
-    while(1) {
-        printf("        \n>> ");
-        if (!fgets(input, sizeof(input), stdin)) {
-            break; // EOF
-        }
 
-        //Escribir Exit para salir del bucle
-        if (strncmp(input, "exit", 4) == 0)
-            break;
-
-        // Crear un archivo temporal en memoria con la entrada
-        FILE *f = fmemopen(input, strlen(input), "r");
-        yyrestart(f);
-        yyin = f;
-
-        if (yyparse() == 0) {
-            printf(" ✅ Análisis sintáctico terminado con éxito \n");
-            if (raiz != NULL ) {
-                Evaluar(raiz);
-            }
-        } else {
-            printf(" ❌ Se encontraron errores durante el análisis \n");
-        }
-
-        fclose(f);
-    }
-
-    return 0;  */
+    return 0; 
+    */
 }

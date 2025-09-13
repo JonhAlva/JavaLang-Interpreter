@@ -1,6 +1,7 @@
 #include "AST.h"
 #include "Evaluate.h"
 #include "Tabla_Simbolos.h"
+#include "PrintBuffer.h"
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -259,18 +260,29 @@ Valor Evaluar(Nodo* n) {
 
             // * Comprobar si son enteros
             if (izq.tipo == VAL_INT && der.tipo == VAL_INT) {
-                v.tipo = VAL_INT;
-                v.i_val = izq.i_val * der.i_val;
-                return v;
+            v.tipo = VAL_INT;
+            v.i_val = izq.i_val * der.i_val;
+            return v;
             }
 
             // * Si viene un float, entonces tirar float
             if (izq.tipo == VAL_FLOAT || der.tipo == VAL_FLOAT) {
-                v.tipo = VAL_FLOAT;
-                float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
-                float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
-                v.f_val = izq_val * der_val;
-                return v;
+            v.tipo = VAL_FLOAT;
+            float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
+            float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
+            v.f_val = izq_val * der_val;
+            return v;
+            }
+
+            // * Si viene un double, entonces tirar double
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+            v.tipo = VAL_DOUBLE;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val : 
+                (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
+            v.d_val = izq_val * der_val;
+            return v;
             }
         }
 
@@ -281,31 +293,49 @@ Valor Evaluar(Nodo* n) {
             // * Comprobar si son enteros
             if (izq.tipo == VAL_INT && der.tipo == VAL_INT) {
 
-                if (der.i_val == 0) {
-                    v.tipo = VAL_NULL;
-                    v.null_val = "-Div/0 Err"; // Error de dividir en 0
-                    return v;
-                }
-
-                v.tipo = VAL_INT;
-                v.i_val = izq.i_val / der.i_val;
+            if (der.i_val == 0) {
+                v.tipo = VAL_NULL;
+                v.null_val = "-Div/0 Err"; // Error de dividir en 0
                 return v;
+            }
+
+            v.tipo = VAL_INT;
+            v.i_val = izq.i_val / der.i_val;
+            return v;
             }
 
             // * Si viene un float, entonces tirar float
             if (izq.tipo == VAL_FLOAT || der.tipo == VAL_FLOAT) {
 
-                if (der.f_val == 0) {
-                    v.tipo = VAL_NULL;
-                    v.null_val = "-Div/0 Err"; // Error de dividir en 0
-                    return v;
-                }
-
-                v.tipo = VAL_FLOAT;
-                float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
-                float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
-                v.f_val = izq_val / der_val;
+            if (der.f_val == 0) {
+                v.tipo = VAL_NULL;
+                v.null_val = "-Div/0 Err"; // Error de dividir en 0
                 return v;
+            }
+
+            v.tipo = VAL_FLOAT;
+            float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
+            float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
+            v.f_val = izq_val / der_val;
+            return v;
+            }
+
+            // * Si viene un double, entonces tirar double 
+            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
+
+            if (der.d_val == 0) {
+                v.tipo = VAL_NULL;
+                v.null_val = "-Div/0 Err"; // Error de dividir en 0
+                return v;
+            }
+
+            v.tipo = VAL_DOUBLE;
+            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val : 
+                (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
+            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
+                (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
+            v.d_val = izq_val / der_val;
+            return v;
             }
             }
         case NODO_MAYOR_A:{// * ----------------------------------------------------------------------------------------
@@ -902,46 +932,58 @@ Valor Evaluar(Nodo* n) {
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
             Valor resultado = Evaluar(n->izq);
+            char buffer[MAX_PRINT_LENGTH];
 
             switch (resultado.tipo) {
 
-            case VAL_INT:
-                printf(" » 🖨️  » %d\n", resultado.i_val);
-                break;
+                case VAL_INT:
+                    snprintf(buffer, MAX_PRINT_LENGTH, "%d\n", resultado.i_val);
+                    //printf(" » 🖨️  » %d\n", resultado.i_val);
+                    break;
 
-            case VAL_FLOAT:
-                printf(" » 🖨️  »  %f\n", resultado.f_val);
-                break;
+                case VAL_FLOAT:
+                    snprintf(buffer, MAX_PRINT_LENGTH, "%f", resultado.f_val);
+                    //printf(" » 🖨️  »  %f\n", resultado.f_val);
+                    break;
 
-            case VAL_DOUBLE:
-                printf(" » 🖨️  »  %lf\n", resultado.d_val);
-                break;
-            
-            case VAL_STRING:
-                printf(" » 🖨️  »  %s\n", resultado.s_val);
-                break;
+                case VAL_DOUBLE:
+                    snprintf(buffer, MAX_PRINT_LENGTH, "%lf\n", resultado.d_val);
+                    //printf(" » 🖨️  »  %lf\n", resultado.d_val);
+                    break;
+                
+                case VAL_STRING:
+                    snprintf(buffer, MAX_PRINT_LENGTH, "%s\n", resultado.s_val);
+                    //printf(" » 🖨️  »  %s\n", resultado.s_val);
+                    break;
 
-            case VAL_BOOL:
-                if (resultado.b_val == 1) {
-                    printf(" » 🖨️  »  True \n");
-                } else {
-                    printf(" » 🖨️  »  False \n");
+                case VAL_BOOL:
+                    if (resultado.b_val == 1) {
+                        snprintf(buffer, MAX_PRINT_LENGTH, "True\n");
+                        //printf(" » 🖨️  »  True \n");
+                    } else {
+                        snprintf(buffer, MAX_PRINT_LENGTH, "False\n");
+                        //printf(" » 🖨️  »  False \n");
+                    }
+                    break;
+
+                case VAL_CHAR:
+                    snprintf(buffer, MAX_PRINT_LENGTH, "%c\n", resultado.c_val);
+                    //printf(" » 🖨️ »  %c\n", resultado.c_val);
+                    break;
+
+                case VAL_NULL:
+                    snprintf(buffer, MAX_PRINT_LENGTH, "%s\n", resultado.null_val);
+                    //printf(" » 🖨️ »  %s\n", resultado.null_val);
+                    break;
+
+                default:
+                snprintf(buffer, MAX_PRINT_LENGTH, "❓ Tipo de dato desconocido para Imprimir\n");
+                    //printf(" ❓ Tipo de dato desconocido para Imprimir \n");
+                    break;
                 }
-                break;
 
-            case VAL_CHAR:
-                printf(" » 🖨️ »  %c\n", resultado.c_val);
-                break;
-
-            case VAL_NULL:
-                printf(" » 🖨️ »  %s\n", resultado.null_val);
-                break;
-
-            default:
-                printf("Tipo de dato desconocido * \n");
-                break;
-            }
-
+            add_to_print_buffer(buffer);
+            break;
         }
 
         // ? Nodo recursivo que lee cada instruccion

@@ -1,5 +1,5 @@
 #MainWindow {
-    background: linear-gradient(to bottom, #000000, #FFD700);
+    background: linear-gradient(to bottom, #000000, #635f10);
 }
 
 #EntradaLabel {
@@ -22,17 +22,18 @@
     font-size: 24px;
     padding: 5px 150px;
     font-family: 'Times New Roman', Times, serif;
-    border-color: #000000;
+    border-color: #bbb421;
     background: #3e3d0b;
-    color: #b5b166;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 2.0); 
+    color: #bbb421;
+    box-shadow: 0px 0px 5px rgba(239, 252, 160, 0.8); 
     transition: all 0.3s ease;
 }
 
 #CompileButton:hover {
-    background: #000000;
-    color: #d4d4d4;
-    border-color: white;
+    background: #d5cb3f;
+    color: #3e3c0b;
+    border-color: #bbb621;
+    box-shadow: 0px 0px 20px rgba(255, 247, 0, 0.8); 
     -gtk-icon-transform: scale(0.15);
 }
 
@@ -54,8 +55,10 @@
     transition: all 0.3s ease;
 }
 #ArchivoButton:hover {
-    background: #bbb421;
-    color: #3e3d0b;
+    background: #53d53f;
+    color: #133e0b;
+    border-color: #35bb21;
+    box-shadow: 0px 0px 20px rgba(43, 255, 0, 0.8); 
     -gtk-icon-transform: scale(0.15);
 }
 #ArchivoButton:active {
@@ -66,9 +69,10 @@
 }
 
 #ReportesButton {
-    font-size: 17px;
-    padding: 5px 30px;
-    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+    padding: 5px 25px;
+    font-family: consolas, monospace;
+    font-weight: bold;
     border-color: #bbb421;
     background: #3e3d0b;
     color: #bbb421;
@@ -77,8 +81,10 @@
 }
 
 #ReportesButton:hover {
-    background: #bbb421;
-    color: #3e3d0b;
+    background: #d53f3f;
+    color: #3e0b0b;
+    border-color: #bb2121;
+    box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.8); 
     -gtk-icon-transform: scale(0.15);
 }
 
@@ -90,19 +96,29 @@
 }
 
 /* Estilo tipo editor de código */
-textview {
-    background-color: #1e1e1e;  /* fondo oscuro */
+#Entrada {
+    background-color: #000000;  /* fondo oscuro */
     color: #d4d4d4;             /* texto claro */
     font-family: "Monospace";  
     font-size: 16px;
-    padding: 10px;
+    padding: 12px;
     border: 3px solid #ffffff;
     border-radius: 5px;
-    box-shadow: 0 40px 80px rgba(0, 0, 0, 1.5); 
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25); 
 }
 
-/* Selección de texto */
-textview text {
-    background-color: #333333; 
-    color: white;
+/* Estilo tipo editor de código */
+#Salida {
+    background-color: #000000;  /* fondo oscuro */
+    font-family: "Monospace";  
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px;
+    border: 3px solid #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); 
+}
+
+#Salida text {
+    color: #ffee00;  /* Verde más brillante */
 }
