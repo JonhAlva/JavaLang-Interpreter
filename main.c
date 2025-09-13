@@ -5,6 +5,7 @@
 #include "Functions/AST.h"
 #include "Functions/Evaluate.h"
 #include "Functions/PrintBuffer.h"
+#include "Functions/Tabla_Simbolos.h"
 #include <gtk/gtk.h>
 #include <locale.h>
 
@@ -33,12 +34,6 @@ int Analizar_Codigo(char* codigo, GtkWidget *textview2) {
         setlocale(LC_NUMERIC, "C"); // Solo punto como decimal
 
         init_print_buffer(); // Inicializar el buffer de impresión
-
-        printf(">> Texto recibido desde GTK: '%s'\n", codigo);
-
-        for (int i = 0; i < strlen(codigo); i++) {
-            printf("Byte[%d] = %d ('%c')\n", i, (unsigned char)codigo[i], codigo[i]);
-        }
 
         // Crear un archivo temporal en memoria con la entrada
         FILE *f = fmemopen(codigo, strlen(codigo), "rb");
@@ -74,8 +69,89 @@ int Analizar_Codigo(char* codigo, GtkWidget *textview2) {
         return 0;
 }
 
+//limpiador
 static void destroy_compile_data(gpointer data, GClosure *closure) {
     g_free(data);
+}
+
+// Abrir archivo
+static void Open_File_clicked(GtkWidget *widget, gpointer user_data) {
+    CompileData *data = (CompileData*)user_data;
+    GtkWidget *dialog;
+    GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+    gint res;
+
+    dialog = gtk_file_chooser_dialog_new("Open File",
+                                        GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+                                        action,
+                                        "_Cancel",
+                                        GTK_RESPONSE_CANCEL,
+                                        "_Open",
+                                        GTK_RESPONSE_ACCEPT,
+                                        NULL);
+
+    res = gtk_dialog_run(GTK_DIALOG(dialog));
+    if (res == GTK_RESPONSE_ACCEPT) {
+        char *filename;
+        GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
+        filename = gtk_file_chooser_get_filename(chooser);
+        
+        // Read file contents
+        FILE *file = fopen(filename, "r");
+        if (file) {
+            // Get file size
+            fseek(file, 0, SEEK_END);
+            long fsize = ftell(file);
+            fseek(file, 0, SEEK_SET);
+
+            // Read file content
+            char *content = malloc(fsize + 1);
+            fread(content, fsize, 1, file);
+            fclose(file);
+            content[fsize] = 0;  // Null terminate
+
+            // Set content to text view
+            GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(data->input));
+            gtk_text_buffer_set_text(buffer, content, -1);
+
+            free(content);
+        } else {
+            GtkWidget *error_dialog = gtk_message_dialog_new(GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+                                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                        GTK_MESSAGE_ERROR,
+                                                        GTK_BUTTONS_CLOSE,
+                                                        "Error al abrir el archivo: %s",
+                                                        filename);
+            gtk_dialog_run(GTK_DIALOG(error_dialog));
+            gtk_widget_destroy(error_dialog);
+        }
+        g_free(filename);
+    }
+
+    gtk_widget_destroy(dialog);
+}
+
+// * Funcion para generar el reporte de simbolos
+void Generate_Symbols_Report(){
+    if (num_vars == 0) {
+        printf("✅ No se encontraron variables declaradas\n");
+        return;
+    } else {
+        Print_All_Variables();
+    }
+}
+
+// * Funcion para generar el reporte de errores
+void Generate_Errors_Report(){
+
+    if (num_errores == 0) {
+        printf("✅ No se encontraron errores\n");
+        return;
+    } else {
+        Print_All_Errors();
+        Clear_All_Errors();
+    }
+    
 }
 
 // funcion de accion del boton {COMPILAR} de la ventana de gtk3
@@ -177,9 +253,6 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
     gtk_fixed_put(GTK_FIXED(fixed), scrolled2, 750, 120);
     
     //Acciones de los botones
-    //g_signal_connect(button, "clicked", G_CALLBACK(Compile_clicked), textview);
-    //g_signal_connect_data(button, "clicked", G_CALLBACK(Compile_clicked), 
-    //                textview2, NULL, G_CONNECT_AFTER);
     // Crear la estructura con los datos
     CompileData *data = g_new(CompileData, 1);
     data->input = textview;
@@ -191,6 +264,24 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
                         data, 
                         destroy_compile_data, 
                         G_CONNECT_AFTER);
+
+    g_signal_connect_data(button2, "clicked",
+                G_CALLBACK(Open_File_clicked),
+                data,
+                NULL,
+                G_CONNECT_AFTER);
+
+    g_signal_connect_data(button5, "clicked",
+                G_CALLBACK(Generate_Symbols_Report),
+                data,
+                NULL,
+                G_CONNECT_AFTER);
+
+    g_signal_connect_data(button6, "clicked",
+                G_CALLBACK(Generate_Errors_Report),
+                data,
+                NULL,
+                G_CONNECT_AFTER);
 
     gtk_widget_show_all(window);
 }

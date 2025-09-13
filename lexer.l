@@ -1,5 +1,6 @@
 %{
     #include "parser.tab.h"
+    #include "Functions/Tabla_Simbolos.h"
     #include <string.h>
     #include <stdlib.h>
 %}
@@ -89,12 +90,17 @@
 "&&"                    { return LOGIC_AND; }
 "!"                     { return LOGIC_NOT; }
 
-[0-9]+"."[0-9]+         { yylval.float_number = strtod(yytext, NULL); printf("Float detected: %f\n", yylval.float_number); return FLOAT_NUMBER; } /* Reconocimiento de identificadores */
+[0-9]+"."[0-9]+         { yylval.float_number = strtod(yytext, NULL); return FLOAT_NUMBER; } /* Reconocimiento de identificadores */
 [0-9]+                  { yylval.int_number = atoi(yytext); return INT_NUMBER; }
 [a-zA-Z_][a-zA-Z0-9_]*  { yylval.identificador = strdup(yytext); return IDENTIFICADOR; }
 \"([^\"\r\n]|\"\")*\"   { yylval.string_comillas = strdup(yytext); return STRING_COMILLAS; }
 
-.                       { printf("Error: caracter inesperado %s\n", yytext); return yytext[0]; }
+.                       { printf("Error: caracter inesperado %s\n", yytext); 
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "Caracter inesperado";
+                        lista_Errores[num_errores].Tipo_Error = yytext;
+                        num_errores++;
+                        return yytext[0]; }
 
 %%
 

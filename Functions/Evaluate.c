@@ -47,14 +47,30 @@ Valor Evaluar(Nodo* n) {
             
             // Verificar si tiene comillas al inicio y al final
             if (len >= 2 && n->valor.s_val[0] == '"' && n->valor.s_val[len-1] == '"') {
-                // Crear nuevo string sin comillas
-                char* contenido = malloc(len - 1); // -2 por las comillas +1 por el null terminator
-                strncpy(contenido, n->valor.s_val + 1, len - 2); // Copiar sin primera y última comilla
-                contenido[len - 2] = '\0'; // Agregar null terminator
-                v.s_val = contenido;
+            // Crear nuevo string sin comillas
+            char* contenido = malloc(len - 1); // -2 por las comillas +1 por el null terminator
+            strncpy(contenido, n->valor.s_val + 1, len - 2); // Copiar sin primera y última comilla
+            contenido[len - 2] = '\0'; // Agregar null terminator
+            
+            // Procesar caracteres especiales de escape
+            char* result = malloc(2*len); // Buffer temporal más grande para posibles expansiones
+            int j = 0;
+            
+            for(int i = 0; contenido[i] != '\0'; i++) {
+                if(contenido[i] == '\\' && contenido[i+1] == 'n') {
+                result[j++] = '\n';  // Insertar salto de línea real
+                i++; // Saltar el siguiente carácter 'n'
+                } else {
+                result[j++] = contenido[i];
+                }
+            }
+            result[j] = '\0';
+            
+            free(contenido);
+            v.s_val = result;
             } else {
-                // Si no tiene comillas, copiar tal cual
-                v.s_val = strdup(n->valor.s_val);
+            // Si no tiene comillas, copiar tal cual
+            v.s_val = strdup(n->valor.s_val);
             }
             return v;
         }
@@ -108,6 +124,7 @@ Valor Evaluar(Nodo* n) {
             v.i_val = ((int)izq.c_val) % der.i_val;
             return v;
             }
+
             if (izq.tipo == VAL_INT && der.tipo == VAL_CHAR) {
             v.tipo = VAL_INT;
             v.i_val = izq.i_val % ((int)der.c_val);
@@ -296,6 +313,10 @@ Valor Evaluar(Nodo* n) {
             if (der.i_val == 0) {
                 v.tipo = VAL_NULL;
                 v.null_val = "-Div/0 Err"; // Error de dividir en 0
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "No es posible dividir entre 0";
+                lista_Errores[num_errores].Tipo_Error = "Division";
+                num_errores++;
                 return v;
             }
 
@@ -326,6 +347,10 @@ Valor Evaluar(Nodo* n) {
             if (der.d_val == 0) {
                 v.tipo = VAL_NULL;
                 v.null_val = "-Div/0 Err"; // Error de dividir en 0
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "No es posible dividir entre 0";
+                lista_Errores[num_errores].Tipo_Error = "Division";
+                num_errores++;
                 return v;
             }
 
@@ -596,6 +621,10 @@ Valor Evaluar(Nodo* n) {
                 printf(" » ❌ Error AND: Los operandos deben ser booleanos\n");
                 v.tipo = VAL_BOOL;
                 v.b_val = 0;
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Los operandos deben ser booleanos";
+                lista_Errores[num_errores].Tipo_Error = "Comparacion AND";
+                num_errores++;
                 return v;
             }
         }
@@ -620,6 +649,10 @@ Valor Evaluar(Nodo* n) {
                 printf(" » ❌ Error OR: Los operandos deben ser booleanos\n");
                 v.tipo = VAL_BOOL;
                 v.b_val = 0;
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Los operandos deben ser booleanos";
+                lista_Errores[num_errores].Tipo_Error = "Comparacion OR";
+                num_errores++;
                 return v;
             }
         }
@@ -648,6 +681,10 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada (int -> float): '%s' asignada con valor: %d \n", n->nombre, (int)izq.f_val);
                 } else {
                     printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion Int";
+                    num_errores++;
                 }
 
             } else if (strcmp(n->valor.varType, "float") == 0) {
@@ -660,6 +697,11 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada (float -> double): '%s' asignada con valor: %f \n", n->nombre, (float)izq.d_val);
                 } else {
                     printf(" »   Float Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion Float";
+                    num_errores++;
                 }
 
             } else if (strcmp(n->valor.varType, "String") == 0) {
@@ -668,6 +710,11 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %s \n", n->nombre, izq.s_val);
                 } else {
                     printf(" »   String Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion String";
+                    num_errores++;
                 }
 
             } else if (strcmp(n->valor.varType, "boolean") == 0) {
@@ -676,6 +723,11 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.b_val ? 1 : 0);
                 } else {
                     printf(" »   Boolean Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion Boolean";
+                    num_errores++;
                 }
 
             } else if (strcmp(n->valor.varType, "char") == 0) {
@@ -692,6 +744,11 @@ Valor Evaluar(Nodo* n) {
                     }
                 } else {
                     printf(" »   Char Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion Char";
+                    num_errores++;
                 }
 
             } else if (strcmp(n->valor.varType, "long") == 0) {
@@ -700,6 +757,11 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
                 } else {
                     printf(" »   Long Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion Long";
+                    num_errores++;
                 }
 
             } else if (strcmp(n->valor.varType, "short") == 0) {
@@ -708,6 +770,11 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
                 } else {
                     printf(" »   Short Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion Short";
+                    num_errores++;
                 }
 
             } else if (strcmp(n->valor.varType, "double") == 0) {
@@ -716,6 +783,11 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %f \n", n->nombre, izq.d_val);
                 } else {
                     printf(" »   Double Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion Double";
+                    num_errores++;
                 }
 
             } else if (strcmp(n->valor.varType, "byte") == 0) {
@@ -724,9 +796,18 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %c \n", n->nombre, izq.c_val);
                 } else {
                     printf(" »   Byte Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
+                    lista_Errores[num_errores].Tipo_Error = "Declaracion Byte";
+                    num_errores++;
                 }
             } else {
-                printf(" »   Tipo de dato desconocido en declaracion * \n");
+                printf(" » ERROR: Tipo de dato desconocido en declaracion * \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Tipo de Dato Desconocido";
+                lista_Errores[num_errores].Tipo_Error = "Declaracion";
+                num_errores++;
             }
             break;
         }
@@ -741,6 +822,10 @@ Valor Evaluar(Nodo* n) {
             } else {
                 v.tipo = VAL_NULL;
                 v.null_val = "-Var Not Found Err"; // Error de variable no encontrada
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "La variable no fue encontrada";
+                lista_Errores[num_errores].Tipo_Error = "Variable";
+                num_errores++;
                 return v;
             }
         }
@@ -829,6 +914,10 @@ Valor Evaluar(Nodo* n) {
                 }
             } else {
                 printf(" » ❌  Error If: La condición no es booleana \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "LA condicion no es booleana";
+                lista_Errores[num_errores].Tipo_Error = "Sentencia If";
+                num_errores++;
             }
             break;
         }
@@ -849,6 +938,10 @@ Valor Evaluar(Nodo* n) {
                 }
             } else {
                 printf(" » ❌  Error If-Else: La condición no es booleana \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "LA condicion no es booleana";
+                lista_Errores[num_errores].Tipo_Error = "Sentencia If-Else";
+                num_errores++;
             }
             break;
         }
@@ -906,6 +999,10 @@ Valor Evaluar(Nodo* n) {
                     printf(" * * *  Vector Registrado: '%s' de tipo Explicito con valores definidos \n", n->nombre);
                 } else {
                     printf(" »   Tipo de dato desconocido en declaracion de vector * \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Dato desconocido en declaracion de vector";
+                    lista_Errores[num_errores].Tipo_Error = "Vector";
+                num_errores++;
                 }
             }
             break;
@@ -924,6 +1021,10 @@ Valor Evaluar(Nodo* n) {
                     //AÑADIR UN ELSE IF PARA EL OTRO TIPO DE MATRIZ CON LOS VALORES DEFINIDOS
                 } else {
                     printf(" »   Tipo de dato desconocido en declaracion de matriz * \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Dato desconocido en declaracion de matriz";
+                    lista_Errores[num_errores].Tipo_Error = "Matriz";
+                num_errores++;
                 }
             }
             break;
@@ -978,6 +1079,10 @@ Valor Evaluar(Nodo* n) {
 
                 default:
                 snprintf(buffer, MAX_PRINT_LENGTH, "❓ Tipo de dato desconocido para Imprimir\n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Tipo de dato desconocido para Imprimir";
+                lista_Errores[num_errores].Tipo_Error = "Print";
+                num_errores++;
                     //printf(" ❓ Tipo de dato desconocido para Imprimir \n");
                     break;
                 }

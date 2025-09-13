@@ -7,6 +7,9 @@
 Variable tabla_Variables[MAX_VARS];
 int num_vars = 0;
 
+Error_Variable lista_Errores[MAX_ERRORS];
+int num_errores = 0;
+
 //! implementar una condicion para saber si hay una variable repetida
 
 // ! Asignacion de variable INT
@@ -194,6 +197,10 @@ Nodo* Acceso_Variable(char* Nombre) {
     n->tipo = NODO_NULL;
     n->valor.null_val = "-Var Not Found Err"; // Error de variable no encontrada
     n->izq = n->der = NULL;
+    lista_Errores[num_errores].Num = num_errores;
+    lista_Errores[num_errores].Desc_Error = "Variable no Encontrada";
+    lista_Errores[num_errores].Tipo_Error = Nombre;
+    num_errores++;
     return n;
 }
 
@@ -210,6 +217,10 @@ void Actualizar_Variable(char* Nombre, Valor nuevo_valor) {
     // Si la variable no fue encontrada
     if (!variable_encontrada) {
         printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Nombre);
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Variable no Encontrada";
+        lista_Errores[num_errores].Tipo_Error = Nombre;
+        num_errores++;
         return;
     }
     // Actualizar el valor de la variable según su tipo
@@ -290,6 +301,10 @@ void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor) {
     // Si la variable no fue encontrada
     if (!variable_encontrada) {
         printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Nombre);
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Variable no Declarada";
+        lista_Errores[num_errores].Tipo_Error = Nombre;
+        num_errores++;
         return;
     }
 
@@ -298,6 +313,10 @@ void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor) {
         if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
             if (tabla_Variables[i].tipo_Variable != TIPO_INT) {
                 printf(" ❌ Error: La variable '%s' no es de tipo int, no se puede usar operador especial\n", Nombre);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Variable no es tipo Int";
+                lista_Errores[num_errores].Tipo_Error = Nombre;
+                num_errores++;
                 return;
             }
             break;
@@ -346,6 +365,10 @@ void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor) {
         Actualizar_Variable(Nombre, (Valor){.tipo = VAL_INT, .i_val = valor_actual});
     } else {
         printf(" ❌ Error: Operador '%s' no reconocido para asignacion\n", operador);
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Operador no reconocido para asignacion";
+        lista_Errores[num_errores].Tipo_Error = "Asignacion Especial";
+        num_errores++;
     }
 }
 
@@ -362,6 +385,10 @@ void Casteo_Narrow(char* Tipo1, char* Identificador, char* ParseType, char* Iden
     // Si la variable no fue encontrada
     if (!variable_encontrada) {
         printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Identificador2);
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Variable no Declarada";
+        lista_Errores[num_errores].Tipo_Error = Identificador2;
+        num_errores++;
         return;
     }
 
@@ -381,6 +408,10 @@ void Casteo_Narrow(char* Tipo1, char* Identificador, char* ParseType, char* Iden
 
     if (!tipo_compatible) {
         printf(" ❌ Error: No se puede realizar casteo narrowing de '%s' a '%s'\n", ParseType, Tipo1);
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "No se puede realizar casteo narrowing";
+        lista_Errores[num_errores].Tipo_Error = "Casteo";
+        num_errores++;
         return;
     }
 
@@ -436,6 +467,10 @@ Nodo* Compare_Equals(char* Identificador, Nodo* Izq) {
     // Si la variable no fue encontrada
     if (!variable_encontrada) {
         printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Identificador);
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Variable no Declarada";
+        lista_Errores[num_errores].Tipo_Error = Identificador;
+        num_errores++;
         Nodo* n = malloc(sizeof(Nodo));
         n->tipo = NODO_NULL;
         n->valor.null_val = "-Var Not Found Err"; // Error de variable no encontrada
@@ -451,6 +486,10 @@ Nodo* Compare_Equals(char* Identificador, Nodo* Izq) {
 
     if (!es_string) {
         printf(" ❌ Error: La funcion .equals solo es compatible con tipo String\n");
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Solo se permite tipo String";
+        lista_Errores[num_errores].Tipo_Error = "Funcion .equals";
+        num_errores++;
         Nodo* n = malloc(sizeof(Nodo));
         n->tipo = NODO_NULL;
         n->valor.null_val = "-Var Not String Err"; // Error de variable no encontrada
@@ -507,6 +546,10 @@ void Asignacion_Default(char* Nombre, char* Tipo) {
         AsignarVariable_Double(Nombre, 0.0);
     } else {
         printf(" »   Tipo de dato desconocido en declaracion * \n");
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Tipo de dato desconocido en declaracion";
+        lista_Errores[num_errores].Tipo_Error = "Asignacion Default";
+        num_errores++;
     }
     
 }
@@ -550,6 +593,10 @@ void AsignarParseo_Variable(char* Nombre, char* Tipo, char* Parse_Type, Valor va
 
         // Si no se pudo convertir, asignar null
         printf(" » ❌ Error: Parseo fallido para variable '%s' el valor ingresado no es un numero \n", Nombre);
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "El valor ingresado no es un numero";
+        lista_Errores[num_errores].Tipo_Error = "Parseo Numerico";
+        num_errores++;
     } else {
         // Convertir el valor que venga a cadena
         char buffer[64];
@@ -619,16 +666,138 @@ void Print_Specific_Variable(char* Nombre) {
         }
     }
     printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Nombre);
+    lista_Errores[num_errores].Num = num_errores;
+    lista_Errores[num_errores].Desc_Error = "Variable no Encontrada";
+    lista_Errores[num_errores].Tipo_Error = "Variable";
+    num_errores++;
 }
 
+void Print_All_Variables() {
+    FILE *f = fopen("tabla_simbolos.dot", "w");
+    if (f == NULL) {
+        printf("Error creating DOT file\n");
+        return;
+    }
 
+    // Write DOT header
+    fprintf(f, "digraph tabla_simbolos {\n");
+    fprintf(f, "    rankdir=LR;\n");
+    fprintf(f, "    node [shape=record];\n\n");
+    
+    // Create a single node with all variables
+    fprintf(f, "    tabla [label=\"{Tabla de Símbolos");
 
+    // Add each variable as a separate field
+    for (int i = 0; i < num_vars; i++) {
+        fprintf(f, "|{%s|", tabla_Variables[i].nombreVariable);
+        
+        // Print type
+        switch (tabla_Variables[i].tipo_Variable) {
+            case TIPO_INT: fprintf(f, "int|"); break;
+            case TIPO_FLOAT: fprintf(f, "float|"); break;
+            case TIPO_STRING: fprintf(f, "String|"); break;
+            case TIPO_BOOLEAN: fprintf(f, "boolean|"); break;
+            case TIPO_CHAR: fprintf(f, "char|"); break;
+            case TIPO_LONG: fprintf(f, "long|"); break;
+            case TIPO_SHORT: fprintf(f, "short|"); break;
+            case TIPO_DOUBLE: fprintf(f, "double|"); break;
+            case TIPO_BYTE: fprintf(f, "byte|"); break;
+            default: fprintf(f, "unknown|"); break;
+        }
 
+        // Print value with proper escaping
+        switch (tabla_Variables[i].tipo_Variable) {
+            case TIPO_INT:
+                fprintf(f, "%d}", tabla_Variables[i].valor.i_val);
+                break;
+            case TIPO_FLOAT:
+                fprintf(f, "%.2f}", tabla_Variables[i].valor.f_val);
+                break;
+            case TIPO_STRING:
+                // Escape special characters in strings
+                fprintf(f, "\\\"%s\\\"}", tabla_Variables[i].valor.s_val);
+                break;
+            case TIPO_BOOLEAN:
+                fprintf(f, "%s}", tabla_Variables[i].valor.b_val ? "true" : "false");
+                break;
+            case TIPO_CHAR:
+                // Escape special characters for chars
+                if (tabla_Variables[i].valor.c_val == '"') 
+                    fprintf(f, "\\\"\\\"}");
+                else if (tabla_Variables[i].valor.c_val == '\\')
+                    fprintf(f, "\\\\}");
+                else
+                    fprintf(f, "%c}", tabla_Variables[i].valor.c_val);
+                break;
+            case TIPO_LONG:
+                fprintf(f, "%ld}", (long)tabla_Variables[i].valor.i_val);
+                break;
+            case TIPO_SHORT:
+                fprintf(f, "%d}", (short)tabla_Variables[i].valor.i_val);
+                break;
+            case TIPO_DOUBLE:
+                fprintf(f, "%.2lf}", tabla_Variables[i].valor.d_val);
+                break;
+            case TIPO_BYTE:
+                fprintf(f, "%d}", (unsigned char)tabla_Variables[i].valor.c_val);
+                break;
+            default:
+                fprintf(f, "unknown}");
+        }
+    }
 
+    // Close the label and graph
+    fprintf(f, "}\"];\n}\n");
+    fclose(f);
 
+    //printf(" » Archivo DOT generado como 'tabla_simbolos.dot'\n");
+    // Generate PNG using system call
+    system("dot -Tpng tabla_simbolos.dot -o tabla_simbolos.png");
+    printf(" ✅ Imagen PNG generada como 'tabla_simbolos.png'\n");
+}
 
+void Print_All_Errors() {
 
+    FILE *f = fopen("lista_errores.dot", "w");
+    if (f == NULL) {
+        printf("Error creating DOT file\n");
+        return;
+    }
 
+    // Write DOT header
+    fprintf(f, "digraph lista_errores {\n");
+    fprintf(f, "    rankdir=LR;\n");
+    fprintf(f, "    node [shape=record];\n\n");
+    
+    // Create a single node with all errors
+    fprintf(f, "    errores [label=\"{Lista de Errores");
 
+    // Add each error as a separate field
+    for (int i = 0; i < num_errores; i++) {
+        fprintf(f, "|{#%d|", lista_Errores[i].Num+1);
+        fprintf(f, "%s|", lista_Errores[i].Tipo_Error);
+        // Escape special characters in error descriptions
+        char* desc = lista_Errores[i].Desc_Error;
+        for (char* p = desc; *p; p++) {
+            if (*p == '"' || *p == '\\') {
+                fputc('\\', f); // Escape character
+            }
+            fputc(*p, f);
+        }
+        fprintf(f, "}");
+    }
 
+    // Close the label and graph
+    fprintf(f, "}\"];\n}\n");
+    fclose(f);
 
+    //printf(" Archivo DOT generado como 'lista_errores.dot'\n");
+    // Generate PNG using system call
+    system("dot -Tpng lista_errores.dot -o lista_errores.png");
+    printf(" ✅ Imagen PNG generada como 'lista_errores.png'\n");
+}
+
+void Clear_All_Errors() {
+    num_errores = 0;
+    printf(" ✅ Lista de errores limpiada\n");
+}

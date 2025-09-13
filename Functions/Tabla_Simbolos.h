@@ -6,6 +6,7 @@
 #ifndef TABLA_SIMBOLOS_H
 #define TABLA_SIMBOLOS_H
 #define MAX_VARS 500
+#define MAX_ERRORS 100
 #define MAX_VECTORES 100
 
 // ? Struct de tipo de variables --------------------------------------------
@@ -44,12 +45,22 @@ typedef struct {
     int size;                 // ? Tamaño actual del vector
 } Vectores ;    // ? Nombre del struct de VECTOR
 
+typedef struct {
+    int Num;
+    char* Desc_Error;
+    char* Tipo_Error;
+} Error_Variable;
+
 // ! Tabla de simbolos que almacena las variables
 extern Variable tabla_Variables[MAX_VARS];
 extern int num_vars;
 // ! -----------------------------------------------
 extern Vectores lista_Vectores[MAX_VECTORES];
 extern int num_vectores;
+// ! -----------------------------------------------
+extern Error_Variable lista_Errores[MAX_ERRORS];
+extern int num_errores;
+// ! -----------------------------------------------
 
 // ? Funciones que estaran publicas y en este paquete
 void AsignarVariable_Int(char* Nombre, int valor);      // ? Widening{int -> float} ? NARROWING{int -> char}
@@ -78,5 +89,8 @@ Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);
 
 // ! DEBUG FUNCTIONS
 void Print_Specific_Variable(char* Nombre);
+void Print_All_Variables();
+void Print_All_Errors();
+void Clear_All_Errors();
 
 #endif
