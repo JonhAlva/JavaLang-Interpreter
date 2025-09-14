@@ -806,3 +806,26 @@ void Clear_All_Variables() {
     num_vars = 0;
     printf(" ✅ Tabla de simbolos limpiada\n");
 }
+
+int CompararValores(Valor valor1, Valor valor2) {
+    if (valor1.tipo != valor2.tipo) {
+        return 0; // Tipos diferentes no son iguales
+    }
+
+    switch (valor1.tipo) {
+        case VAL_INT:
+            return valor1.i_val == valor2.i_val;
+        case VAL_FLOAT:
+            return valor1.f_val == valor2.f_val;
+        case VAL_STRING:
+            return strcmp(valor1.s_val, valor2.s_val) == 0;
+        case VAL_BOOL:
+            return valor1.b_val == valor2.b_val;
+        case VAL_CHAR:
+            return valor1.c_val == valor2.c_val;
+        case VAL_DOUBLE:
+            return valor1.d_val == valor2.d_val;
+        default:
+            return 0; // Tipo desconocido
+    }
+}

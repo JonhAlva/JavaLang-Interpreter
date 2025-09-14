@@ -87,6 +87,9 @@ Nodo* Acceso_Variable(char* Nombre);
 Nodo** Lista_Vector(Nodo* valor);
 Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);
 
+//FUNCION QUE COMPARA DOS VALORES
+int CompararValores(Valor valor1, Valor valor2);
+
 // ! DEBUG FUNCTIONS
 void Print_Specific_Variable(char* Nombre);
 void Print_All_Variables();

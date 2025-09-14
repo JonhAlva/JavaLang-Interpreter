@@ -483,3 +483,33 @@ Nodo* While_Sentence(Nodo* condicion, Nodo* instrucciones) {
     n->nombre = NULL;
     return n;
 }
+
+Nodo* Switch_Default(Nodo* instrucciones) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_SWITCH_DEFAULT; // Reutilizamos el nodo SWITCH_DEFAULT para el default
+    n->izq = instrucciones;
+    n->der = NULL;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Switch_Case_One(Nodo* condicion, Nodo* instrucciones) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_SWITCH_CASE_ONE;
+    n->izq = condicion;
+    n->der = instrucciones;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Switch_Sentence(char* Identificador_Comparador, Nodo* Case_One, Nodo** List_Cases, Nodo* Default_Case) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_SWITCH_SENTENCE;
+    n->nombre = strdup(Identificador_Comparador);
+    n->izq = Case_One; // Primer caso obligatorio
+    n->der = NULL;
+    n->lista_nodos = List_Cases; // Lista de casos adicionales (puede ser NULL)
+    n->nodo_else = Default_Case; // Caso default (puede ser NULL)
+    return n;
+}
+

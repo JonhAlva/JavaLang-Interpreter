@@ -162,6 +162,26 @@ while( conditionx < 7 ) {
     conditionx++;
 }
 
+        // Sentencia SWITCH - CASE -----------------------------------------------------------------------------------
+
+int dia = 3;
+
+switch( dia ) {
+    case 1:
+        System.out.println("Caso 1");
+        break;
+    case 2:
+        System.out.println("Caso 2");
+        break;
+    case 3:
+        System.out.println("Caso 3");
+        break;
+    default:
+        System.out.println("Caso default");
+}
+
+
+
 
 
 
@@ -189,36 +209,6 @@ int[][] board = {
 
 
 
-
-
-
-
-
-
-
-        // Sentencia SWITCH - CASE -----------------------------------------------------------------------------------
-
-int dia = 3;
-
-switch( dia ) {
-    case 1:
-        System.out.println("Caso 1");
-        x >>= 9;
-        break;
-    case 2:
-        System.out.println("Caso 2");
-        int blockInt = (float) block;
-        break;
-    case 3:
-        System.out.println("Caso 3");
-        String n1 = "hola";
-        break;
-    default:
-        System.out.println("Caso default");
-        if ( Nu_mero > 5 ) {
-            System.out.println("Ejecutando If unico");
-        }
-}
 
 
         // Sentencia FOR - EACH              --------------------------------------------------------------------------

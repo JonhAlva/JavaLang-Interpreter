@@ -1168,6 +1168,85 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
+        case NODO_SWITCH_SENTENCE: { // * ----------------------------------------------------------------------------------------
+            // ? Nombre de la variable a comparar
+            char* nombreVar = n->nombre;
+
+            // ? Nodo de la varible a comparar
+            Nodo* Valor_NombreVar = Acceso_Variable(nombreVar);
+            if (Valor_NombreVar == NULL) {
+                printf(" » ❌ Error Switch: Variable '%s' no encontrada\n", nombreVar);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Variable no encontrada";
+                lista_Errores[num_errores].Tipo_Error = "Sentencia Switch";
+                num_errores++;
+                break;
+            }
+
+            // ? Capturar el valor de VValor_NombreVar dependiendo del tipo
+            Valor valorSwitch;
+            switch(Valor_NombreVar->tipo) {
+                case NODO_INT:
+                    valorSwitch = (Valor){.tipo = VAL_INT, .i_val = Valor_NombreVar->valor.i_val};
+                    break;
+                case NODO_STRING:
+                    valorSwitch = (Valor){.tipo = VAL_STRING, .s_val = strdup(Valor_NombreVar->valor.s_val)};
+                    break;
+                case NODO_CHAR:
+                    valorSwitch = (Valor){.tipo = VAL_CHAR, .c_val = Valor_NombreVar->valor.c_val};
+                    break;
+                default:
+                    printf(" » ❌ Error Switch: Tipo de dato no soportado en switch\n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de dato no soportado en switch";
+                    lista_Errores[num_errores].Tipo_Error = "Sentencia Switch";
+                    num_errores++;
+                    break;
+                }
+
+            // Evaluar primer caso si existe
+            int casoEncontrado = 0;
+            if (n->izq != NULL) {
+                Valor valorCaso = Evaluar(n->izq->izq);
+                if (CompararValores(valorSwitch, valorCaso)) {
+                    printf(" » 🔀 Ejecutando primer caso del Switch\n");
+                    Evaluar(n->izq->der);
+                    casoEncontrado = 1;
+                }
+            }
+
+            // Evaluar casos adicionales si existen y no se encontró coincidencia
+            if (!casoEncontrado && n->lista_nodos != NULL) {
+                for (int i = 0; n->lista_nodos[i] != NULL; i++) {
+                    Valor valorCaso = Evaluar(n->lista_nodos[i]->izq);
+                    if (CompararValores(valorSwitch, valorCaso)) {
+                    printf(" » 🔀 Ejecutando caso %d del Switch\n", i + 2);
+                    Evaluar(n->lista_nodos[i]->der);
+                    casoEncontrado = 1;
+                    break;
+                    }
+                }
+            }
+
+            // Ejecutar caso default si existe y no se encontró coincidencia
+            if (!casoEncontrado && n->nodo_else != NULL) {
+                printf(" » 🔀 Ejecutando caso default del Switch\n");
+                Evaluar(n->nodo_else);
+                printf("El tipo de nodo_else es: %d\n", n->nodo_else->tipo);
+            }
+
+            // Liberar memoria si se usó un string
+            if (valorSwitch.tipo == VAL_STRING) {
+                free(valorSwitch.s_val);
+            }
+            break;
+        }
+
+        case NODO_SWITCH_DEFAULT: { // * ----------------------------------------------------------------------------------------
+            Evaluar(n->izq);
+            break;
+        }
+
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
             Valor resultado = Evaluar(n->izq);

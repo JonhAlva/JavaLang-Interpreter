@@ -46,9 +46,10 @@
 //%type <nodo> for_sentence switch_case switch_case_list switch_default native_func  vector matriz
 //%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
-%type <nodo> native_func vector_type string_join if_else_one vector matriz_type matriz for_condition for_sentence
+%type <nodo> native_func vector_type string_join if_else_one vector matriz_type matriz for_condition for_sentence switch_default
+%type <nodo> switch_case_one switch_case
 %type <identificador> op_expr parse_expretion for_option
-%type <lista_nodos> vector_values if_else_chain matriz_values 
+%type <lista_nodos> vector_values if_else_chain matriz_values switch_case_list
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -79,7 +80,7 @@ instruccion:
             | print                 { $$ = $1; }
             | if_sentence           { $$ = $1; }
             | native_func           { $$ = $1; }
-            | switch_case           { $$ = Nodo_Vacio("SWITCH CASE NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
+            | switch_case           { $$ = $1; }
             | while_sentence        { $$ = $1; }
             | for_sentence          { $$ = $1; }
             | function_sentence     { $$ = Nodo_Vacio("FUNCION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
@@ -315,19 +316,53 @@ for_option:
 
 // * CONDICIONAL SWITCH CASE -----------------------------------------------------------------------------------------------
 switch_case:
-            SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_list switch_default LLAVE_CLOSE
+            SWITCH_WORD PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE LLAVE_OPEN switch_case_one switch_case_list switch_default LLAVE_CLOSE
+            { $$ = Switch_Sentence($3, $6, $7, $8); }
+;
+
+// ! ASEGURAMOS QUE ALMENOS UN CASE DEBE EXISTIR
+switch_case_one:
+                CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+                { $$ = Switch_Case_One($2, $4); }
 ;
 
 // ! RECURSIVIDAD PARA INDEFINIDOS CASOS DE 'CASE'
 switch_case_list:
                 switch_case_list CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
-                | CASE_WORD expr S_PUNTO_PUNTO lista_instrucciones BREAK_WORD S_PUNTO_COMA
+                {
+                    // Obtener el tamaño actual de la lista
+                    int size = 0;
+                    while ($1 && $1[size] != NULL) size++;
+                    
+                    // Crear nueva lista con un espacio adicional
+                    $$ = malloc(sizeof(Nodo*) * (size + 2));  // +1 para el nuevo nodo, +1 para NULL
+                    
+                    // Copiar nodos existentes
+                    for(int i = 0; i < size; i++) {
+                        $$[i] = $1[i];
+                    }
+                    
+                    // Agregar nuevo nodo case
+                    $$[size] = Switch_Case_One($3, $5);
+                    $$[size + 1] = NULL;  // Terminar lista con NULL
+                }
+
+
+                | /* vacío */
+                { 
+                // Inicializar lista vacía
+                    $$ = malloc(sizeof(Nodo*) * 1);
+                    $$[0] = NULL;
+                }
 ;
 
 // ! CONDICIONAL DEL CASO 'DEFAULT' QUE PUEDE O NO VENIR
 switch_default:
                 DEFAULT_WORD S_PUNTO_PUNTO lista_instrucciones
+                { $$ = Switch_Default($3); }
+
                 | /* vacío */
+                { $$ = Nodo_Vacio("NO DEFAULT"); }
 ;
 
 // * CONDICIONAL WHILE ----------------------------------------------------------------------------------------------------
