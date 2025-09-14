@@ -456,12 +456,29 @@ Nodo* For_Condition(Nodo* Declaration, Nodo* Condicion, char* Identificador, cha
     return n;
 }
 
-
-
 Nodo* For_Sentence(Nodo* ForCondition, Nodo* instrucciones) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_FOR_SENTENCE;
     n->izq = ForCondition;
+    n->der = instrucciones;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Plus_Minus_Var(char* Identificador, char* IncOrDec) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_PLUS_MINUS_VAR; 
+    n->nombre = strdup(Identificador);
+    n->valor.op_bool = strdup(IncOrDec); // "++" o "--"
+    n->izq = NULL;
+    n->der = NULL;
+    return n;
+}
+
+Nodo* While_Sentence(Nodo* condicion, Nodo* instrucciones) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_WHILE_SENTENCE;
+    n->izq = condicion;
     n->der = instrucciones;
     n->nombre = NULL;
     return n;

@@ -53,7 +53,9 @@ typedef enum {
     NODO_MATRIZ_AUTO,
     NODO_DECLARATION_MATRIX,
     NODO_FOR_CONDITION,
-    NODO_FOR_SENTENCE
+    NODO_FOR_SENTENCE,
+    NODO_PLUS_MINUS_VAR,
+    NODO_WHILE_SENTENCE
 } TipoNodo;
 
 typedef struct Nodo {
@@ -135,6 +137,8 @@ Nodo* Sentencia_If_ElseIf_Else(Nodo* condicion, Nodo* instrucciones_if,
 
 Nodo* For_Condition(Nodo* Declaration, Nodo* Condicion, char* Identificador, char* IncOrDec);
 Nodo* For_Sentence(Nodo* ForCondition, Nodo* instrucciones);
+Nodo* Plus_Minus_Var(char* Identificador, char* IncOrDec);
+Nodo* While_Sentence(Nodo* condicion, Nodo* instrucciones);
 // ? Funciones de limpieza
 //void ImprimirNodo(Nodo* nodo, int nivel);
 //void LiberarNodo(Nodo* nodo);

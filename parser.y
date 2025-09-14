@@ -80,7 +80,7 @@ instruccion:
             | if_sentence           { $$ = $1; }
             | native_func           { $$ = $1; }
             | switch_case           { $$ = Nodo_Vacio("SWITCH CASE NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
-            | while_sentence        { $$ = Nodo_Vacio("WHILE NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
+            | while_sentence        { $$ = $1; }
             | for_sentence          { $$ = $1; }
             | function_sentence     { $$ = Nodo_Vacio("FUNCION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
 ;
@@ -234,10 +234,9 @@ op_expr:
 // * FUNCIONES ESPECIALES O NATIVAS -------------------------------------------------------------------------------------
 
 native_func:
-            
+            IDENTIFICADOR for_option S_PUNTO_COMA          
+            {$$ = Plus_Minus_Var($1, $2);}
 
-            IDENTIFICADOR OP_AUMENTO S_PUNTO_COMA                                             {/* AUMENTADOR DE VARIABLE PARA BUCLES*/}
-            | IDENTIFICADOR OP_DECREMENTO S_PUNTO_COMA                                          {/* REDUCTOR DE VARIABLE PARA BUCLES*/}
             | CONTINUE_WORD S_PUNTO_COMA                               { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* CONTINUE PARA CICLOS */ }
             | BREAK_WORD S_PUNTO_COMA                                   { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* BREAK PARA CICLOS */ }
             | RETURN_WORD S_PUNTO_COMA                                  { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
@@ -333,7 +332,8 @@ switch_default:
 
 // * CONDICIONAL WHILE ----------------------------------------------------------------------------------------------------
 while_sentence:
-                WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE { $$ = Nodo_Vacio("WHILE NO IMPLEMENTADO AUN"); }
+                WHILE_WORD PARENTESIS_OPEN expr PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+                { $$ = While_Sentence($3, $6); }
 ;
 
 // * DECLARACION DE FUNCIONES ----------------------------------------------------------------------------------------------------

@@ -1093,6 +1093,81 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
+        case NODO_PLUS_MINUS_VAR: {
+            Valor izq = Evaluar(n->izq);
+
+            // Obtener nombre de variable y tipo de operación
+            char* nombreVar = n->nombre;
+            char* tipoOp = n->valor.op_bool;
+
+            // Validar operador
+            if(strcmp(tipoOp, "++") != 0 && strcmp(tipoOp, "--") != 0) {
+                printf(" » ❌ Error: Operacion no valida, solo se permite ++ o -- \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Operacion no valida, solo se permite ++ o --";
+                lista_Errores[num_errores].Tipo_Error = "Incremento/Decremento";
+                num_errores++;
+                break;
+            }
+
+            // Validar que la variable exista
+            Nodo* varNodo = Acceso_Variable(nombreVar);
+            if(varNodo == NULL) {
+                printf(" » ❌ Error: Variable no encontrada\n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Variable no encontrada";
+                lista_Errores[num_errores].Tipo_Error = "Incremento/Decremento";
+                num_errores++;
+                break;
+            }
+
+            // Validar que la variable sea de tipo int
+            Valor valorActual = Evaluar(varNodo);
+            if(valorActual.tipo != VAL_INT) {
+                printf(" » ❌ Error: La variable debe ser de tipo int para esta operacion\n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "La variable debe ser de tipo int para esta operacion";
+                lista_Errores[num_errores].Tipo_Error = "Incremento/Decremento";
+                num_errores++;
+                break;
+            }
+
+            // Realizar la operación
+            if(strcmp(tipoOp, "++") == 0) {
+                Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val + 1});
+            } else {
+                Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val - 1});
+            }
+            break;
+        }
+
+        case NODO_WHILE_SENTENCE: { // * ----------------------------------------------------------------------------------------
+            while(1) {
+                // Evaluar condición al inicio de cada iteración
+                Valor condicion = Evaluar(n->izq);
+                
+                // Validar que la condición sea booleana
+                if(condicion.tipo != VAL_BOOL) {
+                    printf(" » ❌ Error While: La condicion debe ser booleana\n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "La condicion debe ser booleana";
+                    lista_Errores[num_errores].Tipo_Error = "Sentencia While";
+                    num_errores++;
+                    break;
+                }
+
+                // Si la condición es falsa, salir del ciclo
+                if(!condicion.b_val) {
+                    break;
+                }
+
+                // Ejecutar el bloque de instrucciones
+                printf(" » 🔄 Ejecutando iteracion While\n");
+                Evaluar(n->der);
+            }
+            break;
+        }
+
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
             Valor resultado = Evaluar(n->izq);
