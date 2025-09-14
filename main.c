@@ -27,6 +27,9 @@ typedef struct {
 //Funcion de compilacion
 int Analizar_Codigo(char* codigo, GtkWidget *textview2) {
     //Escribir Exit para salir del bucle
+
+        Clear_All_Variables();
+        Clear_All_Errors();
         if (strncmp(codigo, "exit", 4) == 0) {
             return 1;
         }
@@ -149,7 +152,6 @@ void Generate_Errors_Report(){
         return;
     } else {
         Print_All_Errors();
-        Clear_All_Errors();
     }
     
 }

@@ -445,3 +445,24 @@ Nodo* Declaration_Matriz(char* DataType, char* Identificador, Nodo* TipoMatriz) 
     n->der = NULL;
     return n;
 }
+
+Nodo* For_Condition(Nodo* Declaration, Nodo* Condicion, char* Identificador, char* IncOrDec) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_FOR_CONDITION;
+    n->izq = Declaration;
+    n->der = Condicion;
+    n->nombre = strdup(Identificador);
+    n->valor.op_bool = strdup(IncOrDec); // "++" o "--"
+    return n;
+}
+
+
+
+Nodo* For_Sentence(Nodo* ForCondition, Nodo* instrucciones) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_FOR_SENTENCE;
+    n->izq = ForCondition;
+    n->der = instrucciones;
+    n->nombre = NULL;
+    return n;
+}

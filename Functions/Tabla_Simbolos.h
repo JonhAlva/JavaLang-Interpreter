@@ -92,5 +92,5 @@ void Print_Specific_Variable(char* Nombre);
 void Print_All_Variables();
 void Print_All_Errors();
 void Clear_All_Errors();
-
+void Clear_All_Variables();
 #endif

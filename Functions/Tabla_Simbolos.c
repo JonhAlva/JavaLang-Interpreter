@@ -801,3 +801,8 @@ void Clear_All_Errors() {
     num_errores = 0;
     printf(" ✅ Lista de errores limpiada\n");
 }
+
+void Clear_All_Variables() {
+    num_vars = 0;
+    printf(" ✅ Tabla de simbolos limpiada\n");
+}

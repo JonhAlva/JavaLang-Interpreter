@@ -147,6 +147,17 @@ if ( ValBol1 == true ) {
     System.out.println("Condicion no se cumplió en el IF ELSE IF en ninguno de los 5 casos");
 }
 
+        // Sentencia FOR - NORMAL            ---------------------------------------------------------------
+
+for( int i = 0; i < 5; i++) {
+    System.out.println("Repeticion for normal" + i);
+}
+
+
+
+
+
+
 // Estructuras de Datos -----------------------------------------------------------------------------------------------------------
 
         // Declaracion de Vectores - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo -----------------------
@@ -213,16 +224,10 @@ while( condition < 7 ) {
 }
 
 
-        // Sentencia FOR - NORMAL            ---------------------------------------------------------------
-
-for( int id = 0; i < 5; i++) {
-    System.out.println("Repeticion for normal");
-}
-
         // Sentencia FOR - EACH              --------------------------------------------------------------------------
 for ( int num : numeros ) {
     System.out.println("Repeticion for each");
-}
+} // implementacion junto a los vectores
 
     /*
         Sentencias de transferencia, break, continue

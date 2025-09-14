@@ -46,8 +46,8 @@
 //%type <nodo> for_sentence switch_case switch_case_list switch_default native_func  vector matriz
 //%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
-%type <nodo> native_func vector_type string_join if_else_one vector matriz_type matriz
-%type <identificador> op_expr parse_expretion
+%type <nodo> native_func vector_type string_join if_else_one vector matriz_type matriz for_condition for_sentence
+%type <identificador> op_expr parse_expretion for_option
 %type <lista_nodos> vector_values if_else_chain matriz_values 
 
 // Precedencia de Operadores
@@ -81,7 +81,7 @@ instruccion:
             | native_func           { $$ = $1; }
             | switch_case           { $$ = Nodo_Vacio("SWITCH CASE NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
             | while_sentence        { $$ = Nodo_Vacio("WHILE NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
-            | for_sentence          { $$ = Nodo_Vacio("FOR NO IMPLEMENTADO AUN"); /*$$ = $1;*/ }
+            | for_sentence          { $$ = $1; }
             | function_sentence     { $$ = Nodo_Vacio("FUNCION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
 ;
 
@@ -299,14 +299,20 @@ if_else_chain:
 // * CICLO FOR ----------------------------------------------------------------------------------------------------------
 for_sentence:
             FOR_WORD PARENTESIS_OPEN for_condition PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+            { $$ = For_Sentence($3, $6); }
 ; 
 
 // ! CONDICIONES DEL FOR PARA DIFERENCIAR ENTRE FOR NORMAL O UN FOR EACH PARA LISTAS
 for_condition:
-            declaration expr S_PUNTO_COMA IDENTIFICADOR OP_AUMENTO                                {/* ESTRUCTURA FOR NORMAL */}
-            | declaration expr S_PUNTO_COMA IDENTIFICADOR OP_DECREMENTO                           {/* ESTRUCTURA FOR NORMAL */}
-            | DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR                                 {/* ESTRUCTURA FOR EACH */}
+            declaration expr S_PUNTO_COMA IDENTIFICADOR for_option
+            { $$ = For_Condition($1, $2, $4, $5); }
+            | DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR
+            {  Nodo_Vacio("ESTRUCTURA FOR EACH"); /* Implementacion con los vectores */}
 ;
+
+for_option:
+            OP_AUMENTO { $$ = "++"; }
+            | OP_DECREMENTO { $$ = "--"; }
 
 // * CONDICIONAL SWITCH CASE -----------------------------------------------------------------------------------------------
 switch_case:

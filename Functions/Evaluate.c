@@ -363,6 +363,7 @@ Valor Evaluar(Nodo* n) {
             return v;
             }
             }
+
         case NODO_MAYOR_A:{// * ----------------------------------------------------------------------------------------
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
@@ -1027,6 +1028,68 @@ Valor Evaluar(Nodo* n) {
                 num_errores++;
                 }
             }
+            break;
+        }
+
+        case NODO_FOR_SENTENCE: { // * ----------------------------------------------------------------------------------------
+            // Evaluar la declaración inicial
+            Evaluar(n->izq->izq);
+
+            // Obtener nombre de variable y tipo de operación
+            char* nombreVar = n->izq->nombre;
+            char* tipoOp = n->izq->valor.op_bool;
+
+            // Validar operador
+            if(strcmp(tipoOp, "++") != 0 && strcmp(tipoOp, "--") != 0) {
+                printf(" » ❌ Error For: Operacion no valida, solo se permite ++ o -- \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Operacion no valida, solo se permite ++ o --";
+                lista_Errores[num_errores].Tipo_Error = "Sentencia For";
+                num_errores++;
+                break;
+            }
+
+            // Ciclo principal del for
+            while(1) {
+                // Evaluar condición
+                printf(" » 🔄 Evaluando condicion For\n");
+                Valor condicion = Evaluar(n->izq->der);
+
+                if(condicion.tipo != VAL_BOOL) {
+                    printf(" » ❌ Error For: La condicion debe ser booleana\n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "La condicion debe ser booleana";
+                    lista_Errores[num_errores].Tipo_Error = "Sentencia For";
+                    num_errores++;
+                    break;
+                }
+
+                // Si la condición es falsa, salir del ciclo
+                if(!condicion.b_val) {
+                    break;
+                }
+
+                // Ejecutar el bloque de instrucciones
+                printf(" » ⏩ Ejecutando iteracion For\n");
+                Evaluar(n->der);
+
+                // Obtener valor actual de la variable
+                Nodo* varNodo = Acceso_Variable(nombreVar);
+                if(varNodo == NULL) {
+                    printf(" » ❌ Error For: Variable de control no encontrada\n");
+                    break;
+                }
+                Valor valorActual = Evaluar(varNodo);
+
+                // Incrementar o decrementar según corresponda
+                if(strcmp(tipoOp, "++") == 0) {
+                    Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val + 1});
+                } else {
+                    printf(" ---------------------------------------------el operador es --\n");
+                    Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val - 1});
+                }
+            }
+            
             break;
         }
 
