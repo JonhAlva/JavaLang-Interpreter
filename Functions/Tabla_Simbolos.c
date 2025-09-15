@@ -10,6 +10,12 @@ int num_vars = 0;
 Error_Variable lista_Errores[MAX_ERRORS];
 int num_errores = 0;
 
+Vectores lista_Vectores[MAX_VECTORES];
+int num_vectores = 0;
+
+Nodo* tabla_Funciones[MAX_FUNCTIONS];
+int num_funciones = 0;
+
 //! implementar una condicion para saber si hay una variable repetida
 
 // ! Asignacion de variable INT
@@ -626,6 +632,33 @@ void AsignarParseo_Variable(char* Nombre, char* Tipo, char* Parse_Type, Valor va
     }
 }
 
+void Agregar_Funcion(Nodo* funcion) {
+    if (num_funciones < MAX_FUNCTIONS) {
+        tabla_Funciones[num_funciones] = funcion;
+        num_funciones++;
+    } else {
+        printf(" ❌ Error: Límite de funciones alcanzado\n");
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Limite de funciones alcanzado";
+        lista_Errores[num_errores].Tipo_Error = "Funcion";
+        num_errores++;
+    }
+}
+
+Nodo* Acceso_Funcion(char* Nombre) {
+    for (int i = 0; i < num_funciones; i++) {
+        if (strcmp(tabla_Funciones[i]->nombre, Nombre) == 0) {
+            return tabla_Funciones[i];
+        }
+    }
+    printf(" ❌ Error: La función '%s' no ha sido declarada\n", Nombre);
+    lista_Errores[num_errores].Num = num_errores;
+    lista_Errores[num_errores].Desc_Error = "Funcion no Encontrada";
+    lista_Errores[num_errores].Tipo_Error = Nombre;
+    num_errores++;
+    return NULL;
+}
+
 // ! FUNCIONES DE APOYO PARA LA TABLA DE SIMBOLOS --------------------
 void Print_Specific_Variable(char* Nombre) {
     for (int i = 0; i < num_vars; i++) {
@@ -805,6 +838,11 @@ void Clear_All_Errors() {
 void Clear_All_Variables() {
     num_vars = 0;
     printf(" ✅ Tabla de simbolos limpiada\n");
+}
+
+void Clear_All_Funciones() {
+    num_funciones = 0;
+    printf(" ✅ Tabla de funciones limpiada\n");
 }
 
 int CompararValores(Valor valor1, Valor valor2) {

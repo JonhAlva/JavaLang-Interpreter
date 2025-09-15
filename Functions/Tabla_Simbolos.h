@@ -8,6 +8,7 @@
 #define MAX_VARS 500
 #define MAX_ERRORS 100
 #define MAX_VECTORES 100
+#define  MAX_FUNCTIONS 100
 
 // ? Struct de tipo de variables --------------------------------------------
 typedef enum {
@@ -61,6 +62,9 @@ extern int num_vectores;
 extern Error_Variable lista_Errores[MAX_ERRORS];
 extern int num_errores;
 // ! -----------------------------------------------
+extern Nodo* tabla_Funciones[MAX_FUNCTIONS];
+extern int num_funciones;
+//! -----------------------------------------------
 
 // ? Funciones que estaran publicas y en este paquete
 void AsignarVariable_Int(char* Nombre, int valor);      // ? Widening{int -> float} ? NARROWING{int -> char}
@@ -79,6 +83,10 @@ void Actualizar_Variable(char* Nombre, Valor nuevo_valor);
 void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor);
 void Asignacion_Default(char* Nombre, char* Tipo);
 void Casteo_Narrow(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2);
+
+void Agregar_Funcion(Nodo* funcion);
+Nodo* Acceso_Funcion(char* Nombre);
+void Clear_All_Funciones();
 
 Nodo* Compare_Equals(char* Identificador, Nodo* Izq);
 Nodo* Acceso_Variable(char* Nombre);

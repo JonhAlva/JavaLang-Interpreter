@@ -59,7 +59,11 @@ typedef enum {
     NODO_SWITCH_DEFAULT,
     NODO_SWITCH_CASE_ONE,
     NODO_SWITCH_CASE_LIST,
-    NODO_SWITCH_SENTENCE
+    NODO_SWITCH_SENTENCE,
+    NODO_FUNCTION_DECLARATION,
+    NODO_FUNCTION_CALL,
+    NODO_CONTINUE,
+    NODO_BREAK,
 } TipoNodo;
 
 typedef struct Nodo {
@@ -126,6 +130,10 @@ Nodo* Nodo_Vacio(const char* mensaje);
 Nodo* Casteo_Narrowing(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2);
 Nodo* Equals_Compare(char* Identificador, Nodo* Izq);
 Nodo* Parse_Expression(char* Identificador, char* TipoVar, char* ParseType, Nodo* expr);
+Nodo* Continue_Word();
+Nodo* Break_Word();
+Nodo* Funtion_Declaration(char* Tipo, char* Identificador, Nodo** Parametros, Nodo* Instrucciones);
+Nodo* Function_Call(char* Identificador);
 
 Nodo** Lista_Vector(Nodo* valor);
 Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);

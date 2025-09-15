@@ -513,3 +513,38 @@ Nodo* Switch_Sentence(char* Identificador_Comparador, Nodo* Case_One, Nodo** Lis
     return n;
 }
 
+Nodo* Continue_Word() {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_CONTINUE;
+    n->izq = n->der = NULL;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Break_Word() {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_BREAK;
+    n->izq = n->der = NULL;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Funtion_Declaration(char* Tipo, char* Identificador, Nodo** Parametros, Nodo* Instrucciones) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_FUNCTION_DECLARATION;
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(Tipo);
+    n->lista_nodos = Parametros; // Lista de parámetros (puede ser NULL)
+    n->izq = Instrucciones; // Instrucciones de la función
+    n->der = NULL;
+    return n;
+}
+
+Nodo* Function_Call(char* Identificador) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_FUNCTION_CALL;
+    n->nombre = strdup(Identificador);
+    n->izq = n->der = NULL;
+    n->lista_nodos = NULL; // No hay parámetros
+    return n;
+}

@@ -156,10 +156,19 @@ for( int i = 0; i < 5; i++) {
         // Sentencia WHILE            -------------------------------------------------------------------------
 
 int conditionx = 0;
-
 while( conditionx < 7 ) {
     System.out.println("Ejecutando");
     conditionx++;
+}
+
+int lel = 0;
+while( lel < 10 ) {
+    System.out.println("Ejecutando " + lel );
+    if ( lel == 5 ) {
+        System.out.println("Entrando al If");
+        break;                                                                      // PENDIENTE EL BREAK Y CONTINUE
+    }
+    lel++;
 }
 
         // Sentencia SWITCH - CASE -----------------------------------------------------------------------------------
@@ -180,6 +189,34 @@ switch( dia ) {
         System.out.println("Caso default");
 }
 
+        // Declaracion de Funciones SIN parametros   --------------------------------------------------------------------------------
+void saludo() {
+        System.out.println("Hola mundo");
+}
+
+saludo();
+
+
+        // Declaracion de Funciones CON parametros   -------------------------------------------------------------------------------
+int suma(int a, int b) {
+        return a + b;
+}
+System.out.println(suma(2,3));
+
+int total = suma(4, 5);
+
+
+
+int contatenar(String a, String b, String c) {
+        return a + b + c;
+}
+String cadena = concatenar("Hola", "Mundo", "Laboral");
+
+
+        /*
+                FUNCIONES RECURSIVAS,
+                AHI VEMOS SI LAS IMPLEMENTAMOS XD
+        */
 
 
 
@@ -239,30 +276,6 @@ letters[2][1] = "Compi2";
 int hypercubo3D[][][] = new int[2][2][2];
 float superhyperCUbo6D[][][][][][] = new float[3][3][3][3][3][3];
 
-        // Declaracion de Funciones CON parametros   -------------------------------------------------------------------------------
-int suma(int a, int b) {
-        return a + b;
-}
-
-int contatenar(String a, String b, String c) {
-        return a + b + c;
-}
-
-        // Declaracion de Funciones SIN parametros   --------------------------------------------------------------------------------
-void saludo() {
-        System.out.println("Hola mundo");
-}
-
-        /*
-                FUNCIONES RECURSIVAS,
-                AHI VEMOS SI LAS IMPLEMENTAMOS XD
-        */ 
-
-        // Llamada  a funciones CON parametros   ------------------------------------------------------------------------------------
-
-int total = suma(4, 5);
-String cadena = concatenar("Hola", "Mundo", "Laboral");
-saludo();
 
 
         // String tipo JOIN - Concatena los strings dados     ----------------------------------------------------------------------

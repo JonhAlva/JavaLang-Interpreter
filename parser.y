@@ -42,14 +42,11 @@
 %token <data_type>          DATA_TYPE NEW_WORD
 
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
-//%type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence
-//%type <nodo> for_sentence switch_case switch_case_list switch_default native_func  vector matriz
-//%type <nodo> vector_values matriz_values function_sentence function_parameters function_expr expr_bridge dynamic_array
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
 %type <nodo> native_func vector_type string_join if_else_one vector matriz_type matriz for_condition for_sentence switch_default
-%type <nodo> switch_case_one switch_case
+%type <nodo> switch_case_one switch_case function_sentence
 %type <identificador> op_expr parse_expretion for_option
-%type <lista_nodos> vector_values if_else_chain matriz_values switch_case_list
+%type <lista_nodos> vector_values if_else_chain matriz_values switch_case_list function_parameters_access function_parameters_declaration parameters_bridge
 
 // Precedencia de Operadores
 %left LOGIC_OR
@@ -83,7 +80,7 @@ instruccion:
             | switch_case           { $$ = $1; }
             | while_sentence        { $$ = $1; }
             | for_sentence          { $$ = $1; }
-            | function_sentence     { $$ = Nodo_Vacio("FUNCION NO IMPLEMENTADA AUN"); /*$$ = $1;*/ }
+            | function_sentence     { $$ = $1; }
 ;
 
 // * FUNCION DE IMPRIMIR VALORES -------------------------------------------------------------------------------
@@ -113,9 +110,6 @@ declaration:
 
             | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA      
             { $$ = Nodo_Vacio("Variable acceso NO IMPLEMENTADO AUN"); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
-
-            | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters PARENTESIS_CLOSE S_PUNTO_COMA  
-            { $$ = Nodo_Vacio("DECLARACION DE FUNCION NO IMPLEMENTADO AUN"); /* DECLARACION DE FUNCIONES */ }
 
             | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA 
             { $$ = Parse_Expression($2, $1, $4, $6); /* PARSEO DE TIPOS */ }
@@ -209,6 +203,8 @@ dynamic_data_declaration:
 asignation:
             IDENTIFICADOR op_expr expr_bridge S_PUNTO_COMA             { $$ = Asignacion_Variable($1, $2, $3); /* 'OPERADOR ASIGNACION' PARA UNA VARIABLE Y ASIGNACION NORMAL*/ }
             | variable_access S_IGUAL expr S_PUNTO_COMA                { $$ = Nodo_Vacio("VAR ACCEESS NO IMPLEMENTADO AUN");}
+            | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters_access PARENTESIS_CLOSE S_PUNTO_COMA  
+            { $$ = Nodo_Vacio("DECLARACION DE FUNCION NO IMPLEMENTADO AUN"); /* DECLARACION DE FUNCIONES a variable*/ }
 ;
 
 // ! PRODUCCION ENCARGADA DE DECIDIR SI SOLO VIENE UNA EXPRESION O ALGUN VALOR DE ASIGNACION DE VECTORES
@@ -238,11 +234,20 @@ native_func:
             IDENTIFICADOR for_option S_PUNTO_COMA          
             {$$ = Plus_Minus_Var($1, $2);}
 
-            | CONTINUE_WORD S_PUNTO_COMA                               { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* CONTINUE PARA CICLOS */ }
-            | BREAK_WORD S_PUNTO_COMA                                   { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* BREAK PARA CICLOS */ }
-            | RETURN_WORD S_PUNTO_COMA                                  { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
-            | RETURN_WORD expr S_PUNTO_COMA                             { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
-            | IDENTIFICADOR PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_COMA               { /** LLAMADA A FUNCION SIN PARAMETROS */ }
+            | CONTINUE_WORD S_PUNTO_COMA 
+            { $$ = Continue_Word(); /* CONTINUE PARA CICLOS */ }
+
+            | BREAK_WORD S_PUNTO_COMA 
+            { $$ = Break_Word(); /* BREAK PARA CICLOS */ }
+            
+            | RETURN_WORD S_PUNTO_COMA 
+            { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
+
+            | RETURN_WORD expr S_PUNTO_COMA 
+            { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
+
+            | IDENTIFICADOR PARENTESIS_OPEN parameters_bridge PARENTESIS_CLOSE              
+            { $$ = Function_Call($1); }
 ;
 
 // ! PRODUCCION QUE MANEJA LA FORMA DE ESCRITURA DE LOS VECTORES Y LAS MATRICES
@@ -373,25 +378,79 @@ while_sentence:
 
 // * DECLARACION DE FUNCIONES ----------------------------------------------------------------------------------------------------
 function_sentence:
-                    DATA_TYPE IDENTIFICADOR PARENTESIS_OPEN parameters_bridge PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+                DATA_TYPE IDENTIFICADOR PARENTESIS_OPEN parameters_bridge PARENTESIS_CLOSE LLAVE_OPEN lista_instrucciones LLAVE_CLOSE
+                { $$ = Funtion_Declaration($1, $2, $4, $7); /* DECLARACION DE FUNCIONES */ }
 ;
 
 // ! PUENTE PARA QUE EL PARSER DECIDA SI VIENEN O NO PARAMETROS
 parameters_bridge:
-                    function_parameters
-                    | {/* vaćio */}
+                function_parameters_declaration
+                { $$ = $1; }
+
+                | function_parameters_access
+                { $$ = $1; }
+
+                | MAIN_STRING
+                {
+                    // Create empty list with single node
+                    $$ = malloc(sizeof(Nodo*) * 2);
+                    $$[0] = Nodo_Vacio("NO PARAMETROS");
+                    $$[1] = NULL;
+                }
+
+                | /* vacío */ 
+                {
+                    // Create empty list
+                    $$ = malloc(sizeof(Nodo*) * 1);
+                    $$[0] = Nodo_Vacio("NO PARAMETROS");
+                }
 ;
 
 // ! RECURSIVA DE PARAMETROS 
-function_parameters:
-                    function_parameters COMA function_expr
-                    | function_expr
-                    | MAIN_STRING
+function_parameters_declaration:
+                    function_parameters_declaration COMA DATA_TYPE IDENTIFICADOR
+                    {
+                        int size = 0;
+                        while ($1 && $1[size] != NULL) size++;
+                        
+                        $$ = malloc(sizeof(Nodo*) * (size + 2));
+                        
+                        for(int i = 0; i < size; i++) {
+                            $$[i] = $1[i];
+                        }
+                        
+                        $$[size] = Var_Declaration($3, $4, Terminal_Null("DEFAULT"));
+                        $$[size + 1] = NULL;
+                    }
+                    | DATA_TYPE IDENTIFICADOR
+                    {
+                        $$ = malloc(sizeof(Nodo*) * 2);
+                        $$[0] = Var_Declaration($1, $2, Terminal_Null("DEFAULT"));
+                        $$[1] = NULL;
+                    }
 ;
 
-function_expr:
-            expr
-            | DATA_TYPE IDENTIFICADOR
+function_parameters_access:
+                    function_parameters_access COMA expr
+                    {
+                        int size = 0;
+                        while ($1 && $1[size] != NULL) size++;
+                        
+                        $$ = malloc(sizeof(Nodo*) * (size + 2));
+                        
+                        for(int i = 0; i < size; i++) {
+                            $$[i] = $1[i];
+                        }
+                        
+                        $$[size] = $3;
+                        $$[size + 1] = NULL;
+                    }
+                    | expr
+                    {
+                        $$ = malloc(sizeof(Nodo*) * 2);
+                        $$[0] = $1;
+                        $$[1] = NULL;
+                    }
 ;
 // * EXPRESIONES GLOBALES QUE INTERPRETAN ARITMETICA, OPERADORES LOGICOS Y ALGUNAS ASIGNACIONES ------------------
 expr:
@@ -421,6 +480,8 @@ expr:
     { $$ = Equals_Compare($1, $4); /* PRINT FUNC .EQUALS PARA UNA VARIABLE */ }
     | STRING_COMILLAS FUNC_EQUALS PARENTESIS_OPEN expr PARENTESIS_CLOSE 
     { $$ = Equals_Compare($1, $4); /* PRINT FUNC .EQUALS PARA UNA VARIABLE */ }
+    | parse_expretion PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
+    { $$ = Nodo_VAcio("PARSEO DE VARIABLE NO IMPLEMENTADO AUN"); /* PARSEO DE VARIABLE */ }
 ;
 
 %%

@@ -1163,9 +1163,23 @@ Valor Evaluar(Nodo* n) {
 
                 // Ejecutar el bloque de instrucciones
                 printf(" » 🔄 Ejecutando iteracion While\n");
-                Evaluar(n->der);
+                
+                // Ejecutar instrucciones y verificar si hay break o continue
+                Valor resultado = Evaluar(n->der);
+                
+                // Verificar si se encontró un break
+                if(resultado.tipo == VAL_NULL && strcmp(resultado.null_val, "BREAK") == 0) {
+                    printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
+                    break;
+                }
+                
+                // Verificar si se encontró un continue
+                if(resultado.tipo == VAL_INT && resultado.i_val == 1) {
+                    printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                    continue;
+                }
             }
-            break;
+        break;
         }
 
         case NODO_SWITCH_SENTENCE: { // * ----------------------------------------------------------------------------------------
@@ -1244,6 +1258,50 @@ Valor Evaluar(Nodo* n) {
 
         case NODO_SWITCH_DEFAULT: { // * ----------------------------------------------------------------------------------------
             Evaluar(n->izq);
+            break;
+        }
+
+        case NODO_FUNCTION_DECLARATION: { // * ----------------------------------------------------------------------------------------
+            // * Nombre de la funcion en "n->nombre"
+            // * Tipo de retorno en "n->valor.varType"
+            // * Parametros en "n->izq" (lista enlazada de nodos PARAMETRO)
+            // * Cuerpo de la funcion en "n->der" (nodo LISTA)
+            // Guardar la funcion en la tabla de simbolos
+            Agregar_Funcion(n);
+            printf(" » 📚 Funcion Registrada: '%s'\n", n->nombre);
+            break;
+        }
+
+        case NODO_FUNCTION_CALL: { // * ----------------------------------------------------------------------------------------
+            // * Nombre de la funcion en "n->nombre"
+            // Buscar la funcion en la tabla de simbolos
+            Nodo* funcionNodo = Acceso_Funcion(n->nombre);
+            if (funcionNodo == NULL) {
+                printf(" » ❌ Error Funcion: Funcion '%s' no encontrada\n", n->nombre);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Funcion no encontrada";
+                lista_Errores[num_errores].Tipo_Error = "Llamado de Funcion";
+                num_errores++;
+                break;
+            }
+
+            // Verificar si la funcion viene sin parametros ejecutarla funcion directamente
+            if (strcmp(funcionNodo->lista_nodos[0]->valor.s_val, "NO PARAMETROS") == 0) {
+                // Ejecutar el cuerpo de la funcion
+                printf(" » ▶️ Ejecutando Funcion: '%s' sin parametros\n", n->nombre);
+                Evaluar(funcionNodo->izq);
+                break;
+            }   
+
+            // Si la funcion tiene parametros, verificar que se hayan proporcionado
+            if (funcionNodo->lista_nodos[0]->valor.s_val != "NO PARAMETROS") {
+                printf(" » ▶️ Ejecutando Funcion: '%s' con parametros\n", n->nombre);
+            }
+
+            /* Manejar el valor de retorno si es necesario
+            if (strcmp(funcionNodo->valor.varType, "void") != 0) {
+                printf(" » ⚠️ Advertencia: La funcion '%s' deberia retornar un valor de tipo %s\n", n->nombre, funcionNodo->valor.varType);
+            } */
             break;
         }
 
