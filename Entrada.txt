@@ -170,6 +170,7 @@ while( lel < 10 ) {
     }
     lel++;
 }
+// idea se puede retornar algun nodo para poder saber cuando viene un break o continue, armar un nodo en el break o continue destacado
 
         // Sentencia SWITCH - CASE -----------------------------------------------------------------------------------
 
@@ -199,18 +200,17 @@ saludo();
 
         // Declaracion de Funciones CON parametros   -------------------------------------------------------------------------------
 int suma(int a, int b) {
+        System.out.println("Ejecutando suma");
         return a + b;
 }
-System.out.println(suma(2,3));
 
-int total = suma(4, 5);
-
-
+int total = suma(10, 5);
 
 int contatenar(String a, String b, String c) {
         return a + b + c;
 }
 String cadena = concatenar("Hola", "Mundo", "Laboral");
+System.out.println(cadena);
 
 
         /*

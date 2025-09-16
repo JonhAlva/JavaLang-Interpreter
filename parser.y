@@ -88,8 +88,6 @@ instruccion:
 print:
     PRINT_SENTENCE PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA               { $$ = Print($3); }
     | PRINT_SENTENCE PARENTESIS_OPEN native_func PARENTESIS_CLOSE S_PUNTO_COMA      { $$ = Print($3); }
-
-
 // * DECLARACION DE VARIABLES Y ESTRUCTURAS DE DATOS -----------------------------------------------------------------------------------
 
 declaration:
@@ -204,8 +202,14 @@ asignation:
             IDENTIFICADOR op_expr expr_bridge S_PUNTO_COMA             { $$ = Asignacion_Variable($1, $2, $3); /* 'OPERADOR ASIGNACION' PARA UNA VARIABLE Y ASIGNACION NORMAL*/ }
             | variable_access S_IGUAL expr S_PUNTO_COMA                { $$ = Nodo_Vacio("VAR ACCEESS NO IMPLEMENTADO AUN");}
             | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters_access PARENTESIS_CLOSE S_PUNTO_COMA  
-            { $$ = Nodo_Vacio("DECLARACION DE FUNCION NO IMPLEMENTADO AUN"); /* DECLARACION DE FUNCIONES a variable*/ }
+            {
+                Nodo* temp = Function_Call_Parameters($4, $6);
+                $$ = Asignation_function($1, $2, temp); /* ASIGNACION DE VARIABLE A UNA FUNCION CON PARAMETROS */
+            }
 ;
+
+
+
 
 // ! PRODUCCION ENCARGADA DE DECIDIR SI SOLO VIENE UNA EXPRESION O ALGUN VALOR DE ASIGNACION DE VECTORES
 expr_bridge:
@@ -241,13 +245,13 @@ native_func:
             { $$ = Break_Word(); /* BREAK PARA CICLOS */ }
             
             | RETURN_WORD S_PUNTO_COMA 
-            { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
+            { $$ = Return_Word(); /* RETURN PARA FUNCIONES */ }
 
             | RETURN_WORD expr S_PUNTO_COMA 
-            { $$ = Nodo_Vacio("NO IMPLEMENTADO AUN"); /* RETURN PARA FUNCIONES */ }
+            { $$ = Return_Value($2); /* RETURN PARA FUNCIONES */ }
 
-            | IDENTIFICADOR PARENTESIS_OPEN parameters_bridge PARENTESIS_CLOSE              
-            { $$ = Function_Call($1); }
+            | IDENTIFICADOR PARENTESIS_OPEN parameters_bridge PARENTESIS_CLOSE S_PUNTO_COMA
+            { $$ = Function_Call_No_Param($1); }
 ;
 
 // ! PRODUCCION QUE MANEJA LA FORMA DE ESCRITURA DE LOS VECTORES Y LAS MATRICES
@@ -480,8 +484,6 @@ expr:
     { $$ = Equals_Compare($1, $4); /* PRINT FUNC .EQUALS PARA UNA VARIABLE */ }
     | STRING_COMILLAS FUNC_EQUALS PARENTESIS_OPEN expr PARENTESIS_CLOSE 
     { $$ = Equals_Compare($1, $4); /* PRINT FUNC .EQUALS PARA UNA VARIABLE */ }
-    | parse_expretion PARENTESIS_OPEN IDENTIFICADOR PARENTESIS_CLOSE
-    { $$ = Nodo_VAcio("PARSEO DE VARIABLE NO IMPLEMENTADO AUN"); /* PARSEO DE VARIABLE */ }
 ;
 
 %%

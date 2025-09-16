@@ -13,7 +13,7 @@ int num_errores = 0;
 Vectores lista_Vectores[MAX_VECTORES];
 int num_vectores = 0;
 
-Nodo* tabla_Funciones[MAX_FUNCTIONS];
+Funcion tabla_Funciones[MAX_FUNCTIONS];
 int num_funciones = 0;
 
 //! implementar una condicion para saber si hay una variable repetida
@@ -632,9 +632,12 @@ void AsignarParseo_Variable(char* Nombre, char* Tipo, char* Parse_Type, Valor va
     }
 }
 
-void Agregar_Funcion(Nodo* funcion) {
+void Agregar_Funcion(char* nombre, char* TipoDato, Nodo** Parametros, Nodo* instrucciones) {
     if (num_funciones < MAX_FUNCTIONS) {
-        tabla_Funciones[num_funciones] = funcion;
+        tabla_Funciones[num_funciones].nombreFuncion = strdup(nombre);
+        tabla_Funciones[num_funciones].tipoRetorno = strdup(TipoDato);
+        tabla_Funciones[num_funciones].parametros = Parametros;
+        tabla_Funciones[num_funciones].instrucciones = instrucciones;
         num_funciones++;
     } else {
         printf(" ❌ Error: Límite de funciones alcanzado\n");
@@ -645,10 +648,10 @@ void Agregar_Funcion(Nodo* funcion) {
     }
 }
 
-Nodo* Acceso_Funcion(char* Nombre) {
+Funcion* Acceso_Funcion(char* Nombre) {
     for (int i = 0; i < num_funciones; i++) {
-        if (strcmp(tabla_Funciones[i]->nombre, Nombre) == 0) {
-            return tabla_Funciones[i];
+        if (strcmp(tabla_Funciones[i].nombreFuncion, Nombre) == 0) {
+            return &tabla_Funciones[i];
         }
     }
     printf(" ❌ Error: La función '%s' no ha sido declarada\n", Nombre);
@@ -657,6 +660,31 @@ Nodo* Acceso_Funcion(char* Nombre) {
     lista_Errores[num_errores].Tipo_Error = Nombre;
     num_errores++;
     return NULL;
+}
+
+void EliminarVariable (char* Nombre) {
+    int encontrada = 0;
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
+            encontrada = 1;
+            // Liberar memoria si es string
+            if (tabla_Variables[i].tipo_Variable == TIPO_STRING) {
+                free(tabla_Variables[i].valor.s_val);
+            }
+            // Mover la última variable a esta posición
+            tabla_Variables[i] = tabla_Variables[num_vars - 1];
+            num_vars--;
+            printf(" » 🗑️  Variable '%s' eliminada\n", Nombre);
+            break;
+        }
+    }
+    if (!encontrada) {
+        printf(" ❌ Error: La variable '%s' no ha sido declarada\n", Nombre);
+        lista_Errores[num_errores].Num = num_errores;
+        lista_Errores[num_errores].Desc_Error = "Variable no Encontrada";
+        lista_Errores[num_errores].Tipo_Error = Nombre;
+        num_errores++;
+    }
 }
 
 // ! FUNCIONES DE APOYO PARA LA TABLA DE SIMBOLOS --------------------

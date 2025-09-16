@@ -5,3 +5,20 @@ System.out.println(suma);
 gcc parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c main.c -o analizador2
 gcc `pkg-config --cflags gtk+-3.0` parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c main.c -o app `pkg-config --libs gtk+-3.0`
 */
+
+// Si la función tiene parámetros, evaluar los argumentos y asignarlos
+            if (funcionNodo->lista_nodos[0]->tipo != NODO_DECLARATION ) {
+
+                if (funcionNodo->lista_nodos[0]->tipo == NODO_VACIO) {
+                    printf(" » ❌ Error Funcion: La funcion '%s' Requiere parametros\n", n->nombre);
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "La funcion no tiene parametros";
+                    lista_Errores[num_errores].Tipo_Error = "Llamado de Funcion";
+                    num_errores++;
+                    break;
+                }
+
+                printf(" » ▶️ Ejecutando Funcion: '%s' con parametros\n", n->nombre);
+                
+                break;
+            }

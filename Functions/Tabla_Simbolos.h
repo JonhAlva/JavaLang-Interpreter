@@ -52,6 +52,13 @@ typedef struct {
     char* Tipo_Error;
 } Error_Variable;
 
+typedef struct {
+    char* nombreFuncion;
+    char* tipoRetorno; // Tipo de retorno de la función
+    Nodo** parametros;     // Lista de parámetros (puede ser NULL)
+    Nodo* instrucciones;   // Instrucciones de la función
+} Funcion;
+
 // ! Tabla de simbolos que almacena las variables
 extern Variable tabla_Variables[MAX_VARS];
 extern int num_vars;
@@ -62,7 +69,7 @@ extern int num_vectores;
 extern Error_Variable lista_Errores[MAX_ERRORS];
 extern int num_errores;
 // ! -----------------------------------------------
-extern Nodo* tabla_Funciones[MAX_FUNCTIONS];
+extern Funcion tabla_Funciones[MAX_FUNCTIONS];
 extern int num_funciones;
 //! -----------------------------------------------
 
@@ -84,8 +91,9 @@ void Asignacion_Especial(char* Nombre, char* operador, Valor nuevo_valor);
 void Asignacion_Default(char* Nombre, char* Tipo);
 void Casteo_Narrow(char* Tipo1, char* Identificador, char* ParseType, char* Identificador2);
 
-void Agregar_Funcion(Nodo* funcion);
-Nodo* Acceso_Funcion(char* Nombre);
+void Agregar_Funcion(char* nombre, char* TipoDato, Nodo** Parametros, Nodo* instrucciones);
+Funcion* Acceso_Funcion(char* Nombre);
+void EliminarVariable (char* Nombre);
 void Clear_All_Funciones();
 
 Nodo* Compare_Equals(char* Identificador, Nodo* Izq);

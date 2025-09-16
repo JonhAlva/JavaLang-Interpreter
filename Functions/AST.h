@@ -61,9 +61,14 @@ typedef enum {
     NODO_SWITCH_CASE_LIST,
     NODO_SWITCH_SENTENCE,
     NODO_FUNCTION_DECLARATION,
-    NODO_FUNCTION_CALL,
+    NODO_FUNCTION_CALL_NO_PARAM,
+    NODO_FUNCTION_CALL_PARAMETERS,
     NODO_CONTINUE,
     NODO_BREAK,
+    NODO_VACIO,
+    NODO_RETURN_SIMPLE, // *
+    NODO_RETURN_FUNC,
+    NODO_ASIGNATION_FUNC,
 } TipoNodo;
 
 typedef struct Nodo {
@@ -132,8 +137,12 @@ Nodo* Equals_Compare(char* Identificador, Nodo* Izq);
 Nodo* Parse_Expression(char* Identificador, char* TipoVar, char* ParseType, Nodo* expr);
 Nodo* Continue_Word();
 Nodo* Break_Word();
+Nodo* Return_Word();
 Nodo* Funtion_Declaration(char* Tipo, char* Identificador, Nodo** Parametros, Nodo* Instrucciones);
-Nodo* Function_Call(char* Identificador);
+Nodo* Function_Call_No_Param(char* Identificador);
+Nodo* Function_Call_Parameters(char* Identificador, Nodo** parametrosPorAsignar);
+Nodo* Asignation_function(char* DataType, char* Identificador, Nodo* NodoFuncCallParameters);
+Nodo* Return_Value(Nodo* expr);
 
 Nodo** Lista_Vector(Nodo* valor);
 Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);

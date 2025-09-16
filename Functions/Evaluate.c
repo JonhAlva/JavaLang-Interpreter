@@ -14,6 +14,7 @@
 // * Evalua nodos
 Valor Evaluar(Nodo* n) {
     Valor v;
+    char* nombresParametros[20]; // Array para almacenar los nombres de los parámetros
 
     if (n == NULL) {
         v.tipo = VAL_NULL;
@@ -207,6 +208,7 @@ Valor Evaluar(Nodo* n) {
             // Liberar memoria temporal
             free(str_izq);
             free(str_der);
+            
             return v;
         }
 
@@ -307,61 +309,39 @@ Valor Evaluar(Nodo* n) {
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
-            // * Comprobar si son enteros
+            // Check for division by zero first
+            if ((der.tipo == VAL_INT && der.i_val == 0) || 
+                (der.tipo == VAL_FLOAT && der.f_val == 0.0) ||
+                (der.tipo == VAL_DOUBLE && der.d_val == 0.0)) {
+                v.tipo = VAL_NULL;
+                v.null_val = "-Div/0 Err";
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "No es posible dividir entre 0";
+                lista_Errores[num_errores].Tipo_Error = "Division";
+                num_errores++;
+                return v;
+            }
+
             if (izq.tipo == VAL_INT && der.tipo == VAL_INT) {
 
-            if (der.i_val == 0) {
-                v.tipo = VAL_NULL;
-                v.null_val = "-Div/0 Err"; // Error de dividir en 0
-                lista_Errores[num_errores].Num = num_errores;
-                lista_Errores[num_errores].Desc_Error = "No es posible dividir entre 0";
-                lista_Errores[num_errores].Tipo_Error = "Division";
-                num_errores++;
+                if (izq.i_val % der.i_val != 0) {
+                    v.tipo = VAL_FLOAT;
+                    v.f_val = (float)izq.i_val / (float)der.i_val;
+                } else {
+                    v.tipo = VAL_INT;
+                    v.i_val = izq.i_val / der.i_val;
+                }
                 return v;
             }
 
-            v.tipo = VAL_INT;
-            v.i_val = izq.i_val / der.i_val;
-            return v;
-            }
-
-            // * Si viene un float, entonces tirar float
-            if (izq.tipo == VAL_FLOAT || der.tipo == VAL_FLOAT) {
-
-            if (der.f_val == 0) {
-                v.tipo = VAL_NULL;
-                v.null_val = "-Div/0 Err"; // Error de dividir en 0
-                return v;
-            }
 
             v.tipo = VAL_FLOAT;
-            float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : izq.f_val;
-            float der_val = (der.tipo == VAL_INT) ? (float)der.i_val : der.f_val;
+            float izq_val = (izq.tipo == VAL_INT) ? (float)izq.i_val : 
+                            (izq.tipo == VAL_FLOAT) ? izq.f_val : (float)izq.d_val;
+            float der_val = (der.tipo == VAL_INT) ? (float)der.i_val :
+                            (der.tipo == VAL_FLOAT) ? der.f_val : (float)der.d_val;
             v.f_val = izq_val / der_val;
             return v;
-            }
-
-            // * Si viene un double, entonces tirar double 
-            if (izq.tipo == VAL_DOUBLE || der.tipo == VAL_DOUBLE) {
-
-            if (der.d_val == 0) {
-                v.tipo = VAL_NULL;
-                v.null_val = "-Div/0 Err"; // Error de dividir en 0
-                lista_Errores[num_errores].Num = num_errores;
-                lista_Errores[num_errores].Desc_Error = "No es posible dividir entre 0";
-                lista_Errores[num_errores].Tipo_Error = "Division";
-                num_errores++;
-                return v;
-            }
-
-            v.tipo = VAL_DOUBLE;
-            double izq_val = (izq.tipo == VAL_INT) ? (double)izq.i_val : 
-                (izq.tipo == VAL_FLOAT) ? (double)izq.f_val : izq.d_val;
-            double der_val = (der.tipo == VAL_INT) ? (double)der.i_val :
-                (der.tipo == VAL_FLOAT) ? (double)der.f_val : der.d_val;
-            v.d_val = izq_val / der_val;
-            return v;
-            }
             }
 
         case NODO_MAYOR_A:{// * ----------------------------------------------------------------------------------------
@@ -1267,41 +1247,143 @@ Valor Evaluar(Nodo* n) {
             // * Parametros en "n->izq" (lista enlazada de nodos PARAMETRO)
             // * Cuerpo de la funcion en "n->der" (nodo LISTA)
             // Guardar la funcion en la tabla de simbolos
-            Agregar_Funcion(n);
+            Agregar_Funcion(n->nombre, n->valor.varType, n->lista_nodos, n->izq);
+
             printf(" » 📚 Funcion Registrada: '%s'\n", n->nombre);
             break;
         }
 
-        case NODO_FUNCTION_CALL: { // * ----------------------------------------------------------------------------------------
+        case NODO_FUNCTION_CALL_NO_PARAM: { // * ----------------------------------------------------------------------------------------
             // * Nombre de la funcion en "n->nombre"
             // Buscar la funcion en la tabla de simbolos
-            Nodo* funcionNodo = Acceso_Funcion(n->nombre);
-            if (funcionNodo == NULL) {
+            Funcion* funcionStruct = Acceso_Funcion(n->nombre);
+            if (funcionStruct == NULL) {
                 printf(" » ❌ Error Funcion: Funcion '%s' no encontrada\n", n->nombre);
                 lista_Errores[num_errores].Num = num_errores;
                 lista_Errores[num_errores].Desc_Error = "Funcion no encontrada";
                 lista_Errores[num_errores].Tipo_Error = "Llamado de Funcion";
                 num_errores++;
-                break;
+                v.tipo = VAL_NULL;
+                v.null_val = "-Func Not Found Err"; // Error de funcion no encontrada
+                return v;
             }
 
             // Verificar si la funcion viene sin parametros ejecutarla funcion directamente
-            if (strcmp(funcionNodo->lista_nodos[0]->valor.s_val, "NO PARAMETROS") == 0) {
+            if (strcmp(funcionStruct->parametros[0]->valor.s_val, "NO PARAMETROS") == 0) {
                 // Ejecutar el cuerpo de la funcion
                 printf(" » ▶️ Ejecutando Funcion: '%s' sin parametros\n", n->nombre);
-                Evaluar(funcionNodo->izq);
+                Evaluar(funcionStruct->instrucciones);
                 break;
-            }   
+            }
+            break;
+        }
 
-            // Si la funcion tiene parametros, verificar que se hayan proporcionado
-            if (funcionNodo->lista_nodos[0]->valor.s_val != "NO PARAMETROS") {
-                printf(" » ▶️ Ejecutando Funcion: '%s' con parametros\n", n->nombre);
+        case NODO_RETURN_FUNC: { // * ----------------------------------------------------------------------------------------
+            // * Valor a retornar en "n->izq"
+            Valor retorno = Evaluar(n->izq);
+            printf(" » 🔙 Retornando valor de funcion\n");
+            return retorno;
+        }
+
+        case NODO_ASIGNATION_FUNC: { // * ----------------------------------------------------------------------------------------
+            // Obtener la función de la tabla de símbolos
+            Funcion* funcionStruct = Acceso_Funcion(n->izq->nombre);
+            if (funcionStruct == NULL) {
+            printf(" » ❌ Error Funcion: Funcion '%s' no encontrada\n", n->izq->nombre);
+            lista_Errores[num_errores].Num = num_errores;
+            lista_Errores[num_errores].Desc_Error = "Funcion no encontrada";
+            lista_Errores[num_errores].Tipo_Error = "Llamado de Funcion";
+            num_errores++;
+            break;
             }
 
-            /* Manejar el valor de retorno si es necesario
-            if (strcmp(funcionNodo->valor.varType, "void") != 0) {
-                printf(" » ⚠️ Advertencia: La funcion '%s' deberia retornar un valor de tipo %s\n", n->nombre, funcionNodo->valor.varType);
-            } */
+            // Verificar que el tipo de retorno coincida con el tipo declarado
+            if (strcmp(funcionStruct->tipoRetorno, n->valor.varType) != 0) {
+            printf(" » ❌ Error: Tipo de retorno de función no coincide con tipo declarado\n");
+            lista_Errores[num_errores].Num = num_errores;
+            lista_Errores[num_errores].Desc_Error = "Tipo de retorno no coincide";
+            lista_Errores[num_errores].Tipo_Error = "Asignacion Funcion";
+            num_errores++;
+            break;
+            }
+
+            // Evaluar los parámetros y almacenarlos directamente
+            if (n->izq->lista_nodos != NULL) {
+                int i = 0;
+                while (n->izq->lista_nodos[i] != NULL && funcionStruct->parametros[i] != NULL) {
+                    // Evaluar el valor del parámetro
+                    Valor val = Evaluar(n->izq->lista_nodos[i]);
+                    // Asignar el parámetro según su tipo
+                    switch (val.tipo) {
+                        case VAL_INT:
+                            AsignarVariable_Int(funcionStruct->parametros[i]->nombre, val.i_val);
+                            break;
+                        case VAL_FLOAT:  
+                            AsignarVariable_Float(funcionStruct->parametros[i]->nombre, val.f_val);
+                            break;
+                        case VAL_DOUBLE:
+                            AsignarVariable_Double(funcionStruct->parametros[i]->nombre, val.d_val); 
+                            break;
+                        case VAL_STRING:
+                            AsignarVariable_String(funcionStruct->parametros[i]->nombre, val.s_val);
+                            break;
+                        case VAL_BOOL:
+                            AsignarVariable_Boolean(funcionStruct->parametros[i]->nombre, val.b_val);
+                            break;
+                        case VAL_CHAR:
+                            AsignarVariable_Char(funcionStruct->parametros[i]->nombre, val.c_val);
+                            break;
+                        default:
+                            printf("Error: Tipo de parámetro no soportado\n");
+                            break;
+                    }
+                    i++;
+                }
+            }
+
+            // Ejecutar la función y obtener el valor de retorno
+            Valor resultado = Evaluar(funcionStruct->instrucciones);  // ! ------------------
+            // printf("el retorno fue de tipo: %d\n", resultado.tipo);
+            // printf("y su valor nuimerico es: %d\n", resultado.i_val);
+            // Asignar el resultado a la variable dependiendo del tipo
+            switch (resultado.tipo) {
+                case VAL_INT:
+                    AsignarVariable_Int(n->nombre, resultado.i_val);
+                    break;
+                case VAL_FLOAT:
+                    AsignarVariable_Float(n->nombre, resultado.f_val);
+                    break;
+                case VAL_DOUBLE:
+                    AsignarVariable_Double(n->nombre, resultado.d_val);
+                    break;
+                case VAL_STRING:
+                    AsignarVariable_String(n->nombre, resultado.s_val);
+                    break;
+                case VAL_BOOL:
+                    AsignarVariable_Boolean(n->nombre, resultado.b_val);
+                    break;
+                case VAL_CHAR:
+                    AsignarVariable_Char(n->nombre, resultado.c_val);
+                    break;
+                default:
+                    printf(" » ❌ Error: Tipo de retorno no soportado\n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de retorno no soportado";
+                    lista_Errores[num_errores].Tipo_Error = "Asignacion Funcion";
+                    num_errores++;
+                    break;
+            }
+            printf(" » 💾 Variable '%s' asignada con resultado de función '%s'\n", 
+                n->nombre, n->izq->nombre);
+
+            // Eliminar los parámetros de la tabla de símbolos
+            if (funcionStruct->parametros[0] != NULL) {
+            int i = 0;
+            while (funcionStruct->parametros[i] != NULL) {
+                EliminarVariable(funcionStruct->parametros[i]->nombre);
+                i++;
+            }
+            }
             break;
         }
 
@@ -1318,7 +1400,7 @@ Valor Evaluar(Nodo* n) {
                     break;
 
                 case VAL_FLOAT:
-                    snprintf(buffer, MAX_PRINT_LENGTH, "%f", resultado.f_val);
+                    snprintf(buffer, MAX_PRINT_LENGTH, "%f\n", resultado.f_val);
                     //printf(" » 🖨️  »  %f\n", resultado.f_val);
                     break;
 
@@ -1367,10 +1449,24 @@ Valor Evaluar(Nodo* n) {
         }
 
         // ? Nodo recursivo que lee cada instruccion
-        case NODO_LISTA:  // * ----------------------------------------------------------------------------------------
-            Evaluar(n->izq);
-            Evaluar(n->der);
+        case NODO_LISTA: { // * ----------------------------------------------------------------------------------------
+            if (n->izq != NULL) {
+                Valor resultado_izq = Evaluar(n->izq);
+                // Si encontramos un return, propagarlo inmediatamente
+                if (n->izq->tipo == NODO_RETURN_FUNC) {
+                    return resultado_izq;
+                }
+            }
+            
+            if (n->der != NULL) {
+                Valor resultado_der = Evaluar(n->der);
+                // Si encontramos un return, propagarlo inmediatamente
+                if (n->der->tipo == NODO_RETURN_FUNC) {
+                    return resultado_der;
+                }
+            }
             break;
+        }
         
         // ! DEclaraciones y esas weas de las variables en tabla de simbolos se trabaja
         // ! Aqui solo desglozamos valores y los mandamos

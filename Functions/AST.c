@@ -270,7 +270,7 @@ Nodo* Diferente_Que(Nodo* Izq, Nodo* Der) {
 
 Nodo* Nodo_Vacio(const char* mensaje) {
     Nodo* n = malloc(sizeof(Nodo));
-    n->tipo = NODO_NULL;
+    n->tipo = NODO_VACIO;
     n->valor.s_val = strdup(mensaje);
     n->izq = n->der = NULL;
     return n;
@@ -529,6 +529,23 @@ Nodo* Break_Word() {
     return n;
 }
 
+Nodo* Return_Word() {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_RETURN_SIMPLE; // Cambiar a NODO_RETURN cuando se implemente
+    n->izq = n->der = NULL;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Return_Value(Nodo* expr) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_RETURN_FUNC; // Cambiar a NODO_RETURN cuando se implemente
+    n->izq = expr;
+    n->der = NULL;
+    n->nombre = NULL;
+    return n;
+}
+
 Nodo* Funtion_Declaration(char* Tipo, char* Identificador, Nodo** Parametros, Nodo* Instrucciones) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_FUNCTION_DECLARATION;
@@ -540,11 +557,29 @@ Nodo* Funtion_Declaration(char* Tipo, char* Identificador, Nodo** Parametros, No
     return n;
 }
 
-Nodo* Function_Call(char* Identificador) {
+Nodo* Function_Call_No_Param(char* Identificador) {
     Nodo* n = malloc(sizeof(Nodo));
-    n->tipo = NODO_FUNCTION_CALL;
+    n->tipo = NODO_FUNCTION_CALL_NO_PARAM;
     n->nombre = strdup(Identificador);
     n->izq = n->der = NULL;
-    n->lista_nodos = NULL; // No hay parámetros
+    return n;
+}
+
+Nodo* Function_Call_Parameters(char* Identificador, Nodo** parametrosPorAsignar) { 
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_FUNCTION_CALL_PARAMETERS; // Cambiar a NODO_FUNCTION_CALL cuando se implemente
+    n->nombre = strdup(Identificador);
+    n->lista_nodos = parametrosPorAsignar; // Lista de parámetros (puede ser NULL)
+    n->izq = n->der = NULL;
+    return n;
+}
+
+Nodo* Asignation_function(char* DataType, char* Identificador, Nodo* NodoFuncCallParameters) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_ASIGNATION_FUNC; 
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(DataType);
+    n->izq = NodoFuncCallParameters;
+    n->der = NULL;
     return n;
 }
