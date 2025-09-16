@@ -157,6 +157,15 @@ void Generate_Errors_Report(){
     
 }
 
+void Generate_AST_Report(){
+    if (raiz == NULL) {
+        printf("❌ No se ha generado el AST, no hay código para analizar\n");
+        return;
+    } else {
+        Print_AST(raiz, "ast_report");
+    }
+}
+
 // funcion de accion del boton {COMPILAR} de la ventana de gtk3
 void Compile_clicked(GtkWidget *widget, gpointer user_data) {
     CompileData *data = (CompileData*)user_data;
@@ -282,6 +291,12 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
 
     g_signal_connect_data(button6, "clicked",
                 G_CALLBACK(Generate_Errors_Report),
+                data,
+                NULL,
+                G_CONNECT_AFTER);
+
+    g_signal_connect_data(button4, "clicked",
+                G_CALLBACK(Generate_AST_Report),
                 data,
                 NULL,
                 G_CONNECT_AFTER);

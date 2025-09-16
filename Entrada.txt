@@ -231,10 +231,6 @@ System.out.println(cadena);
                 AHI VEMOS SI LAS IMPLEMENTAMOS XD
         */
 
-
-
-
-
 // Estructuras de Datos -----------------------------------------------------------------------------------------------------------
 
         // Declaracion de Vectores - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo -----------------------

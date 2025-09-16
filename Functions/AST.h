@@ -163,6 +163,11 @@ Nodo* While_Sentence(Nodo* condicion, Nodo* instrucciones);
 Nodo* Switch_Default(Nodo* instrucciones);
 Nodo* Switch_Case_One(Nodo* condicion, Nodo* instrucciones);
 Nodo* Switch_Sentence(char* Identificador_Comparador, Nodo* Case_One, Nodo** List_Cases, Nodo* Default_Case);
+
+void Print_AST(Nodo* raiz, const char* filename);
+const char* Get_Node_Type_Name(TipoNodo tipo);
+static void Print_AST_DOT(Nodo* n, FILE* f);
+
 // ? Funciones de limpieza
 //void ImprimirNodo(Nodo* nodo, int nivel);
 //void LiberarNodo(Nodo* nodo);
