@@ -153,6 +153,19 @@ for( int i = 0; i < 5; i++) {
     System.out.println("Repeticion for normal" + i);
 }
 
+for (int lel = 0; lel < 10; lel++) {
+    System.out.println("Ejecutando " + lel);
+
+    if (lel == 5) {
+        System.out.println("Entrando al If");
+        continue; // aquí se salta lo de abajo en esta iteración
+    }
+
+    // Esto NO se ejecuta cuando lel == 5
+    System.out.println("Instruccion despues del if" + lel);
+}
+
+
         // Sentencia WHILE            -------------------------------------------------------------------------
 
 int conditionx = 0;
@@ -166,11 +179,11 @@ while( lel < 10 ) {
     System.out.println("Ejecutando " + lel );
     if ( lel == 5 ) {
         System.out.println("Entrando al If");
-        break;                                                                      // PENDIENTE EL BREAK Y CONTINUE
+        lel++;
+        continue;
     }
     lel++;
 }
-// idea se puede retornar algun nodo para poder saber cuando viene un break o continue, armar un nodo en el break o continue destacado
 
         // Sentencia SWITCH - CASE -----------------------------------------------------------------------------------
 

@@ -1052,9 +1052,35 @@ Valor Evaluar(Nodo* n) {
                     break;
                 }
 
+                if(continue_) {
+                    printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                    continue_ = 0; // Reiniciar el estado de continue
+                    
+                    // Actualizar variable de control antes de continuar
+                    Nodo* varNodo = Acceso_Variable(nombreVar);
+                    if(varNodo == NULL) {
+                        printf(" » ❌ Error For: Variable de control no encontrada\n");
+                        break;
+                    }
+                    Valor valorActual = Evaluar(varNodo);
+                    if(strcmp(tipoOp, "++") == 0) {
+                        Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val + 1});
+                    } else {
+                        Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val - 1});
+                    }
+                    continue;
+                }
+
                 // Ejecutar el bloque de instrucciones
                 printf(" » ⏩ Ejecutando iteracion For\n");
                 Evaluar(n->der);
+
+                // Verificar si se encontró un break
+                if(break_) {
+                    printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
+                    break_ = 0; // Reiniciar el estado de break
+                    break;
+                }
 
                 // Obtener valor actual de la variable
                 Nodo* varNodo = Acceso_Variable(nombreVar);
@@ -1068,7 +1094,6 @@ Valor Evaluar(Nodo* n) {
                 if(strcmp(tipoOp, "++") == 0) {
                     Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val + 1});
                 } else {
-                    printf(" ---------------------------------------------el operador es --\n");
                     Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val - 1});
                 }
             }
@@ -1133,7 +1158,6 @@ Valor Evaluar(Nodo* n) {
         case NODO_BREAK:  // * ----------------------------------------------------------------------------------------
             // Retornar un valor especial para indicar un break
             break_ = 1;
-            printf(" * * * ** se cambio el valor de break_ a: %d\n", break_);
             break;
         
 
@@ -1160,6 +1184,7 @@ Valor Evaluar(Nodo* n) {
             // Verificar si se encontró un continue
             if(continue_) {
                     printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                    continue_ = 0; // Reiniciar el estado de continue
                     continue;
                 }
 
@@ -1429,7 +1454,7 @@ Valor Evaluar(Nodo* n) {
                 
                 case VAL_STRING:
                     snprintf(buffer, MAX_PRINT_LENGTH, "%s\n", resultado.s_val);
-                    printf(" » 🖨️  »  %s\n", resultado.s_val);
+                    //printf(" » 🖨️  »  %s\n", resultado.s_val);
                     break;
 
                 case VAL_BOOL:
