@@ -11,6 +11,9 @@
 // * que tipo de dato es el que viene, mandamos un objeto valor para
 // * almacenar el tipo y poder usarlo para ejecutar las operaciones
 
+    int continue_ = 0;
+    int break_ = 0;
+
 // * Evalua nodos
 Valor Evaluar(Nodo* n) {
     Valor v;
@@ -1121,45 +1124,59 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
+        case NODO_CONTINUE:  // * ----------------------------------------------------------------------------------------
+            // Retornar un valor especial para indicar un continue
+            continue_ = 1;
+            break;
+        
+
+        case NODO_BREAK:  // * ----------------------------------------------------------------------------------------
+            // Retornar un valor especial para indicar un break
+            break_ = 1;
+            printf(" * * * ** se cambio el valor de break_ a: %d\n", break_);
+            break;
+        
+
         case NODO_WHILE_SENTENCE: { // * ----------------------------------------------------------------------------------------
             while(1) {
-                // Evaluar condición al inicio de cada iteración
-                Valor condicion = Evaluar(n->izq);
-                
-                // Validar que la condición sea booleana
-                if(condicion.tipo != VAL_BOOL) {
-                    printf(" » ❌ Error While: La condicion debe ser booleana\n");
-                    lista_Errores[num_errores].Num = num_errores;
-                    lista_Errores[num_errores].Desc_Error = "La condicion debe ser booleana";
-                    lista_Errores[num_errores].Tipo_Error = "Sentencia While";
-                    num_errores++;
-                    break;
-                }
+            // Evaluar condición al inicio de cada iteración
+            Valor condicion = Evaluar(n->izq);
+            
+            // Validar que la condición sea booleana
+            if(condicion.tipo != VAL_BOOL) {
+                printf(" » ❌ Error While: La condicion debe ser booleana\n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "La condicion debe ser booleana";
+                lista_Errores[num_errores].Tipo_Error = "Sentencia While";
+                num_errores++;
+                break;
+            }
 
-                // Si la condición es falsa, salir del ciclo
-                if(!condicion.b_val) {
-                    break;
-                }
-
-                // Ejecutar el bloque de instrucciones
-                printf(" » 🔄 Ejecutando iteracion While\n");
-                
-                // Ejecutar instrucciones y verificar si hay break o continue
-                Valor resultado = Evaluar(n->der);
-                
-                // Verificar si se encontró un break
-                if(resultado.tipo == VAL_NULL && strcmp(resultado.null_val, "BREAK") == 0) {
-                    printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
-                    break;
-                }
-                
-                // Verificar si se encontró un continue
-                if(resultado.tipo == VAL_INT && resultado.i_val == 1) {
+            // Si la condición es falsa, salir del ciclo
+            if(!condicion.b_val) {
+                break;
+            }
+            
+            // Verificar si se encontró un continue
+            if(continue_) {
                     printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
                     continue;
                 }
+
+            // Ejecutar instrucciones y verificar si hay break o continue
+            Valor resultado = Evaluar(n->der);
+            printf(" » 🔄 Ejecutada iteracion While\n");
+            
+
+            // Verificar si se encontró un break
+            if(break_) {
+                    printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
+                    break_ = 0; // Reiniciar el estado de break
+                    break;
+                }
+            
             }
-        break;
+            break;
         }
 
         case NODO_SWITCH_SENTENCE: { // * ----------------------------------------------------------------------------------------
@@ -1281,6 +1298,7 @@ Valor Evaluar(Nodo* n) {
         case NODO_RETURN_FUNC: { // * ----------------------------------------------------------------------------------------
             // * Valor a retornar en "n->izq"
             Valor retorno = Evaluar(n->izq);
+            // esta llegando un nodo suma
             printf(" » 🔙 Retornando valor de funcion\n");
             return retorno;
         }
@@ -1411,7 +1429,7 @@ Valor Evaluar(Nodo* n) {
                 
                 case VAL_STRING:
                     snprintf(buffer, MAX_PRINT_LENGTH, "%s\n", resultado.s_val);
-                    //printf(" » 🖨️  »  %s\n", resultado.s_val);
+                    printf(" » 🖨️  »  %s\n", resultado.s_val);
                     break;
 
                 case VAL_BOOL:

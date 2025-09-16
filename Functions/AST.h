@@ -12,63 +12,63 @@
 #define AST_H
 
 typedef enum {
-    NODO_INT,               // *
-    NODO_FLOAT,             // *
-    NODO_DOUBLE,            // *
-    NODO_STRING,            // *
-    NODO_IDENTIFICADOR,     // *
-    NODO_DECLARATION,       // *
-    NODO_ASIGNACION,        // *
-    NODO_EQUALS_COMPARE,    // *
-    NODO_BOOL,              // *
-    NODO_CHAR,              // *
-    NODO_PRINT,             // *
-    NODO_SUMA,              // *
-    NODO_RESTA,             // *
-    NODO_MULTIPLICACION,    // *
-    NODO_CASTEO_NARROWING,  // *
-    NODO_DIVISION,          // *
-    NODO_MODULO,            // *
-    NODO_NOT,               // *
-    NODO_NULL,              // *
-    NODO_AND,               // *
-    NODO_OR,                // *
-    NODO_LISTA,             // *
-    NODO_MENOR_A,           // *
-    NODO_MAYOR_A,           // *
-    NODO_MENOR_IGUAL_A,     // *
-    NODO_MAYOR_IGUAL_A,     // *
-    NODO_IGUAL_IGUAL,       // *
-    NODO_DIFERENTE_QUE,      // *
-    NODO_VALORES_VECTOR,     // *
-    NODO_PARSEO,              // *
-    NODO_IF_SIMPLE,        // *
-    NODO_IF_ELSE,            // *
-    NODO_IF_ELSE_ONE,       // *
-    NODO_ELSE_IF_LIST,    // *
-    NODO_IF_ELSE_IF,         // * 
-    NODO_VECTOR_AUTO,
-    NODO_VALORES_VECTOR_LIST, // *
-    NODO_DECLARATION_VECTOR,   // *
-    NODO_MATRIZ_AUTO,
-    NODO_DECLARATION_MATRIX,
-    NODO_FOR_CONDITION,
-    NODO_FOR_SENTENCE,
-    NODO_PLUS_MINUS_VAR,
-    NODO_WHILE_SENTENCE,
-    NODO_SWITCH_DEFAULT,
-    NODO_SWITCH_CASE_ONE,
-    NODO_SWITCH_CASE_LIST,
-    NODO_SWITCH_SENTENCE,
-    NODO_FUNCTION_DECLARATION,
-    NODO_FUNCTION_CALL_NO_PARAM,
-    NODO_FUNCTION_CALL_PARAMETERS,
-    NODO_CONTINUE,
-    NODO_BREAK,
-    NODO_VACIO,
-    NODO_RETURN_SIMPLE, // *
-    NODO_RETURN_FUNC,
-    NODO_ASIGNATION_FUNC,
+    NODO_INT,               // 0
+    NODO_FLOAT,             // 1
+    NODO_DOUBLE,            // 2
+    NODO_STRING,            // 3
+    NODO_IDENTIFICADOR,     // 4
+    NODO_DECLARATION,       // 5
+    NODO_ASIGNACION,        // 6
+    NODO_EQUALS_COMPARE,    // 7
+    NODO_BOOL,              // 8
+    NODO_CHAR,              // 9
+    NODO_PRINT,             // 10
+    NODO_SUMA,              // 11
+    NODO_RESTA,             // 12
+    NODO_MULTIPLICACION,    // 13
+    NODO_CASTEO_NARROWING,  // 14
+    NODO_DIVISION,          // 15
+    NODO_MODULO,            // 16
+    NODO_NOT,               // 17
+    NODO_NULL,              // 18
+    NODO_AND,               // 19
+    NODO_OR,                // 20
+    NODO_LISTA,             // 21
+    NODO_MENOR_A,           // 22
+    NODO_MAYOR_A,           // 23
+    NODO_MENOR_IGUAL_A,     // 24
+    NODO_MAYOR_IGUAL_A,     // 25
+    NODO_IGUAL_IGUAL,       // 26
+    NODO_DIFERENTE_QUE,      // 27
+    NODO_VALORES_VECTOR,     // 28
+    NODO_PARSEO,              // 29
+    NODO_IF_SIMPLE,        // 30
+    NODO_IF_ELSE,            // 31
+    NODO_IF_ELSE_ONE,       // 32
+    NODO_ELSE_IF_LIST,    // 33
+    NODO_IF_ELSE_IF,         // 34
+    NODO_VECTOR_AUTO,    // 35
+    NODO_VALORES_VECTOR_LIST, // 36
+    NODO_DECLARATION_VECTOR,   // 37
+    NODO_MATRIZ_AUTO,         // 38
+    NODO_DECLARATION_MATRIX,  // 39
+    NODO_FOR_CONDITION,      // 40
+    NODO_FOR_SENTENCE,      // 41
+    NODO_PLUS_MINUS_VAR,    // 42
+    NODO_WHILE_SENTENCE,    // 43
+    NODO_SWITCH_DEFAULT,    // 44
+    NODO_SWITCH_CASE_ONE,   // 45
+    NODO_SWITCH_CASE_LIST,  // 46
+    NODO_SWITCH_SENTENCE,   // 47
+    NODO_FUNCTION_DECLARATION, // 48
+    NODO_FUNCTION_CALL_NO_PARAM, // 49
+    NODO_FUNCTION_CALL_PARAMETERS, // 50
+    NODO_CONTINUE,               // 51
+    NODO_BREAK,                  // 52
+    NODO_VACIO,                  // 53
+    NODO_RETURN_SIMPLE,          // 54
+    NODO_RETURN_FUNC,            // 55
+    NODO_ASIGNATION_FUNC,     // 56
 } TipoNodo;
 
 typedef struct Nodo {

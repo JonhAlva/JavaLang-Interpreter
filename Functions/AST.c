@@ -517,7 +517,7 @@ Nodo* Continue_Word() {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_CONTINUE;
     n->izq = n->der = NULL;
-    n->nombre = NULL;
+    n->nombre = "CONTINUE_WORD";
     return n;
 }
 
@@ -525,7 +525,7 @@ Nodo* Break_Word() {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_BREAK;
     n->izq = n->der = NULL;
-    n->nombre = NULL;
+    n->nombre = "BREAK_WORD";
     return n;
 }
 
