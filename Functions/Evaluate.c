@@ -1062,7 +1062,6 @@ Valor Evaluar(Nodo* n) {
                         // Agregar los valores al vector usando lista_nodos
                         for(int i = 0; n->izq->lista_nodos[i] != NULL; i++) {
                             Valor val = Evaluar(n->izq->lista_nodos[i]);
-                            printf(" * * evaluando los valores de la lista nodos\n");
                             if (val.tipo == VAL_INT) {
                                 vector_add_int(vInt, val.i_val);
                             } else {
@@ -1596,6 +1595,53 @@ Valor Evaluar(Nodo* n) {
                 EliminarVariable(funcionStruct->parametros[i]->nombre);
                 i++;
             }
+            }
+            break;
+        }
+
+        case NODO_ARRAYS_DECLARATION: {
+            // ! AQUI ENTRA EL NODO: NODO_ARRAYS_DECLARATION = n
+            if (n->izq->tipo == NODO_ARRAYS_INDEXOF) {  
+                // nombre del vector a buscar el indice
+                char* Name_array_to_find = n->izq->nombre;
+                Valor Array_Key = Evaluar(n->izq->izq); // valor a buscar en el array
+                // verificar si el vector existe
+                Vector* vec = table_get(symtab, Name_array_to_find);
+                if (vec == NULL) {
+                    printf(" » ❌ Error Array: El array '%s' no existe \n", Name_array_to_find);
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "El array no existe";
+                    lista_Errores[num_errores].Tipo_Error = "Array";
+                    num_errores++;
+                    break;
+                }
+
+                if (Array_Key.tipo == VAL_INT && vec->type == T_INT) {
+                    int index_found = vector_find_int(vec, Array_Key.i_val);
+                    //declarar variable
+                    AsignarVariable_Int(n->nombre, index_found);
+                    printf(" » 🆗 Array.IndexOf Asignado a '%s' del array el valor del indice \n", n->nombre);
+                    break;
+
+                } else if (Array_Key.tipo == VAL_STRING && vec->type == T_STRING) {
+                    int index_found = vector_find_string(vec, Array_Key.s_val);
+                    //declarar variable
+                    AsignarVariable_Int(n->nombre, index_found);
+                    printf(" » 🆗 Array.IndexOf Asignado a '%s' el valor del indice \n", n->nombre);
+                    break;
+
+                } else {
+                    printf(" » ❌ Error Array IndexOf: Tipo de dato no coincide con el tipo del array \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible en el IndexOf del array";
+                    lista_Errores[num_errores].Tipo_Error = "Array";
+                    num_errores++;
+                    break;
+
+                }
+
+            } else if (n->izq->tipo == NODO_ARRAY_LENGTH) {
+                printf(" » 🆗 Declaracion de Array con Length no implementado aun \n");
             }
             break;
         }

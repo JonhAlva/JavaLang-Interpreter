@@ -70,7 +70,10 @@ typedef enum {
     NODO_RETURN_FUNC,            // 55
     NODO_ASIGNATION_FUNC,     // 56
     NODO_VECTOR_REFERENCE,     // 57
-    NODO_VECTOR_ASIGNATION      // 58
+    NODO_VECTOR_ASIGNATION ,   // 58
+    NODO_ARRAYS_INDEXOF,      // 59
+    NODO_ARRAYS_DECLARATION,   // 60
+    NODO_ARRAY_LENGTH           // 61
 } TipoNodo;
 
 typedef struct Nodo {
@@ -168,6 +171,10 @@ Nodo* While_Sentence(Nodo* condicion, Nodo* instrucciones);
 Nodo* Switch_Default(Nodo* instrucciones);
 Nodo* Switch_Case_One(Nodo* condicion, Nodo* instrucciones);
 Nodo* Switch_Sentence(char* Identificador_Comparador, Nodo* Case_One, Nodo** List_Cases, Nodo* Default_Case);
+
+Nodo* Array_Index_Of(char* VectorName, Nodo* Clave);
+Nodo* Array_func_Declaration(char* DataType, char* Identificador, Nodo* TipoArray);
+Nodo* Array_Length(char* Identificador);
 
 void Print_AST(Nodo* raiz, const char* filename);
 const char* Get_Node_Type_Name(TipoNodo tipo);

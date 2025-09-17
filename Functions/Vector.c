@@ -64,6 +64,42 @@ void vector_free(Vector *vec) {
     free(vec);
 }
 
+// Busca un entero en el vector y devuelve el índice, o -1 si no se encuentra
+int vector_find_int(Vector *vec, int value) {
+    if (vec->type != T_INT) {
+        fprintf(stderr, "Error: vector no es de tipo int\n");
+        return -1;
+    }
+    for (size_t i = 0; i < vec->size; i++) {
+        int *p = (int *)vec->data[i];
+        if (*p == value) {
+            return (int)i;  // encontrado
+        }
+    }
+    return -1; // no encontrado
+}
+
+// Busca una cadena en el vector y devuelve el índice, o -1 si no se encuentra
+int vector_find_string(Vector *vec, const char *str) {
+    if (vec->type != T_STRING) {
+        fprintf(stderr, "Error: vector no es de tipo string\n");
+        return -1;
+    }
+    for (size_t i = 0; i < vec->size; i++) {
+        char *s = (char *)vec->data[i];
+        if (strcmp(s, str) == 0) {
+            return (int)i;  // encontrado
+        }
+    }
+    return -1; // no encontrado
+}
+
+// Retorna el número de elementos actuales en el vector
+size_t vector_size(Vector *vec) {
+    return vec->size;
+}
+
+
 // ------------------- TABLA DE SÍMBOLOS -------------------
 
 SymbolTable* table_create(size_t initial_capacity) {

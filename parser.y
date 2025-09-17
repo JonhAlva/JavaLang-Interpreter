@@ -44,7 +44,7 @@
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
 %type <nodo> native_func vector_type string_join if_else_one vector matriz_type matriz for_condition for_sentence switch_default
-%type <nodo> switch_case_one switch_case function_sentence
+%type <nodo> switch_case_one switch_case function_sentence array_funcs
 %type <identificador> op_expr parse_expretion for_option
 %type <lista_nodos> vector_values if_else_chain matriz_values switch_case_list function_parameters_access function_parameters_declaration parameters_bridge
 
@@ -114,7 +114,8 @@ declaration:
 
             | string_join  { $$ = $1; }
 
-            | DATA_TYPE IDENTIFICADOR S_IGUAL array_funcs S_PUNTO_COMA  { $$ = Nodo_Vacio("ARRAY FUNCS NO IMPLEMENTADO AUN"); /* FUNCIONES DE ARRAYS */ }
+            | DATA_TYPE IDENTIFICADOR S_IGUAL array_funcs S_PUNTO_COMA  
+            { $$ = Array_func_Declaration($1, $2, $4); /* FUNCIONES DE ARRAYS */ }
 ;
 
 parse_expretion:
@@ -130,8 +131,11 @@ string_join:
 ;
 
 array_funcs:
-            ARRAY_INDEX PARENTESIS_OPEN expr COMA expr PARENTESIS_CLOSE
+            ARRAY_INDEX PARENTESIS_OPEN IDENTIFICADOR COMA expr PARENTESIS_CLOSE
+            { $$ = Array_Index_Of($3, $5); /* FUNCION INDEX OF PARA VECTORES */ }
+
             | IDENTIFICADOR FUNC_LENGTH
+            { $$ = Array_Length($1); /* FUNCION LENGTH PARA VECTORES */ }
 ;
 
 // ! DECLARACION DE VECTOR

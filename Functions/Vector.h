@@ -21,6 +21,9 @@ void vector_add_string(Vector *vec, const char *str);
 int vector_get_int(Vector *vec, size_t index);
 char* vector_get_string(Vector *vec, size_t index);
 void vector_free(Vector *vec);
+int vector_find_int(Vector *vec, int value);
+int vector_find_string(Vector *vec, const char *str);
+size_t vector_size(Vector *vec);
 
 // Entrada de tabla de símbolos
 typedef struct {

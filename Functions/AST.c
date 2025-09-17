@@ -605,6 +605,33 @@ Nodo* Vector_Asignation(char* TipoDato, char* Identificador, Nodo* expr) {
     return n;
 }
 
+Nodo* Array_Index_Of(char* VectorName, Nodo* Clave) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_ARRAYS_INDEXOF;
+    n->nombre = strdup(VectorName);
+    n->izq = Clave; // No se utiliza
+    n->der = NULL; // Clave o índice
+    return n;
+}
+
+Nodo* Array_func_Declaration(char* DataType, char* Identificador, Nodo* TipoArray) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_ARRAYS_DECLARATION;
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(DataType);
+    n->izq = TipoArray; // Tipo del array
+    n->der = NULL;
+    return n;
+}
+
+Nodo* Array_Length(char* Identificador) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_ARRAY_LENGTH;
+    n->nombre = strdup(Identificador);
+    n->izq = n->der = NULL;
+    return n;
+}
+
 const char* Get_Node_Type_Name(TipoNodo tipo) {
     switch (tipo) {
         case NODO_INT: return "NODO_INT";
