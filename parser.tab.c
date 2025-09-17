@@ -2002,7 +2002,7 @@ yyreduce:
 
   case 81: /* for_condition: DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR  */
 #line 336 "parser.y"
-            {  Nodo_Vacio("ESTRUCTURA FOR EACH"); /* Implementacion con los vectores */}
+            { (yyval.nodo) = For_Each((yyvsp[-3].data_type), (yyvsp[-2].identificador), (yyvsp[0].identificador)); /* Implementacion con los vectores */ }
 #line 2007 "parser.tab.c"
     break;
 

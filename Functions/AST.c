@@ -652,6 +652,16 @@ Nodo* String_Join_Array(char* VarType, char* Identificador, char* Separador, Nod
     return n;
 }
 
+Nodo* For_Each(char* Tipo, char* TempVar, char* VectorName) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_FOR_EACH;
+    n->valor.varType = strdup(Tipo); // Tipo de la variable temporal
+    n->nombre = strdup(TempVar); // Nombre de la variable temporal
+    n->separador = strdup(VectorName); // Nombre del vector a iterar
+    n->izq = n->der = NULL; // Instrucciones se asignan después
+    return n;
+}
+
 const char* Get_Node_Type_Name(TipoNodo tipo) {
     switch (tipo) {
         case NODO_INT: return "NODO_INT";

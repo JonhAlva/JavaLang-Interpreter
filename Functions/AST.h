@@ -75,7 +75,8 @@ typedef enum {
     NODO_ARRAYS_DECLARATION,   // 60
     NODO_ARRAY_LENGTH,           // 61
     NODO_ARRAY_ADD,             // 62
-    NODO_STRING_JOIN_ARRAY    // 63
+    NODO_STRING_JOIN_ARRAY,     // 63
+    NODO_FOR_EACH,              // 64
 } TipoNodo;
 
 typedef struct Nodo {
@@ -169,6 +170,7 @@ Nodo* Sentencia_If_ElseIf_Else(Nodo* condicion, Nodo* instrucciones_if,
 
 Nodo* For_Condition(Nodo* Declaration, Nodo* Condicion, char* Identificador, char* IncOrDec);
 Nodo* For_Sentence(Nodo* ForCondition, Nodo* instrucciones);
+Nodo* For_Each(char* Tipo, char* TempVar, char* VectorName);
 Nodo* Plus_Minus_Var(char* Identificador, char* IncOrDec);
 Nodo* While_Sentence(Nodo* condicion, Nodo* instrucciones);
 Nodo* Switch_Default(Nodo* instrucciones);

@@ -1266,6 +1266,94 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_FOR_SENTENCE: { // * ----------------------------------------------------------------------------------------
+
+            // Instrucciones del for each
+            if (n->izq->tipo == NODO_FOR_EACH) {
+                char* Vector_Name = n->izq->separador; // nombre del vector a recorrer
+                char* Var_Name = n->izq->nombre; // nombre de la variable que tomara el valor del vector
+                char* Type_Var = n->izq->valor.varType; // tipo de la variable que tomara el valor del vector
+
+                // verificar que el vector exista
+                Vector* vec = table_get(symtab, Vector_Name);
+                if (vec == NULL) {
+                    printf(" » ❌ Error For Each: El vector '%s' no existe \n", Vector_Name);
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "El vector no existe";
+                    lista_Errores[num_errores].Tipo_Error = "Sentencia For Each";
+                    num_errores++;
+                    break;
+                }
+
+                // recorrer el vector segun su tipo
+                if (vec->type == T_INT) {
+                    int vectorSize = (int)vec->size;
+                    for (int i = 0; i < vectorSize; i++) {
+                        // Obtener el valor actual del vector
+                        int value = vector_get_int(vec, i);
+                        
+                        // Asignar el valor a la variable temporal
+                        AsignarVariable_Int(Var_Name, value);
+                        
+                        printf(" » 🔄 For Each: Iterando valor %d en vector '%s'\n", value, Vector_Name);
+                        
+                        // Ejecutar el bloque de código
+                        Evaluar(n->der);
+                        
+                        // Verificar si se encontró un break
+                        if(break_) {
+                            printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
+                            break_ = 0;
+                            break;
+                        }
+                        
+                        // Verificar si se encontró un continue 
+                        if(continue_) {
+                            printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                            continue_ = 0;
+                            continue;
+                        }
+                    }
+                    EliminarVariable (Var_Name);
+                } else if (vec->type == T_STRING) {
+                    int vectorSize = (int)vec->size;
+                    for (int i = 0; i < vectorSize; i++) {
+                        // Obtener el valor actual del vector
+                        char* value = vector_get_string(vec, i);
+                        
+                        // Asignar el valor a la variable temporal
+                        AsignarVariable_String(Var_Name, value);
+                        
+                        printf(" » 🔄 For Each: Iterando valor %s en vector '%s'\n", value, Vector_Name);
+                        
+                        // Ejecutar el bloque de código
+                        Evaluar(n->der);
+                        
+                        // Verificar si se encontró un break
+                        if(break_) {
+                            printf(" » ⏹️ Break encontrado, saliendo del ciclo\n"); 
+                            break_ = 0;
+                            break;
+                        }
+                        
+                        // Verificar si se encontró un continue
+                        if(continue_) {
+                            printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                            continue_ = 0;
+                            continue;
+                        }
+                    }
+                    EliminarVariable (Var_Name);
+                } else {
+                    printf(" » ❌ Error For: Tipo de vector no soportado en For Each\n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de vector no soportado";
+                    lista_Errores[num_errores].Tipo_Error = "Sentencia For Each";
+                    num_errores++;
+                    break;
+                }
+            break;
+            }
+
             // Evaluar la declaración inicial
             Evaluar(n->izq->izq);
 
@@ -1283,7 +1371,7 @@ Valor Evaluar(Nodo* n) {
                 break;
             }
 
-            // Ciclo principal del for
+            // Ciclo principal del for clasico
             while(1) {
                 // Evaluar condición
                 printf(" » 🔄 Evaluando condicion For\n");

@@ -333,7 +333,7 @@ for_condition:
             declaration expr S_PUNTO_COMA IDENTIFICADOR for_option
             { $$ = For_Condition($1, $2, $4, $5); }
             | DATA_TYPE IDENTIFICADOR S_PUNTO_PUNTO IDENTIFICADOR
-            {  Nodo_Vacio("ESTRUCTURA FOR EACH"); /* Implementacion con los vectores */}
+            { $$ = For_Each($1, $2, $4); /* Implementacion con los vectores */ }
 ;
 
 for_option:

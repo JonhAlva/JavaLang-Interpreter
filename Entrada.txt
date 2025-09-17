@@ -283,6 +283,10 @@ String[] frutas = {"manzana", "pera", "uvas"};
 String csv = String.join(",", frutas);          //Resultado: "manzana,pera,uvas"
 
 
+        // Sentencia FOR - EACH              --------------------------------------------------------------------------
+for ( int num : numeros ) {
+    System.out.println("Repeticion for each");
+} // implementacion junto a los vectores
 
 
 
@@ -297,11 +301,6 @@ int[][] board = {
     {1, 0, 1},
     {0, 1, 0}
 };
-
-        // Sentencia FOR - EACH              --------------------------------------------------------------------------
-for ( int num : numeros ) {
-    System.out.println("Repeticion for each");
-} // implementacion junto a los vectores
 
     /*
         Sentencias de transferencia, break, continue
