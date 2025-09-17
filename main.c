@@ -34,6 +34,7 @@ int Analizar_Codigo(char* codigo, GtkWidget *textview2) {
         Clear_All_Variables();
         Clear_All_Errors();
         Clear_All_Funciones();
+        //table_free(symtab);
         if (strncmp(codigo, "exit", 4) == 0) {
             return 1;
         }

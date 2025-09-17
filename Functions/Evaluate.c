@@ -1086,7 +1086,6 @@ Valor Evaluar(Nodo* n) {
                         for(int i = 0; n->izq->lista_nodos[i] != NULL; i++) {
                             Valor val = Evaluar(n->izq->lista_nodos[i]); // ! si retorna string
                             if (val.tipo == VAL_STRING) {
-                                printf(" * * evaluando los valores de la lista nodos\n");
                                 vector_add_string(vString, val.s_val);
                             } else {
                                 printf(" » ❌ Error Vector: Tipo de dato no coincide en los valores del vector \n");
@@ -1103,6 +1102,89 @@ Valor Evaluar(Nodo* n) {
                     }
 
                     break;
+                } else if (n->izq->tipo == NODO_ARRAY_ADD) {
+                    // ? CREAR VECTOR CON VALORES AGREGADOS DINAMICAMENTE
+                    char* Name_vector_declaration = n->nombre;
+                    char* Name_Vector_exist = n->izq->nombre; // nombre del vector al que se le agregaran los valores
+                    char* Type_vector_declaration = n->valor.varType;
+
+                    // verificar que el vaector exista
+                    Vector* vec = table_get(symtab, Name_Vector_exist);
+                    if (vec == NULL) {
+                        printf(" » ❌ Error Vector: El vector '%s' no existe para agregar valores \n", Name_Vector_exist);
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "El vector no existe para agregar valores";
+                        lista_Errores[num_errores].Tipo_Error = "Vector";
+                        num_errores++;
+                        break;
+                    }   
+
+                    //agreagar el valor al vector
+                    Valor val = Evaluar(n->izq->izq); // valor a agregar al vector
+                    if (strcmp(Type_vector_declaration, "int") == 0 ) { // * ----------------------------------------------------------------------------------------
+                        if (val.tipo == VAL_INT) {
+                            // declaramos el nuevo vector
+                            Vector *vInt = vector_create(T_INT, 2);
+                            size_t vectorSize = vec->size;
+                            int currentSize = (int)vectorSize;
+
+                            //agregar los valores al vector
+                            for (int i = 0; i < currentSize; i++) {
+                                int value = vector_get_int(vec, i);
+                                vector_add_int(vInt, value);
+                            }
+
+                            //añadir el ultimo valor
+                            vector_add_int(vInt, val.i_val);
+
+                            table_add(symtab, Name_vector_declaration, vInt);
+                            printf(" » 🆗 Vector con Func add Int creado: '%s' \n", n->nombre);
+                            break;
+
+                        } else {
+                            printf(" » ❌ Error Vector: Tipo de dato no coincide en los valores del vector \n");
+                            lista_Errores[num_errores].Num = num_errores;
+                            lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible en los valores del vector";
+                            lista_Errores[num_errores].Tipo_Error = "Vector";
+                            num_errores++;
+                            break;
+                        }
+                    }
+
+
+                    if (strcmp(Type_vector_declaration, "String") == 0 ) { // * ------------------------------------------------------------------
+                        if (val.tipo == VAL_STRING) {
+                            // declaramos el nuevo vector
+                            printf("--- se esta creando un nuevo vector de string con add\n");
+                            Vector *vString = vector_create(T_STRING, 2);
+                            size_t vectorSize = vec->size;
+                            int currentSize = (int)vectorSize;
+
+                            //agregar los valores al vector
+                            for (int i = 0; i < currentSize; i++) {
+                                char* value = vector_get_string(vec, i);
+                                vector_add_string(vString, value);
+                            }
+
+                            //añadir el ultimo valor
+                            vector_add_string(vString, val.s_val);
+
+                            table_add(symtab, Name_vector_declaration, vString);
+                            printf(" » 🆗 Vector con Func add String creado: '%s' \n", n->nombre);
+                            break;
+
+                        } else {
+                            printf(" » ❌ Error Vector: Tipo de dato no coincide en los valores del vector \n");
+                            lista_Errores[num_errores].Num = num_errores;
+                            lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible en los valores del vector";
+                            lista_Errores[num_errores].Tipo_Error = "Vector";
+                            num_errores++;
+                            break;
+                            }
+                        }
+
+                    break;
+
                 } else {
                     printf(" »   Tipo de dato desconocido en declaracion de vector * \n");
                     lista_Errores[num_errores].Num = num_errores;
@@ -1641,9 +1723,28 @@ Valor Evaluar(Nodo* n) {
                 }
 
             } else if (n->izq->tipo == NODO_ARRAY_LENGTH) {
-                printf(" » 🆗 Declaracion de Array con Length no implementado aun \n");
-            }
+                // nombre del vector a buscar el indice
+                char* Name_array_to_find = n->izq->nombre;
+
+                // verificar si el vector existe
+                Vector* vec = table_get(symtab, Name_array_to_find);
+                if (vec == NULL) {
+                    printf(" » ❌ Error Array: El array '%s' no existe \n", Name_array_to_find);
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "El array no existe";
+                    lista_Errores[num_errores].Tipo_Error = "Array";
+                    num_errores++;
+                    break;  
+                }
+
+                size_t length_of_array = vector_size(vec);
+                int count = (int)length_of_array;
+
+                //declarar variable
+                AsignarVariable_Int(n->nombre, count);
+                printf(" » 🆗 Array.Length Asignado a '%s' el valor del length: %d\n", n->nombre, count);
             break;
+            }
         }
 
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------

@@ -94,6 +94,28 @@ int vector_find_string(Vector *vec, const char *str) {
     return -1; // no encontrado
 }
 
+// Reemplazar un entero en un índice específico
+void vector_set_int(Vector *vec, size_t index, int value) {
+    if (vec->type != T_INT || index >= vec->size) {
+        fprintf(stderr, "Error: tipo incorrecto o índice fuera de rango\n");
+        exit(1);
+    }
+    int *p = malloc(sizeof(int));
+    *p = value;
+    free(vec->data[index]);      // liberar el valor anterior
+    vec->data[index] = p;        // asignar el nuevo valor
+}
+
+// Reemplazar una cadena en un índice específico
+void vector_set_string(Vector *vec, size_t index, const char *str) {
+    if (vec->type != T_STRING || index >= vec->size) {
+        fprintf(stderr, "Error: tipo incorrecto o índice fuera de rango\n");
+        exit(1);
+    }
+    free(vec->data[index]);      // liberar la cadena anterior
+    vec->data[index] = strdup(str);  // duplicar la nueva cadena
+}
+
 // Retorna el número de elementos actuales en el vector
 size_t vector_size(Vector *vec) {
     return vec->size;

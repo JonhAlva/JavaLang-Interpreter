@@ -420,6 +420,15 @@ Nodo* Declaration_Vector(char* DataType, char* Identificador, Nodo* TipoVector) 
     return n;
 }
 
+Nodo* Array_Add_Ref(char* VectorName, Nodo* ValueToAdd) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_ARRAY_ADD;
+    n->nombre = strdup(VectorName);
+    n->izq = ValueToAdd;
+    n->der = NULL;
+    return n;
+}
+
 Nodo* Valores_Vector(Nodo** lista) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_VALORES_VECTOR_LIST;

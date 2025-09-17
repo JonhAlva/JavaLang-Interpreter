@@ -73,7 +73,8 @@ typedef enum {
     NODO_VECTOR_ASIGNATION ,   // 58
     NODO_ARRAYS_INDEXOF,      // 59
     NODO_ARRAYS_DECLARATION,   // 60
-    NODO_ARRAY_LENGTH           // 61
+    NODO_ARRAY_LENGTH,           // 61
+    NODO_ARRAY_ADD             // 62
 } TipoNodo;
 
 typedef struct Nodo {
@@ -175,6 +176,7 @@ Nodo* Switch_Sentence(char* Identificador_Comparador, Nodo* Case_One, Nodo** Lis
 Nodo* Array_Index_Of(char* VectorName, Nodo* Clave);
 Nodo* Array_func_Declaration(char* DataType, char* Identificador, Nodo* TipoArray);
 Nodo* Array_Length(char* Identificador);
+Nodo* Array_Add_Ref(char* VectorName, Nodo* ValueToAdd);
 
 void Print_AST(Nodo* raiz, const char* filename);
 const char* Get_Node_Type_Name(TipoNodo tipo);
