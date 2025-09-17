@@ -74,13 +74,15 @@ typedef enum {
     NODO_ARRAYS_INDEXOF,      // 59
     NODO_ARRAYS_DECLARATION,   // 60
     NODO_ARRAY_LENGTH,           // 61
-    NODO_ARRAY_ADD             // 62
+    NODO_ARRAY_ADD,             // 62
+    NODO_STRING_JOIN_ARRAY    // 63
 } TipoNodo;
 
 typedef struct Nodo {
     TipoNodo tipo;
     char* nombre;       //Identificadores
     int size_vector; // Tamaño del vector
+    char* separador; // Separador para join
     union {
         int i_val;
         float f_val;
@@ -177,6 +179,7 @@ Nodo* Array_Index_Of(char* VectorName, Nodo* Clave);
 Nodo* Array_func_Declaration(char* DataType, char* Identificador, Nodo* TipoArray);
 Nodo* Array_Length(char* Identificador);
 Nodo* Array_Add_Ref(char* VectorName, Nodo* ValueToAdd);
+Nodo* String_Join_Array(char* VarType, char* Identificador, char* Separador, Nodo** ArrayVal);
 
 void Print_AST(Nodo* raiz, const char* filename);
 const char* Get_Node_Type_Name(TipoNodo tipo);

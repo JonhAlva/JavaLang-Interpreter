@@ -127,7 +127,16 @@ parse_expretion:
 
 string_join:
             DATA_TYPE IDENTIFICADOR S_IGUAL JOIN_STRING PARENTESIS_OPEN STRING_COMILLAS COMA vector_values PARENTESIS_CLOSE S_PUNTO_COMA
-            { $$ = Var_Declaration($1, $2, Make_StringJoin($1, $6, $8)); }
+            { 
+                if ($8[0]->tipo == NODO_IDENTIFICADOR) {
+                    // Si es un identificador, retornarlo tal cual para evaluar luego
+                    $$ = String_Join_Array($1, $2, $6, $8);
+                } else { 
+                    $$ = Var_Declaration($1, $2, Make_StringJoin($1, $6, $8)); 
+                }
+                
+            }
+
 ;
 
 array_funcs:

@@ -277,6 +277,11 @@ String[] NewVars = numse.add(nuevoVAL); // Resultado del add: numeros = 1, 2, 3,
 int tams2 = NewVars.length;
 System.out.println(tams2);
 
+        // String tipo JOIN - Concatena los strings dados     ----------------------------------------------------------------------
+
+String[] frutas = {"manzana", "pera", "uvas"};
+String csv = String.join(",", frutas);          //Resultado: "manzana,pera,uvas"
+
 
 
 
@@ -319,9 +324,3 @@ letters[2][1] = "Compi2";
 int hypercubo3D[][][] = new int[2][2][2];
 float superhyperCUbo6D[][][][][][] = new float[3][3][3][3][3][3];
 
-
-
-        // String tipo JOIN - Concatena los strings dados     ----------------------------------------------------------------------
-
-String[] frutas = {"manzana", "pera", "uvas"};
-String csv = String.join(",", frutas);          //Resultado: "manzana,pera,uvas"

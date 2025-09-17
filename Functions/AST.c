@@ -641,6 +641,17 @@ Nodo* Array_Length(char* Identificador) {
     return n;
 }
 
+Nodo* String_Join_Array(char* VarType, char* Identificador, char* Separador, Nodo** ArrayVal) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_STRING_JOIN_ARRAY;
+    n->nombre = strdup(Identificador);
+    n->separador = strdup(Separador); // Separador
+    n->valor.varType = strdup(VarType);
+    n->lista_nodos = ArrayVal; // Valores del array
+    n->izq = n->der = NULL;
+    return n;
+}
+
 const char* Get_Node_Type_Name(TipoNodo tipo) {
     switch (tipo) {
         case NODO_INT: return "NODO_INT";

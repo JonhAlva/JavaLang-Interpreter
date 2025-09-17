@@ -1747,6 +1747,71 @@ Valor Evaluar(Nodo* n) {
             }
         }
 
+        case NODO_STRING_JOIN_ARRAY: {
+            char* Nombre_Variable_Asignar = n->nombre;
+            char* Separador = n->separador;
+            char separador_str[256];
+            char* Tipo_de_Variable = n->valor.varType;
+            char* Identificador = n->lista_nodos[0]->nombre;
+
+            // verificar que el vaector exista
+            Vector* vec = table_get(symtab,Identificador);
+            if (vec == NULL) {
+                printf(" » ❌ Error Vector: El vector '%s' no existe para agregar valores \n",  Identificador);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "El vector no existe para agregar valores";
+                lista_Errores[num_errores].Tipo_Error = "Vector";
+                num_errores++;
+                break;
+            } 
+
+            // Quitar las comillas del separador si existen
+            size_t len = strlen(Separador);
+            if (len >= 2 && Separador[0] == '"' && Separador[len - 1] == '"') {
+                strncpy(separador_str, Separador + 1, len - 2);
+                separador_str[len - 2] = '\0';
+            } else {
+                strncpy(separador_str, Separador, sizeof(separador_str) - 1);
+                separador_str[sizeof(separador_str) - 1] = '\0';
+            }
+
+            char resultado[1000] = ""; // Cadena para almacenar el resultado final
+            if (vec->type == T_STRING) {
+                size_t vectorSize = vec->size;
+                int currentSize = (int)vectorSize;
+
+                for (int i = 0; i < currentSize; i++) {
+                    char* value = vector_get_string(vec, i);
+                    strcat(resultado, value);
+                    if (i < currentSize - 1) {
+                        strcat(resultado, separador_str);
+                    }
+                }
+
+                // Asignar el resultado a la variable dependiendo del tipo
+                if (strcmp(Tipo_de_Variable, "String") == 0) {
+                    AsignarVariable_String(Nombre_Variable_Asignar, resultado);
+                    printf(" » 🆗 Variable '%s' asignada con resultado de Join del array '%s'\n", 
+                        Nombre_Variable_Asignar, Identificador);
+                } else {
+                    printf(" » ❌ Error: Tipo de retorno no soportado en Join\n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de retorno no soportado en Join";
+                    lista_Errores[num_errores].Tipo_Error = "Join Array";
+                    num_errores++;
+                }
+
+            } else {
+                printf(" » ❌ Error Vector Join: Tipo de dato no coincide en los valores del vector \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible en los valores del vector";
+                lista_Errores[num_errores].Tipo_Error = "Vector";
+                num_errores++;
+            }
+
+            break;
+        }
+
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
             Valor resultado = Evaluar(n->izq);
