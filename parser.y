@@ -107,7 +107,7 @@ declaration:
             | dynamic_array         { $$ = Nodo_Vacio("DYNAMIC_ARRAY NO IMPLEMENTADO AUN"); /* DYNAMIC_ARRAY */ }
 
             | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA      
-            { $$ = Nodo_Vacio("Variable acceso NO IMPLEMENTADO AUN"); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
+            { $$ = Vector_Asignation($1, $2, $4); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
 
             | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA 
             { $$ = Parse_Expression($2, $1, $4, $6); /* PARSEO DE TIPOS */ }
@@ -141,8 +141,8 @@ vector:
 
 // ! LAS DOS MANERAS DE QUE PUEDEN INGRESAR UN VECTOR
 vector_type:
-            NEW_WORD DATA_TYPE CORCHETE_OPEN expr CORCHETE_CLOSE S_PUNTO_COMA 
-            { $$ = Vector_Auto($1, $2, $4); }
+            NEW_WORD DATA_TYPE CORCHETE_OPEN INT_NUMBER CORCHETE_CLOSE S_PUNTO_COMA 
+            { $$ = Vector_Auto($2, $4); }
 
             | LLAVE_OPEN vector_values LLAVE_CLOSE S_PUNTO_COMA         
             { $$ = Valores_Vector($2); /* VECTOR CON VALORES */ }
@@ -256,8 +256,11 @@ native_func:
 
 // ! PRODUCCION QUE MANEJA LA FORMA DE ESCRITURA DE LOS VECTORES Y LAS MATRICES
 variable_access:
-                IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE                 {$$ = Nodo_Vacio("VECTOR NO IMPLEMENTADO AUN");/* ACCESO A VALOR EN UN VECTOR*/}
-                | IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE     {$$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN");/* ACCESO A VALOR EN UNA MATRIZ */}
+                IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE
+                {$$ = Vector_Reference($1, $3);/* ACCESO A VALOR EN UN VECTOR*/}
+
+                | IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE     
+                {$$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN");/* ACCESO A VALOR EN UNA MATRIZ */}
 ;
 
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------

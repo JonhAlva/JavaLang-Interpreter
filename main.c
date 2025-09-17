@@ -6,6 +6,7 @@
 #include "Functions/Evaluate.h"
 #include "Functions/PrintBuffer.h"
 #include "Functions/Tabla_Simbolos.h"
+#include "Functions/Vector.h"
 #include <gtk/gtk.h>
 #include <locale.h>
 
@@ -18,6 +19,8 @@ extern FILE *yyin;
 extern void yyrestart(FILE *input_file);
 
 extern Nodo* raiz;
+
+SymbolTable *symtab;
 
 typedef struct {
     GtkWidget *input;
@@ -306,6 +309,7 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
 
 int main(int argc, char **argv) {
 
+    symtab = table_create(2);
     setlocale(LC_NUMERIC, "C"); // Solo punto como decimal
     gtk_init(&argc, &argv);
     

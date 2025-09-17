@@ -231,10 +231,15 @@ System.out.println(cadena);
                 AHI VEMOS SI LAS IMPLEMENTAMOS XD
         */
 
-// Estructuras de Datos -----------------------------------------------------------------------------------------------------------
-
         // Declaracion de Vectores - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo -----------------------
 int[] nums = new int[5];
+int valVector = nums[2];
+
+String[] names = new String[5];
+String Testo = names[1];
+
+
+// Estructuras de Datos -----------------------------------------------------------------------------------------------------------
 
         // Declaracion de Vectores - Añadiendo sus elementos        ------------------------------------------------------------------
 String[] letters = {"a", "b", "c", "d", "e"};

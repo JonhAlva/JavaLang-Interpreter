@@ -2,6 +2,7 @@
 #include "Evaluate.h"
 #include "Tabla_Simbolos.h"
 #include "PrintBuffer.h"
+#include "Vector.h"
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -13,6 +14,7 @@
 
     int continue_ = 0;
     int break_ = 0;
+    extern SymbolTable *symtab;
 
 // * Evalua nodos
 Valor Evaluar(Nodo* n) {
@@ -975,20 +977,137 @@ Valor Evaluar(Nodo* n) {
             // * Tipo de variable en "n->valor.varType"
             // * Tipo del vector en "n->izq"
 
+            // ! ENTRA NODO_DECLARATION DE VECTOR = n
+
             // del nodo izq ver que tipo de vector viene
             if (n->izq != NULL) {
                 if (n->izq->tipo == NODO_VECTOR_AUTO) {
-                    printf(" * * *  Vector Registrado: '%s' de tipo Auto \n", n->nombre);
+                    if(strcmp(n->valor.varType, n->izq->valor.varType) != 0) {
+                        printf(" » ❌ Error Vector: El Tipo del vector no coincide con el tipo declarado \n");
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "El nombre del vector no coincide con el tipo Declarado";
+                        lista_Errores[num_errores].Tipo_Error = "Vector";
+                        num_errores++;
+                        break;
+                    }
+
+                    int vectorSize = n->izq->size_vector;
+
+                    if (strcmp(n->valor.varType, "int") == 0) {
+                        // ? CREAR VECTOR DE ENTEROS
+                        Vector *vInt = vector_create(T_INT, vectorSize);
+
+                        //agregar los valores al vector
+                        for (int i = 0; i < vectorSize; i++) {
+                            vector_add_int(vInt, 0); // valor por defecto   
+                        }
+
+                        table_add(symtab, n->nombre, vInt);
+                        printf(" » 🆗 Vector de Int creado: '%s' con tamaño %d \n", n->nombre, vectorSize);
+                        break;
+
+                    } else if (strcmp(n->valor.varType, "float") == 0) {
+                        // ? CREAR VECTOR DE FLOATS
+
+                    } else if (strcmp(n->valor.varType, "String") == 0) {
+                        Vector *vString = vector_create(T_STRING, vectorSize);
+
+                        //agregar los valores al vector
+                        for (int i = 0; i < vectorSize; i++) {
+                            vector_add_string(vString, "Vacio"); // valor por defecto
+                        }
+
+                        table_add(symtab, n->nombre, vString);
+                        printf(" » 🆗 Vector de String creado: '%s' con tamaño %d \n", n->nombre, vectorSize);
+                        break;
+
+                    } else if (strcmp(n->valor.varType, "boolean") == 0) {
+                        // ? CREAR VECTOR DE BOOLEANOS
+
+                    } else if (strcmp(n->valor.varType, "char") == 0) {
+                        // ? CREAR VECTOR DE CHARS
+
+                    } else if (strcmp(n->valor.varType, "long") == 0) {
+                        // ? CREAR VECTOR DE LONGS
+
+                    } else if (strcmp(n->valor.varType, "short") == 0) {
+                        // ? CREAR VECTOR DE SHORTS
+
+                    } else if (strcmp(n->valor.varType, "double") == 0) {
+                        // ? CREAR VECTOR DE DOUBLES
+
+                    } else if (strcmp(n->valor.varType, "byte") == 0) {
+                        // ? CREAR VECTOR DE BYTES
+
+                    } else {
+                        printf(" » ❌ Error Vector: Tipo de dato no soportado para vector \n");
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "Tipo de Dato no soportado para vector";
+                        lista_Errores[num_errores].Tipo_Error = "Vector";
+                        num_errores++;
+                        break;
+                    }
+                    printf(" 🗃️ Vector Registrado: '%s' de tipo Auto con tamaño %d \n", n->nombre, n->izq->size_vector);
+                    break;
                 } else if (n->izq->tipo == NODO_VALORES_VECTOR_LIST) {
                     printf(" * * *  Vector Registrado: '%s' de tipo Explicito con valores definidos \n", n->nombre);
+                    break;
                 } else {
                     printf(" »   Tipo de dato desconocido en declaracion de vector * \n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Dato desconocido en declaracion de vector";
                     lista_Errores[num_errores].Tipo_Error = "Vector";
-                num_errores++;
+                    num_errores++;
+                    break;
                 }
             }
+            break;
+        }
+
+        case NODO_VECTOR_ASIGNATION: {
+            // ! AQUI ENTRA EL NODO_VECTOR_ASIGNATION = n
+            char* Asignation_Name = n->nombre; // nombre del vector
+            char* Asignation_Type = n->valor.varType; // tipo del vector
+            char* Name_of_vector = n->izq->nombre; // nombre del vector al que se le asignara el valor
+            Valor Index_of_vector = Evaluar(n->izq->izq); // indice del vector al que se le asignara el valor
+            
+            if (Index_of_vector.tipo != VAL_INT) {
+                printf(" » ❌ Error Vector Asignation: El indice del vector debe ser un entero \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "El indice del vector debe ser un entero";
+                lista_Errores[num_errores].Tipo_Error = "Asignacion Vector";
+                num_errores++;
+                break;
+            }
+
+            // verificar si el vector existe
+            Vector* vec = table_get(symtab, Name_of_vector);
+            if (vec == NULL) {
+                printf(" » ❌ Error Vector Asignation: El vector '%s' no existe \n", Name_of_vector);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "El vector no existe";
+                lista_Errores[num_errores].Tipo_Error = "Asignacion Vector";
+                num_errores++;
+            }
+
+            //Obtener el valor del indice del vector para asignarlo
+            if (vec->type == T_INT) { // * ASIGNACION DE VARIABLE INT
+                int value_to_assign = vector_get_int(vec, Index_of_vector.i_val);
+
+                //declarar variable
+                AsignarVariable_Int(Asignation_Name, value_to_assign);
+                printf(" » 🆗 Vector Asignado: '%s' del vector '%s' con valor %d \n", Asignation_Name, Name_of_vector, value_to_assign);
+                break;
+            } else if (vec->type == T_STRING) {
+                char* value_to_assign = vector_get_string(vec, Index_of_vector.i_val);
+
+                //declarar variable
+                AsignarVariable_String(Asignation_Name, value_to_assign);
+                printf(" » 🆗 Vector Asignado: '%s' del vector '%s' con valor %s \n", Asignation_Name, Name_of_vector, value_to_assign);
+                break;
+            }
+
+
             break;
         }
 
@@ -996,7 +1115,6 @@ Valor Evaluar(Nodo* n) {
             // * Nombre de variable en "n->nombre"
             // * Tipo de variable en "n->valor.varType"
             // * Tipo del vector en "n->izq"
-
             // del nodo izq ver que tipo de vector viene
             if (n->izq != NULL) {
                 if (n->izq->tipo == NODO_MATRIZ_AUTO) {
@@ -1004,7 +1122,7 @@ Valor Evaluar(Nodo* n) {
 
                     //AÑADIR UN ELSE IF PARA EL OTRO TIPO DE MATRIZ CON LOS VALORES DEFINIDOS
                 } else {
-                    printf(" »   Tipo de dato desconocido en declaracion de matriz * \n");
+                    printf(" » » » »  Tipo de dato desconocido en declaracion de matriz * \n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Dato desconocido en declaracion de matriz";
                     lista_Errores[num_errores].Tipo_Error = "Matriz";

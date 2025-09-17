@@ -69,11 +69,14 @@ typedef enum {
     NODO_RETURN_SIMPLE,          // 54
     NODO_RETURN_FUNC,            // 55
     NODO_ASIGNATION_FUNC,     // 56
+    NODO_VECTOR_REFERENCE,     // 57
+    NODO_VECTOR_ASIGNATION      // 58
 } TipoNodo;
 
 typedef struct Nodo {
     TipoNodo tipo;
     char* nombre;       //Identificadores
+    int size_vector; // Tamaño del vector
     union {
         int i_val;
         float f_val;
@@ -125,7 +128,7 @@ Nodo* Var_Declaration(char* Tipo, char* Nombre, Nodo* Izq);
 Nodo* Asignacion_Variable(char* Nombre, char* Op, Nodo* Izq);
 Nodo* Print(Nodo* expr);
 Nodo* ListaInstrucciones(Nodo* instr, Nodo* resto);
-Nodo* Vector_Auto(char* Instruccion, char* TipoDato, Nodo* LlenadoAuto);
+Nodo* Vector_Auto(char* TipoDato, int LlenadoAuto);
 Nodo* Declaration_Vector(char* DataType, char* Identificador, Nodo* TipoVector);
 Nodo* Valores_Vector(Nodo** lista);
 Nodo* Matriz_Auto(char* Tipo, Nodo* Val1, Nodo* Val2);
@@ -143,6 +146,8 @@ Nodo* Function_Call_No_Param(char* Identificador);
 Nodo* Function_Call_Parameters(char* Identificador, Nodo** parametrosPorAsignar);
 Nodo* Asignation_function(char* DataType, char* Identificador, Nodo* NodoFuncCallParameters);
 Nodo* Return_Value(Nodo* expr);
+Nodo* Vector_Reference(char* Identificador, Nodo* Index);
+Nodo* Vector_Asignation(char* TipoDato, char* Identificador, Nodo* expr);
 
 Nodo** Lista_Vector(Nodo* valor);
 Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);

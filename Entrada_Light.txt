@@ -3,7 +3,7 @@ System.out.println(suma);
 
 /*
 gcc parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c main.c -o analizador2
-gcc `pkg-config --cflags gtk+-3.0` parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c main.c -o app `pkg-config --libs gtk+-3.0`
+gcc `pkg-config --cflags gtk+-3.0` parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c ./Functions/Vector.c main.c -o app `pkg-config --libs gtk+-3.0`
 */
 
 // Si la función tiene parámetros, evaluar los argumentos y asignarlos

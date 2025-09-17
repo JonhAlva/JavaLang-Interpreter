@@ -10,9 +10,6 @@ int num_vars = 0;
 Error_Variable lista_Errores[MAX_ERRORS];
 int num_errores = 0;
 
-Vectores lista_Vectores[MAX_VECTORES];
-int num_vectores = 0;
-
 Funcion tabla_Funciones[MAX_FUNCTIONS];
 int num_funciones = 0;
 

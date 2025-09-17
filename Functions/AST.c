@@ -400,12 +400,12 @@ Nodo* Sentencia_If_ElseIf_Else(Nodo* condicion, Nodo* instrucciones_if,
     return n;
 }
 
-Nodo* Vector_Auto(char* Instruccion, char* TipoDato, Nodo* LlenadoAuto) {
+Nodo* Vector_Auto(char* TipoDato, int LlenadoAuto) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_VECTOR_AUTO;
-    n->nombre = strdup(Instruccion);
-    n->izq = LlenadoAuto;
-    n->der = NULL;
+    n->nombre = NULL;
+    n->der = n->izq = NULL;
+    n->size_vector = LlenadoAuto;
     n->valor.varType = strdup(TipoDato);
     return n;
 }
@@ -582,6 +582,25 @@ Nodo* Asignation_function(char* DataType, char* Identificador, Nodo* NodoFuncCal
     n->nombre = strdup(Identificador);
     n->valor.varType = strdup(DataType);
     n->izq = NodoFuncCallParameters;
+    n->der = NULL;
+    return n;
+}
+
+Nodo* Vector_Reference(char* Identificador, Nodo* Index) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_VECTOR_REFERENCE;
+    n->nombre = strdup(Identificador);
+    n->izq = Index; // Índice del vector
+    n->der = NULL;
+    return n;
+}
+
+Nodo* Vector_Asignation(char* TipoDato, char* Identificador, Nodo* expr) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_VECTOR_ASIGNATION;
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(TipoDato);
+    n->izq = expr; // Valor a asignar
     n->der = NULL;
     return n;
 }

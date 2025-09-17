@@ -40,13 +40,6 @@ typedef struct {
 } Variable ;    // ? Nombre del struct de VARIABLE
 
 typedef struct {
-    char nombreVector[64];    // ? Nombre del vector
-    TipoDato tipo_Vector;     // ? Tipo de la variable
-    Nodo** valores;           // ? Lista de nodos que contiene los valores del vector
-    int size;                 // ? Tamaño actual del vector
-} Vectores ;    // ? Nombre del struct de VECTOR
-
-typedef struct {
     int Num;
     char* Desc_Error;
     char* Tipo_Error;
@@ -62,9 +55,6 @@ typedef struct {
 // ! Tabla de simbolos que almacena las variables
 extern Variable tabla_Variables[MAX_VARS];
 extern int num_vars;
-// ! -----------------------------------------------
-extern Vectores lista_Vectores[MAX_VECTORES];
-extern int num_vectores;
 // ! -----------------------------------------------
 extern Error_Variable lista_Errores[MAX_ERRORS];
 extern int num_errores;
