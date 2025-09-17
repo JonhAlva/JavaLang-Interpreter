@@ -242,8 +242,22 @@ String Testo = names[1];
 // Estructuras de Datos -----------------------------------------------------------------------------------------------------------
 
         // Declaracion de Vectores - Añadiendo sus elementos        ------------------------------------------------------------------
-String[] letters = {"a", "b", "c", "d", "e"};
+String[] letters = {"aa", "bb", "cc", "dd", "ee"};
+String valueY = letters[2];
+
 int[] numbers = {23, 56, 12, 124, 21};
+int valueX = numbers[2];
+
+
+
+
+
+
+
+
+
+
+
 
         // Declaracion de Matrices - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo  -----------------------
 float[][] mat = new float[3][3];
@@ -255,12 +269,6 @@ int[][] board = {
     {1, 0, 1},
     {0, 1, 0}
 };
-
-
-
-
-
-
 
         // Sentencia FOR - EACH              --------------------------------------------------------------------------
 for ( int num : numeros ) {
@@ -277,10 +285,8 @@ for ( int num : numeros ) {
 
 
         // Acceso a un valor de una matriz o vector y asignacion de un valor  ------------------------------------------------------
-int nums_val = nums[1];
 String board_Val = board[0][1];
 
-int declaration_on_list = nums[2];
 String declaration_on_list2 = letters[2][1];
 
 nums[1] = 42;

@@ -1049,8 +1049,60 @@ Valor Evaluar(Nodo* n) {
                     }
                     printf(" 🗃️ Vector Registrado: '%s' de tipo Auto con tamaño %d \n", n->nombre, n->izq->size_vector);
                     break;
+
                 } else if (n->izq->tipo == NODO_VALORES_VECTOR_LIST) {
-                    printf(" * * *  Vector Registrado: '%s' de tipo Explicito con valores definidos \n", n->nombre);
+
+                    char* Name_vector_declaration = n->nombre;
+                    char* Type_vector_declaration = n->valor.varType;
+
+                    if (strcmp(Type_vector_declaration, "int") == 0 ) { // * ----------------------------------------------------------------------------------------
+                        // ? CREAR VECTOR DE ENTEROS
+                        Vector *vInt = vector_create(T_INT, 2);
+
+                        // Agregar los valores al vector usando lista_nodos
+                        for(int i = 0; n->izq->lista_nodos[i] != NULL; i++) {
+                            Valor val = Evaluar(n->izq->lista_nodos[i]);
+                            printf(" * * evaluando los valores de la lista nodos\n");
+                            if (val.tipo == VAL_INT) {
+                                vector_add_int(vInt, val.i_val);
+                            } else {
+                                printf(" » ❌ Error Vector: Tipo de dato no coincide en los valores del vector \n");
+                                lista_Errores[num_errores].Num = num_errores;
+                                lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible en los valores del vector";
+                                lista_Errores[num_errores].Tipo_Error = "Vector";
+                                num_errores++;
+                                break;
+                            }
+                        }
+
+                        table_add(symtab, Name_vector_declaration, vInt);
+                        printf(" 🗃️ Vector Registrado: '%s' de tipo Explicito \n", n->nombre);
+                        break;
+
+                    } else if (strcmp(Type_vector_declaration, "String") == 0 ) { // * ------------------------------------------------------------------
+                        // ? CREAR VECTOR DE STRINGS
+                        Vector *vString = vector_create(T_STRING, 2);
+
+                        // Agregar los valores al vector usando lista_nodos
+                        for(int i = 0; n->izq->lista_nodos[i] != NULL; i++) {
+                            Valor val = Evaluar(n->izq->lista_nodos[i]); // ! si retorna string
+                            if (val.tipo == VAL_STRING) {
+                                printf(" * * evaluando los valores de la lista nodos\n");
+                                vector_add_string(vString, val.s_val);
+                            } else {
+                                printf(" » ❌ Error Vector: Tipo de dato no coincide en los valores del vector \n");
+                                lista_Errores[num_errores].Num = num_errores;
+                                lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible en los valores del vector";
+                                lista_Errores[num_errores].Tipo_Error = "Vector";
+                                num_errores++;
+                                break;
+                            }
+                        }
+                        table_add(symtab, Name_vector_declaration, vString);
+                        printf(" 🗃️ Vector Registrado: '%s' de tipo Explicito \n", n->nombre);
+                        break;
+                    }
+
                     break;
                 } else {
                     printf(" »   Tipo de dato desconocido en declaracion de vector * \n");
