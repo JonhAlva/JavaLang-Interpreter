@@ -1,0 +1,192 @@
+// ====== Funciones del enunciado ======
+
+// 1.3.1 / 1.3.2
+void saludar() {
+    System.out.println("¡Hola, mundo!");
+}
+int obtenerNumero() { 
+    return 42; 
+}
+void saludarPersona(String nombre) {
+    System.out.println("¡Hola, " + nombre + "!");
+}
+int sumar(int a, int b) { 
+    return a + b; 
+}
+
+// 1.3.3 Recursivas - sin implementar
+
+// ====== Programa principal ======
+void main(String[] args) {
+    double puntos = 0.0;
+
+    System.out.println("=== Archivo de prueba de funciones (rubrica nueva) ===");
+
+    // 1.3.1 Funciones no recursivas sin parámetros (obligatorio) – 5 pts
+    System.out.println("==== 1.3.1 Funciones no recursivas sin parámetros (obligatorio) ====");
+    double p131 = 0.0;
+    System.out.println("###Validacion Manual");
+    saludar();
+
+    int no = obtenerNumero();
+    System.out.println("obtenerNumero() -> " + no);
+    if (no == 42) {
+        p131 = 5.0; // cumple: función sin parámetros y con retorno correcto
+        System.out.println("OK 1.3.1");
+    } else {
+        System.out.println("X 1.3.1");
+    }
+
+    // 1.3.2 Funciones no recursivas con parámetros (obligatorio) – 5 pts
+    System.out.println("\n==== 1.3.2 Funciones no recursivas con parámetros (obligatorio) ====");
+    double p132 = 0.0;
+    System.out.println("###Validacion Manual");
+    saludarPersona("Juan");
+    int s = sumar(10, 20);
+    System.out.println("sumar(10,20) -> " + s);
+    if (s == 30) {
+        p132 = 5.0;
+        System.out.println("OK 1.3.2");
+    } else {
+        System.out.println("X 1.3.2");
+    }
+
+    // 1.3.3 Funciones recursivas – 10 pts
+    System.out.println("\n==== 1.3.3 Funciones recursivas ====");
+    double p133 = 0.0;
+    System.out.println("###Validacion Manual (Hanoi)");
+
+    // 1.3.4 Parseo de enteros – 2 pts
+    System.out.println("\n==== 1.3.4 Parseo de enteros ====");
+    double p134 = 0.0;
+    int entero = Integer.parseInt("123");
+    System.out.println("'123' -> " + entero);
+    // Casos que deben fallar (comentados para compilar):
+    // Integer.parseInt("123.45");
+    // Integer.parseInt("abc");
+    if (entero == 123) {
+        p134 = 2.0;
+        System.out.println("OK 1.3.4");
+    } else {
+        System.out.println("X 1.3.4");
+    }
+
+    // 1.3.5 Parseo de flotantes – 1.5 pts
+    System.out.println("\n==== 1.3.5 Parseo de flotantes ====");
+    double p135 = 0.0;
+    double f1 = Double.parseDouble("123.45");
+    double f2 = Double.parseDouble("123");
+    System.out.println("'123.45' -> " + f1);
+    System.out.println("'123' -> " + f2);
+    // Double.parseDouble("abc"); // debería fallar
+    if (f1 == 123.45 && f2 == 123.0) {
+        p135 = 1.5;
+        System.out.println("OK 1.3.5");
+    } else {
+        System.out.println("X 1.3.5");
+    }
+
+    // 1.3.6 String.valueOf() – 0.5 pts
+    System.out.println("\n==== 1.3.6 String.valueOf() ====");
+    double p136 = 0.0;
+    String sv = String.valueOf(123);
+    System.out.println("String.valueOf(123) -> '" + sv + "'");
+    if ("123".equals(sv)) {
+        p136 = 0.5;
+        System.out.println("OK 1.3.6");
+    } else {
+        System.out.println("X 1.3.6");
+    }
+
+    // 1.3.7 Strings.join() – 0.5 pts  (en Java es String.join)
+    System.out.println("\n==== 1.3.7 Strings.join() ====");
+    double p137 = 0.0;
+    // Original
+    //String joined = String.join("-", Arrays.asList("a", "b", "c"));
+    String [] parts = {"aa", "bb", "cc"};
+    String joined = String.join("-", parts);
+    System.out.println("join([a,b,c], '-') -> '" + joined + "'");
+    if ("aa-bb-cc".equals(joined)) {
+        p137 = 0.5;
+        System.out.println("OK 1.3.7");
+    } else {
+        System.out.println("X 1.3.7");
+    }
+
+    // 1.3.8 Arrays.indexOf() – 0.5 pts
+    // Nota: para primitivas no existe indexOf; usamos List<Integer>.indexOf.
+    System.out.println("\n==== 1.3.8 Arrays.indexOf() ====");
+    double p138 = 0.0;
+    // Original
+    //List<Integer> lista = Arrays.asList(10, 20, 30, 40);
+    //int idx = lista.indexOf(30);
+    int[] lista = {10, 20, 30, 40};
+    int idx = Arrays.indexOf(lista,30);
+    System.out.println("[10,20,30,40].indexOf(30) -> " + idx);
+    if (idx == 2) {
+        p138 = 0.5;
+        System.out.println("OK 1.3.8");
+    } else {
+        System.out.println("X 1.3.8");
+    }
+
+    // 1.3.9 Array.length – 0.5 pts
+    System.out.println("\n==== 1.3.9 Array.length ====");
+    double p139 = 0.0;
+    // Original
+    //int[] arr = new int[] {1, 2, 3, 4, 5};
+    int[] arr = {1, 2, 3, 4, 5};
+    int leng = arr.length;
+    System.out.println("length([1,2,3,4,5]) -> " + leng);
+    if (leng == 5) {
+        p139 = 0.5;
+        System.out.println("OK 1.3.9");
+    } else {
+        System.out.println("X 1.3.9");
+    }
+
+    // 1.3.10 Array.add() – 0.5 pts (en Java: List.add)
+    System.out.println("\n==== 1.3.10 Array.add() ====");
+    double p1310 = 0.0;
+    // Original
+    //List<Integer> vec = new ArrayList<>(Arrays.asList(1, 2, 3));
+    //vec.add(4);
+    int[] vec = {1, 2, 3};
+    int[] NewVec = vec.add(4);
+    // Original
+    //System.out.println("add([1,2,3], 4) -> " + vec);
+    for (int num : NewVec) { System.out.println(num); }
+    // Original
+    //if (vec.size() == 4 && vec.get(3) == 4) 
+    int vec_lenght = NewVec.length;
+    int vec_val = NewVec[3];
+    if (vec_lenght == 4 && vec_val == 4) {
+        p1310 = 0.5;
+        System.out.println("OK 1.3.10");
+    } else {
+        System.out.println("X 1.3.10");
+    }
+
+    // ====== Resumen ======
+    puntos = p131 + p132 + p133 + p134 + p135 + p136 + p137 + p138 + p139 + p1310;
+
+    System.out.println("\n=== Tabla de Resultados ===");
+    System.out.println("+----------------------------------+--------+--------+");
+    System.out.println("| Característica                   | Puntos | Total  |");
+    System.out.println("+----------------------------------+--------+--------+");
+    System.out.println("| 1.3.1 Func. sin parámetros       | " + p131  + " |   5   |");
+    System.out.println("| 1.3.2 Func. con parámetros       | " + p132  + " |   5   |");
+    System.out.println("| 1.3.3 Funciones recursivas       | " + p133  + " |  10   |");
+    System.out.println("| 1.3.4 Parseo de enteros          | " + p134  + " |   2   |");
+    System.out.println("| 1.3.5 Parseo de flotantes        | " + p135  + " |  1.5  |");
+    System.out.println("| 1.3.6 String.valueOf()           | " + p136  + " |  0.5  |");
+    System.out.println("| 1.3.7 Strings.join()             | " + p137  + " |  0.5  |");
+    System.out.println("| 1.3.8 Arrays.indexOf()           | " + p138  + " |  0.5  |");
+    System.out.println("| 1.3.9 Array.length               | " + p139  + " |  0.5  |");
+    System.out.println("| 1.3.10 Array.add()               | " + p1310 + " |  0.5  |");
+    System.out.println("+----------------------------------+--------+--------+");
+    System.out.println("| TOTAL                            | " + puntos + " |  26   |");
+    System.out.println("+----------------------------------+--------+--------+");
+}
+
+main();

@@ -1,4 +1,4 @@
-//public static void main() {
+void main(String[] args) {
         int puntos = 0;
 
         System.out.println("=== Archivo de prueba básico ===");
@@ -307,4 +307,6 @@ System.out.println("+--------------------------+--------+-------+");
 System.out.println("| TOTAL                    | " + puntos + " | 16    |");
 System.out.println("+--------------------------+--------+-------+");
 
-//}
+}
+
+main();

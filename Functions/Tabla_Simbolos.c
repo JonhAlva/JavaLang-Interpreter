@@ -684,6 +684,15 @@ void EliminarVariable (char* Nombre) {
     }
 }
 
+int BuscarVariable(char* Nombre) {
+    for (int i = 0; i < num_vars; i++) {
+        if (strcmp(tabla_Variables[i].nombreVariable, Nombre) == 0) {
+            return 1; // Variable encontrada
+        }
+    }
+    return 0; // Variable no encontrada
+}
+
 // ! FUNCIONES DE APOYO PARA LA TABLA DE SIMBOLOS --------------------
 void Print_Specific_Variable(char* Nombre) {
     for (int i = 0; i < num_vars; i++) {

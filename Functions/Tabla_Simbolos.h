@@ -95,6 +95,7 @@ Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);
 
 //FUNCION QUE COMPARA DOS VALORES
 int CompararValores(Valor valor1, Valor valor2);
+int BuscarVariable(char* Nombre);
 
 // ! DEBUG FUNCTIONS
 void Print_Specific_Variable(char* Nombre);

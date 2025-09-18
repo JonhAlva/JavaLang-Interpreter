@@ -222,6 +222,15 @@ Nodo* Terminal_Null(char* valor) {
     return n;
 }
 
+Nodo* Terminal_Negativo(Nodo* expr) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_NEGATIVO;
+    n->izq = expr;
+    n->der = NULL;
+    n->nombre = NULL;
+    return n;
+}
+
 Nodo* Mayor_A(Nodo* Izq, Nodo* Der) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_MAYOR_A;
@@ -668,6 +677,15 @@ Nodo* For_Each(char* Tipo, char* TempVar, char* VectorName) {
     n->nombre = strdup(TempVar); // Nombre de la variable temporal
     n->separador = strdup(VectorName); // Nombre del vector a iterar
     n->izq = n->der = NULL; // Instrucciones se asignan después
+    return n;
+}
+
+Nodo* Asignation_function_no_param(char* DataType, char* Identificador, char* FuncToSearch) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_ASIGNACION_FUNCION_NO_PARAM; 
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(DataType);
+    n->separador = strdup(FuncToSearch); // Nombre de la función a asignar
     return n;
 }
 

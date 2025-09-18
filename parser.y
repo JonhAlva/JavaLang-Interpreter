@@ -56,6 +56,7 @@
 %left '+' '-'
 %left '*' '/' '%'
 %right LOGIC_NOT
+%precedence UMINUS
 
 // Nombre de la produccion donde empezara el analisis sintactico
 %start input
@@ -116,6 +117,9 @@ declaration:
 
             | DATA_TYPE IDENTIFICADOR S_IGUAL array_funcs S_PUNTO_COMA  
             { $$ = Array_func_Declaration($1, $2, $4); /* FUNCIONES DE ARRAYS */ }
+
+            | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN PARENTESIS_CLOSE S_PUNTO_COMA  
+            { $$ = Asignation_function_no_param($1, $2, $4); /* ASIGNACION DE VARIABLE A UNA FUNCION SIN PARAMETROS */ }
 ;
 
 parse_expretion:
@@ -486,6 +490,7 @@ expr:
     | expr '%' expr                             { $$ = Modulo($2, $1, $3); }
     | PARENTESIS_OPEN expr PARENTESIS_CLOSE     { $$ = $2; }
     | INT_NUMBER                                { $$ = Terminal_Int($1); }
+    | '-' expr %prec UMINUS                     { $$ = Terminal_Negativo($2); }
     | FLOAT_NUMBER FLOAT_SUFFIX                 { $$ = Terminal_Float($1); }
     | FLOAT_NUMBER                              { $$ = Terminal_Double($1); }
     | STRING_COMILLAS                           { if (strlen($1) == 3) { $$ = Terminal_Char($1[1]); } else { $$ = Terminal_String($1); }} // ! Agregar verificacion si es un char o no

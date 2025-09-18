@@ -1,24 +1,77 @@
-double suma = 5.2 + 5.2;
-System.out.println(suma);
+ // 1.4.3 Array Multidimensional – 4 pts
+    System.out.println("\n==== 1.4.3 Array Multidimensional ====");
+    int puntosMultidimensional = 0;
+
+    System.out.println("Creación de matriz 2D con literales:");
+    // Original
+    //int[][] matriz = new int[][]{
+    int[][] matriz = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    System.out.println("###Validacion Manual");
+    // Original
+    //System.out.println(Arrays.deepToString(matriz));
+    for ( int num: matriz) { System.out.println(num);}
+    puntosMultidimensional += 2;
+
+    System.out.println("\nMatrices irregulares:");
+    int[][] matrizIrregular = {
+        {1, 2, 3, 4},
+        {5, 6},
+        {7, 8, 9}
+    };
+    System.out.println("###Validacion Manual");
+    // Original
+    //System.out.println(Arrays.deepToString(matrizIrregular));
+    for ( int num: matrizIrregular) { System.out.println(num);}
+    //  *   System.out.println("Elemento [0,3]: " + matrizIrregular[0][3]); // Acceso al elemento 4
+    puntosMultidimensional += 2;
+
+    // 1.4.4 Acceso Array Multidimensional – 4 pts
+    System.out.println("\n==== 1.4.4 Acceso Array Multidimensional ====");
+    int puntosAccesoMultidimensional = 0;
+
+    System.out.println("Acceso a elementos de matriz 2D:");
+    int elemento11 = matriz[0][0];
+    int elemento23 = matriz[1][2];
+    int elemento33 = matriz[2][2];
+    System.out.println("Elemento [0][0]: " + elemento11);
+    System.out.println("Elemento [1][2]: " + elemento23);
+    System.out.println("Elemento [2][2]: " + elemento33);
+    if (elemento11 == 1 && elemento23 == 6 && elemento33 == 9) {
+        puntosAccesoMultidimensional += 1;
+        System.out.println("OK Acceso a elementos de matriz 2D: correcto");
+    } else {
+        System.out.println("X Acceso a elementos de matriz 2D: incorrecto");
+    }
+
+    System.out.println("\nModificación de elementos en matriz 2D:");
+    matriz[0][0] = 100;
+    matriz[1][1] = 500;
+    matriz[2][2] = 900;
+    if (matriz[0][0] == 100 && matriz[1][1] == 500 && matriz[2][2] == 900) {
+        puntosAccesoMultidimensional += 1;
+        System.out.println("OK Modificación de elementos en matriz 2D: correcto");
+    } else {
+        System.out.println("X Modificación de elementos en matriz 2D: incorrecto");
+    }
+ 
+    System.out.println("\nAcceso a filas completas:");
+    int[] primeraFila = matriz[0];
+    // Original
+    //System.out.println("Primera fila de matriz: " + Arrays.toString(primeraFila));
+    for (int num : primeraFila) { System.out.println(num); }
+    if (primeraFila[0] == 100 && primeraFila[1] == 2 && primeraFila[2] == 3) {
+        puntosAccesoMultidimensional += 2;
+        System.out.println("OK Acceso a filas completas: correcto");
+    } else {
+        System.out.println("X Acceso a filas completas: incorrecto");
+    }
 
 /*
 gcc parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c main.c -o analizador2
 gcc `pkg-config --cflags gtk+-3.0` parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c ./Functions/Vector.c main.c -o app `pkg-config --libs gtk+-3.0`
 */
 
-// Si la función tiene parámetros, evaluar los argumentos y asignarlos
-            if (funcionNodo->lista_nodos[0]->tipo != NODO_DECLARATION ) {
-
-                if (funcionNodo->lista_nodos[0]->tipo == NODO_VACIO) {
-                    printf(" » ❌ Error Funcion: La funcion '%s' Requiere parametros\n", n->nombre);
-                    lista_Errores[num_errores].Num = num_errores;
-                    lista_Errores[num_errores].Desc_Error = "La funcion no tiene parametros";
-                    lista_Errores[num_errores].Tipo_Error = "Llamado de Funcion";
-                    num_errores++;
-                    break;
-                }
-
-                printf(" » ▶️ Ejecutando Funcion: '%s' con parametros\n", n->nombre);
-                
-                break;
-            }

@@ -114,7 +114,8 @@ extern int yydebug;
     OP_MAYOR_IGUAL = 315,          /* OP_MAYOR_IGUAL  */
     OP_MENOR_IGUAL = 316,          /* OP_MENOR_IGUAL  */
     DATA_TYPE = 317,               /* DATA_TYPE  */
-    NEW_WORD = 318                 /* NEW_WORD  */
+    NEW_WORD = 318,                /* NEW_WORD  */
+    UMINUS = 319                   /* UMINUS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -136,7 +137,7 @@ union YYSTYPE
     char* data_type;
     struct Nodo** lista_nodos;
 
-#line 140 "parser.tab.h"
+#line 141 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

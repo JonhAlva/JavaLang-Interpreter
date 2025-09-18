@@ -77,7 +77,9 @@ typedef enum {
     NODO_ARRAY_ADD,             // 62
     NODO_STRING_JOIN_ARRAY,     // 63
     NODO_FOR_EACH,              // 64
-    NODO_VECTOR_ASIGNATION_REF    // 65
+    NODO_VECTOR_ASIGNATION_REF,    // 65
+    NODO_ASIGNACION_FUNCION_NO_PARAM,      // 66
+    NODO_NEGATIVO                // 67
 } TipoNodo;
 
 typedef struct Nodo {
@@ -114,6 +116,7 @@ Nodo* Terminal_Bool(int valor);
 Nodo* Terminal_Char(char valor);
 Nodo* Variable_Ref(char* nombre);
 Nodo* Terminal_Null(char* valor);
+Nodo* Terminal_Negativo(Nodo* expr);
 
 Nodo* Suma(int Op, Nodo* Izq, Nodo* Der);
 Nodo* Resta(int Op, Nodo* Izq, Nodo* Der);
@@ -157,6 +160,8 @@ Nodo* Return_Value(Nodo* expr);
 Nodo* Vector_Reference(char* Identificador, Nodo* Index);
 Nodo* Vector_Asignation(char* TipoDato, char* Identificador, Nodo* expr);
 Nodo* Vector_Asignation_Ref(Nodo* VectorRef, Nodo* ValueToAssign);
+
+Nodo* Asignation_function_no_param(char* DataType, char* Identificador, char* FuncToSearch);
 
 Nodo** Lista_Vector(Nodo* valor);
 Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);

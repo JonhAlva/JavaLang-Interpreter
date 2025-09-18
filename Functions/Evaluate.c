@@ -96,6 +96,29 @@ Valor Evaluar(Nodo* n) {
             v.null_val = n->valor.null_val;
             return v;
 
+        case NODO_NEGATIVO: { // * ----------------------------------------------------------------------------------------
+            Valor izq = Evaluar(n->izq);
+            if (izq.tipo == VAL_INT) {
+                v.tipo = VAL_INT;
+                v.i_val = -izq.i_val;
+                return v;
+            }
+            if (izq.tipo == VAL_FLOAT) {
+                v.tipo = VAL_FLOAT;
+                v.f_val = -izq.f_val;
+                return v;
+            }
+            if (izq.tipo == VAL_DOUBLE) {
+                v.tipo = VAL_DOUBLE;
+                v.d_val = -izq.d_val;
+                return v;
+            }
+            // Manejar error de tipo
+            v.tipo = VAL_NULL;
+            v.null_val = "Error: tipo no soportado para negacion";
+            return v;
+        }
+
         case NODO_NOT: { // * ----------------------------------------------------------------------------------------
             Valor izq = Evaluar(n->izq);
 
@@ -152,59 +175,59 @@ Valor Evaluar(Nodo* n) {
             // Convertir valor izquierdo a string
             switch(izq.tipo) {
                 case VAL_STRING:
-                str_izq = strdup(izq.s_val);
-                break;
+                    str_izq = strdup(izq.s_val);
+                    break;
                 case VAL_INT:
-                sprintf(temp, "%d", izq.i_val);
-                str_izq = strdup(temp);
-                break;
+                    sprintf(temp, "%d", izq.i_val);
+                    str_izq = strdup(temp);
+                    break;
                 case VAL_FLOAT:
-                sprintf(temp, "%f", izq.f_val);
-                str_izq = strdup(temp);
-                break;
+                    sprintf(temp, "%f", izq.f_val);
+                    str_izq = strdup(temp);
+                    break;
                 case VAL_DOUBLE:
-                sprintf(temp, "%lf", izq.d_val);
-                str_izq = strdup(temp);
-                break;
+                    sprintf(temp, "%lf", izq.d_val);
+                    str_izq = strdup(temp);
+                    break;
                 case VAL_BOOL:
-                str_izq = strdup(izq.b_val ? "true" : "false");
-                break;
+                    str_izq = strdup(izq.b_val ? "true" : "false");
+                    break;
                 case VAL_CHAR:
-                sprintf(temp, "%c", izq.c_val);
-                str_izq = strdup(temp);
-                break;
+                    sprintf(temp, "%c", izq.c_val);
+                    str_izq = strdup(temp);
+                    break;
                 case VAL_NULL:
-                str_izq = strdup("null");
+                    str_izq = strdup("null");
                 break;
             }
 
             // Convertir valor derecho a string
             switch(der.tipo) {
                 case VAL_STRING:
-                str_der = strdup(der.s_val);
-                break;
+                    str_der = strdup(der.s_val);
+                    break;
                 case VAL_INT:
-                sprintf(temp, "%d", der.i_val);
-                str_der = strdup(temp);
-                break;
+                    sprintf(temp, "%d", der.i_val);
+                    str_der = strdup(temp);
+                    break;
                 case VAL_FLOAT:
-                sprintf(temp, "%f", der.f_val);
-                str_der = strdup(temp);
-                break;
+                    sprintf(temp, "%f", der.f_val);
+                    str_der = strdup(temp);
+                    break;
                 case VAL_DOUBLE:
-                sprintf(temp, "%lf", der.d_val);
-                str_der = strdup(temp);
-                break;
+                    sprintf(temp, "%lf", der.d_val);
+                    str_der = strdup(temp);
+                    break;
                 case VAL_BOOL:
-                str_der = strdup(der.b_val ? "true" : "false");
-                break;
+                    str_der = strdup(der.b_val ? "true" : "false");
+                    break;
                 case VAL_CHAR:
-                sprintf(temp, "%c", der.c_val);
-                str_der = strdup(temp);
-                break;
+                    sprintf(temp, "%c", der.c_val);
+                    str_der = strdup(temp);
+                    break;
                 case VAL_NULL:
-                str_der = strdup("null");
-                break;
+                    str_der = strdup("null");
+                    break;
             }
             // Concatenar strings
             v.s_val = malloc(strlen(str_izq) + strlen(str_der) + 1);
@@ -653,6 +676,16 @@ Valor Evaluar(Nodo* n) {
             if (izq.tipo == VAL_NULL) {
                 Asignacion_Default(n->nombre, n->valor.varType);
                 printf(" » 💾 Variable Registrada: '%s' asignada con valor por defecto\n", n->nombre);
+                break;
+            }
+
+            //Verificar si la variable ya fue declarada
+            if (BuscarVariable(n->nombre) == 1) {
+                printf(" »   Error: La variable '%s' ya ha sido declarada.\n", n->nombre);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Variable ya declarada";
+                lista_Errores[num_errores].Tipo_Error = "Declaracion Variable";
+                num_errores++;
                 break;
             }
 
@@ -1436,7 +1469,7 @@ Valor Evaluar(Nodo* n) {
                     Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val - 1});
                 }
             }
-            
+            EliminarVariable (nombreVar);
             break;
         }
 
@@ -1500,46 +1533,55 @@ Valor Evaluar(Nodo* n) {
             break;
         
 
-        case NODO_WHILE_SENTENCE: { // * ----------------------------------------------------------------------------------------
+        case NODO_WHILE_SENTENCE: {
+            // Save parent flags
+            int outer_break = break_;
+            int outer_continue = continue_;
+            
+            // Reset flags for this loop
+            break_ = 0;
+            continue_ = 0;
+
             while(1) {
-            // Evaluar condición al inicio de cada iteración
-            Valor condicion = Evaluar(n->izq);
-            
-            // Validar que la condición sea booleana
-            if(condicion.tipo != VAL_BOOL) {
-                printf(" » ❌ Error While: La condicion debe ser booleana\n");
-                lista_Errores[num_errores].Num = num_errores;
-                lista_Errores[num_errores].Desc_Error = "La condicion debe ser booleana";
-                lista_Errores[num_errores].Tipo_Error = "Sentencia While";
-                num_errores++;
-                break;
-            }
-
-            // Si la condición es falsa, salir del ciclo
-            if(!condicion.b_val) {
-                break;
-            }
-            
-            // Verificar si se encontró un continue
-            if(continue_) {
-                    printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
-                    continue_ = 0; // Reiniciar el estado de continue
-                    continue;
-                }
-
-            // Ejecutar instrucciones y verificar si hay break o continue
-            Valor resultado = Evaluar(n->der);
-            printf(" » 🔄 Ejecutada iteracion While\n");
-            
-
-            // Verificar si se encontró un break
-            if(break_) {
-                    printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
-                    break_ = 0; // Reiniciar el estado de break
+                // Evaluar condición al inicio de cada iteración
+                Valor condicion = Evaluar(n->izq);
+                
+                // Validar que la condición sea booleana
+                if(condicion.tipo != VAL_BOOL) {
+                    printf(" » ❌ Error While: La condicion debe ser booleana\n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "La condicion debe ser booleana";
+                    lista_Errores[num_errores].Tipo_Error = "Sentencia While";
+                    num_errores++;
                     break;
                 }
-            
+
+                // Si la condición es falsa, salir del ciclo 
+                if(!condicion.b_val) {
+                    break;
+                }
+                
+                // Ejecutar instrucciones
+                Valor resultado = Evaluar(n->der);
+                printf(" » 🔄 Ejecutada iteracion While\n");
+                
+                // Verificar break/continue después de la ejecución
+                if(continue_) {
+                    printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                    continue_ = 0;  // Reset continue flag
+                    continue;  // Skip to next iteration
+                }
+                
+                if(break_) {
+                    printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
+                    break_ = 0;  // Reset break flag
+                    break;  // Exit the loop
+                }
             }
+
+            // Restore parent flags
+            break_ = outer_break;
+            continue_ = outer_continue;
             break;
         }
 
@@ -1932,6 +1974,73 @@ Valor Evaluar(Nodo* n) {
                 lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible en los valores del vector";
                 lista_Errores[num_errores].Tipo_Error = "Vector";
                 num_errores++;
+            }
+            break;
+        }
+
+        case NODO_ASIGNACION_FUNCION_NO_PARAM:{ 
+            // * Nombre de la funcion en "n->nombre"
+            // Buscar la funcion en la tabla de simbolos
+            char* Nombre_variable_a_declarar = n->nombre;
+            char* Tipo_de_variable = n->valor.varType;
+
+            Funcion* funcionStruct = Acceso_Funcion(n->separador);
+            if (funcionStruct == NULL) {
+                printf(" » ❌ Error Funcion: Funcion '%s' no encontrada\n", n->separador);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Funcion no encontrada";
+                lista_Errores[num_errores].Tipo_Error = "Llamado de Funcion";
+                num_errores++;
+                break;
+            }
+
+            // verificar el tipo de funcion y el tipo de variable
+            if (strcmp(funcionStruct->tipoRetorno, Tipo_de_variable) != 0) {
+                printf(" » ❌ Error: Tipo de retorno de función no coincide con tipo declarado\n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Tipo de retorno no coincide";
+                lista_Errores[num_errores].Tipo_Error = "Asignacion Funcion";
+                num_errores++;
+                break;
+            }
+
+            // ejecutar la funcion y asignar su valor a una nueva declaracion de variable segun el tipo
+            Valor resultado = Evaluar(funcionStruct->instrucciones);  // ! ------------------
+            // printf("el retorno fue de tipo: %d\n", resultado.tipo);
+            // printf("y su valor nuimerico es: %d\n", resultado.i_val);
+            // Asignar el resultado a la variable dependiendo del tipo
+            switch (resultado.tipo) {
+                case VAL_INT:
+                    AsignarVariable_Int(Nombre_variable_a_declarar, resultado.i_val);
+                    break;
+
+                case VAL_FLOAT:
+                    AsignarVariable_Float(Nombre_variable_a_declarar, resultado.f_val);
+                    break;
+
+                case VAL_DOUBLE:
+                    AsignarVariable_Double(Nombre_variable_a_declarar, resultado.d_val);
+                    break;
+
+                case VAL_STRING:
+                    AsignarVariable_String(Nombre_variable_a_declarar, resultado.s_val);
+                    break;
+
+                case VAL_BOOL:
+                    AsignarVariable_Boolean(Nombre_variable_a_declarar, resultado.b_val);
+                    break;
+
+                case VAL_CHAR:
+                    AsignarVariable_Char(Nombre_variable_a_declarar, resultado.c_val);
+                    break;
+
+                default:
+                    printf(" » ❌ Error: Tipo de dato desconocido para asignar a la variable\n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "Tipo de dato desconocido para asignar a la variable";
+                    lista_Errores[num_errores].Tipo_Error = "Asignacion Funcion";
+                    num_errores++;
+                    break;
             }
             break;
         }
