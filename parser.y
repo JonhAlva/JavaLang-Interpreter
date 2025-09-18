@@ -213,8 +213,12 @@ dynamic_data_declaration:
 // * ASIGNACION DE VARIABLES ------------------------------------------------------------------------------------
 
 asignation:
-            IDENTIFICADOR op_expr expr_bridge S_PUNTO_COMA             { $$ = Asignacion_Variable($1, $2, $3); /* 'OPERADOR ASIGNACION' PARA UNA VARIABLE Y ASIGNACION NORMAL*/ }
-            | variable_access S_IGUAL expr S_PUNTO_COMA                { $$ = Nodo_Vacio("VAR ACCEESS NO IMPLEMENTADO AUN");}
+            IDENTIFICADOR op_expr expr_bridge S_PUNTO_COMA             
+            { $$ = Asignacion_Variable($1, $2, $3); /* 'OPERADOR ASIGNACION' PARA UNA VARIABLE Y ASIGNACION NORMAL*/ }
+
+            | variable_access S_IGUAL expr S_PUNTO_COMA                
+            { $$ = Vector_Asignation_Ref($1, $3); }
+
             | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters_access PARENTESIS_CLOSE S_PUNTO_COMA  
             {
                 Nodo* temp = Function_Call_Parameters($4, $6);

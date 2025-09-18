@@ -599,8 +599,17 @@ Nodo* Vector_Reference(char* Identificador, Nodo* Index) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_VECTOR_REFERENCE;
     n->nombre = strdup(Identificador);
-    n->izq = Index; // Índice del vector
+    n->izq = Index; // Índice del vector por evaluar
     n->der = NULL;
+    return n;
+}
+
+Nodo* Vector_Asignation_Ref(Nodo* VectorRef, Nodo* ValueToAssign) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_VECTOR_ASIGNATION_REF;
+    n->nombre = strdup(VectorRef->nombre); // Nombre del vector
+    n->izq = VectorRef; // Índice del vector
+    n->der = ValueToAssign; // Valor a asignar
     return n;
 }
 

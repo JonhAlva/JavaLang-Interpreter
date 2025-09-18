@@ -1197,7 +1197,7 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
-        case NODO_VECTOR_ASIGNATION: {
+        case NODO_VECTOR_ASIGNATION: { // * ----------------------------------------------------------------------------------------
             // ! AQUI ENTRA EL NODO_VECTOR_ASIGNATION = n
             char* Asignation_Name = n->nombre; // nombre del vector
             char* Asignation_Type = n->valor.varType; // tipo del vector
@@ -1897,6 +1897,42 @@ Valor Evaluar(Nodo* n) {
                 num_errores++;
             }
 
+            break;
+        }
+
+        case NODO_VECTOR_ASIGNATION_REF: {
+            char* Name_of_vector = n->izq->nombre; // nombre del vector a asignar
+            Valor number = Evaluar(n->izq->izq); // valor del índice
+            int index = number.i_val; // indice donde se asignara el valor
+            Valor assignValue = Evaluar(n->der); // valor a asignar al vector
+
+            //verificar si el vector existe
+            Vector* vec = table_get(symtab, Name_of_vector);
+            if (vec == NULL) {
+                printf(" » ❌ Error Vector: El vector '%s' no existe para asignar valores \n", Name_of_vector);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "El vector no existe para asignar valores";
+                lista_Errores[num_errores].Tipo_Error = "Vector";
+                num_errores++;
+                break;
+            }
+
+            //verificar si el tipo de dato coincide
+            if (vec->type == T_INT && assignValue.tipo == VAL_INT) {
+                vector_set_int(vec, index, assignValue.i_val);
+                printf(" » 🆗 Valor %d agregado al vector '%s'\n", assignValue.i_val, Name_of_vector);
+
+            } else if (vec->type == T_STRING && assignValue.tipo == VAL_STRING) {
+                vector_set_string(vec, index, assignValue.s_val);
+                printf(" » 🆗 Valor %s agregado al vector '%s'\n", assignValue.s_val, Name_of_vector);
+
+            } else {
+                printf(" » ❌ Error Vector: Tipo de dato no coincide en los valores del vector \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible en los valores del vector";
+                lista_Errores[num_errores].Tipo_Error = "Vector";
+                num_errores++;
+            }
             break;
         }
 

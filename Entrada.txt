@@ -284,9 +284,22 @@ String csv = String.join(",", frutas);          //Resultado: "manzana,pera,uvas"
 
 
         // Sentencia FOR - EACH              --------------------------------------------------------------------------
-for ( int num : numeros ) {
-    System.out.println("Repeticion for each");
+int[] numerosX = {2, 5, 9, 10, 15};
+for ( int num : numerosX ) {
+    System.out.println("Repeticion for each: " + num);
 } // implementacion junto a los vectores
+
+
+int[] asigVec = {1,2,3,4,5};
+nums[1] = 42;
+
+for ( int num : asigVec ) {
+    System.out.println("Repeticion for each: " + num);
+}
+
+
+
+
 
 
 
@@ -312,11 +325,10 @@ int[][] board = {
 
 
         // Acceso a un valor de una matriz o vector y asignacion de un valor  ------------------------------------------------------
-String board_Val = board[0][1];
+
 
 String declaration_on_list2 = letters[2][1];
 
-nums[1] = 42;
 letters[2][1] = "Compi2";
 
         // Array multidimensional de n valores        ------------------------------------------------------------------------------

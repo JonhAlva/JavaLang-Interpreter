@@ -77,6 +77,7 @@ typedef enum {
     NODO_ARRAY_ADD,             // 62
     NODO_STRING_JOIN_ARRAY,     // 63
     NODO_FOR_EACH,              // 64
+    NODO_VECTOR_ASIGNATION_REF    // 65
 } TipoNodo;
 
 typedef struct Nodo {
@@ -155,6 +156,7 @@ Nodo* Asignation_function(char* DataType, char* Identificador, Nodo* NodoFuncCal
 Nodo* Return_Value(Nodo* expr);
 Nodo* Vector_Reference(char* Identificador, Nodo* Index);
 Nodo* Vector_Asignation(char* TipoDato, char* Identificador, Nodo* expr);
+Nodo* Vector_Asignation_Ref(Nodo* VectorRef, Nodo* ValueToAssign);
 
 Nodo** Lista_Vector(Nodo* valor);
 Nodo** Add_Valor_Vector(Nodo** lista, Nodo* valor);
