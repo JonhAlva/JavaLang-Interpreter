@@ -466,6 +466,43 @@ Nodo* Declaration_Matriz(char* DataType, char* Identificador, Nodo* TipoMatriz) 
     return n;
 }
 
+Nodo* Matriz_With_Values(Nodo** Lista) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MATRIZ_WITH_VALUES;
+    n->lista_nodos = Lista;
+    n->izq = n->der = NULL;
+    n->nombre = NULL;
+    return n;
+}
+
+Nodo* Matriz_Reference(char* Identificador, Nodo* Index1, Nodo* Index2) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MATRIZ_REFERENCE;
+    n->nombre = strdup(Identificador);
+    n->izq = Index1;
+    n->der = Index2;
+    return n;
+}
+
+Nodo* Matriz_Asignation(char* TipoDato, char* Identificador, Nodo* exprValue) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MATRIZ_ASIGNATION;
+    n->nombre = strdup(Identificador);
+    n->valor.varType = strdup(TipoDato);
+    n->izq = exprValue;
+    n->der = NULL;
+    return n;
+}
+
+Nodo* Matriz_Change_Value(Nodo* Matrix_Info, Nodo* NewValue) {
+    Nodo* n = malloc(sizeof(Nodo));
+    n->tipo = NODO_MATRIZ_CHANGE_VALUE;
+    n->izq = Matrix_Info; // Información de la matriz (nombre e índices)
+    n->der = NewValue;    // Nuevo valor a asignar
+    n->nombre = NULL;
+    return n;
+}
+
 Nodo* For_Condition(Nodo* Declaration, Nodo* Condicion, char* Identificador, char* IncOrDec) {
     Nodo* n = malloc(sizeof(Nodo));
     n->tipo = NODO_FOR_CONDITION;
@@ -691,63 +728,74 @@ Nodo* Asignation_function_no_param(char* DataType, char* Identificador, char* Fu
 
 const char* Get_Node_Type_Name(TipoNodo tipo) {
     switch (tipo) {
-        case NODO_INT: return "NODO_INT";
-        case NODO_FLOAT: return "NODO_FLOAT";
-        case NODO_DOUBLE: return "NODO_DOUBLE";
-        case NODO_STRING: return "NODO_STRING";
-        case NODO_IDENTIFICADOR: return "NODO_IDENTIFICADOR";
-        case NODO_DECLARATION: return "NODO_DECLARATION";
-        case NODO_ASIGNACION: return "NODO_ASIGNACION";
-        case NODO_EQUALS_COMPARE: return "NODO_EQUALS_COMPARE";
-        case NODO_BOOL: return "NODO_BOOL";
-        case NODO_CHAR: return "NODO_CHAR";
-        case NODO_PRINT: return "NODO_PRINT";
-        case NODO_SUMA: return "NODO_SUMA";
-        case NODO_RESTA: return "NODO_RESTA";
-        case NODO_MULTIPLICACION: return "NODO_MULTIPLICACION";
-        case NODO_CASTEO_NARROWING: return "NODO_CASTEO_NARROWING";
-        case NODO_DIVISION: return "NODO_DIVISION";
-        case NODO_MODULO: return "NODO_MODULO";
-        case NODO_NOT: return "NODO_NOT";
-        case NODO_NULL: return "NODO_NULL";
-        case NODO_AND: return "NODO_AND";
-        case NODO_OR: return "NODO_OR";
-        case NODO_LISTA: return "NODO_LISTA";
-        case NODO_MENOR_A: return "NODO_MENOR_A";
-        case NODO_MAYOR_A: return "NODO_MAYOR_A";
-        case NODO_MENOR_IGUAL_A: return "NODO_MENOR_IGUAL_A";
-        case NODO_MAYOR_IGUAL_A: return "NODO_MAYOR_IGUAL_A";
-        case NODO_IGUAL_IGUAL: return "NODO_IGUAL_IGUAL";
-        case NODO_DIFERENTE_QUE: return "NODO_DIFERENTE_QUE";
-        case NODO_VALORES_VECTOR: return "NODO_VALORES_VECTOR";
-        case NODO_PARSEO: return "NODO_PARSEO";
-        case NODO_IF_SIMPLE: return "NODO_IF_SIMPLE";
-        case NODO_IF_ELSE: return "NODO_IF_ELSE";
-        case NODO_IF_ELSE_ONE: return "NODO_IF_ELSE_ONE";
-        case NODO_ELSE_IF_LIST: return "NODO_ELSE_IF_LIST";
-        case NODO_IF_ELSE_IF: return "NODO_IF_ELSE_IF";
-        case NODO_VECTOR_AUTO: return "NODO_VECTOR_AUTO";
-        case NODO_VALORES_VECTOR_LIST: return "NODO_VALORES_VECTOR_LIST";
-        case NODO_DECLARATION_VECTOR: return "NODO_DECLARATION_VECTOR";
-        case NODO_MATRIZ_AUTO: return "NODO_MATRIZ_AUTO";
-        case NODO_DECLARATION_MATRIX: return "NODO_DECLARATION_MATRIX";
-        case NODO_FOR_CONDITION: return "NODO_FOR_CONDITION";
-        case NODO_FOR_SENTENCE: return "NODO_FOR_SENTENCE";
-        case NODO_PLUS_MINUS_VAR: return "NODO_PLUS_MINUS_VAR";
-        case NODO_WHILE_SENTENCE: return "NODO_WHILE_SENTENCE";
-        case NODO_SWITCH_DEFAULT: return "NODO_SWITCH_DEFAULT";
-        case NODO_SWITCH_CASE_ONE: return "NODO_SWITCH_CASE_ONE";
-        case NODO_SWITCH_CASE_LIST: return "NODO_SWITCH_CASE_LIST";
-        case NODO_SWITCH_SENTENCE: return "NODO_SWITCH_SENTENCE";
-        case NODO_FUNCTION_DECLARATION: return "NODO_FUNCTION_DECLARATION";
-        case NODO_FUNCTION_CALL_NO_PARAM: return "NODO_FUNCTION_CALL_NO_PARAM";
-        case NODO_FUNCTION_CALL_PARAMETERS: return "NODO_FUNCTION_CALL_PARAMETERS";
-        case NODO_CONTINUE: return "NODO_CONTINUE";
-        case NODO_BREAK: return "NODO_BREAK";
-        case NODO_VACIO: return "NODO_VACIO";
-        case NODO_RETURN_SIMPLE: return "NODO_RETURN_SIMPLE";
-        case NODO_RETURN_FUNC: return "NODO_RETURN_FUNC";
-        case NODO_ASIGNATION_FUNC: return "NODO_ASIGNATION_FUNC";
+        case NODO_INT: return "INT";
+        case NODO_FLOAT: return "FLOAT";
+        case NODO_DOUBLE: return "DOUBLE";
+        case NODO_STRING: return "STRING";
+        case NODO_IDENTIFICADOR: return "IDENTIFICADOR";
+        case NODO_DECLARATION: return "DECLARATION";
+        case NODO_ASIGNACION: return "ASIGNACION";
+        case NODO_EQUALS_COMPARE: return "EQUALS_COMPARE";
+        case NODO_BOOL: return "BOOL";
+        case NODO_CHAR: return "CHAR";
+        case NODO_PRINT: return "PRINT";
+        case NODO_SUMA: return "SUMA";
+        case NODO_RESTA: return "RESTA";
+        case NODO_MULTIPLICACION: return "MULTIPLICACION";
+        case NODO_CASTEO_NARROWING: return "CASTEO_NARROWING";
+        case NODO_DIVISION: return "DIVISION";
+        case NODO_MODULO: return "MODULO";
+        case NODO_NOT: return "NOT";
+        case NODO_NULL: return "NULL";
+        case NODO_AND: return "AND";
+        case NODO_OR: return "OR";
+        case NODO_LISTA: return "LISTA";
+        case NODO_MENOR_A: return "MENOR_A";
+        case NODO_MAYOR_A: return "MAYOR_A";
+        case NODO_MENOR_IGUAL_A: return "MENOR_IGUAL_A";
+        case NODO_MAYOR_IGUAL_A: return "MAYOR_IGUAL_A";
+        case NODO_IGUAL_IGUAL: return "IGUAL_IGUAL";
+        case NODO_DIFERENTE_QUE: return "DIFERENTE_QUE";
+        case NODO_VALORES_VECTOR: return "VALORES_VECTOR";
+        case NODO_PARSEO: return "PARSEO";
+        case NODO_IF_SIMPLE: return "IF_SIMPLE";
+        case NODO_IF_ELSE: return "IF_ELSE";
+        case NODO_IF_ELSE_ONE: return "IF_ELSE_ONE";
+        case NODO_ELSE_IF_LIST: return "ELSE_IF_LIST";
+        case NODO_IF_ELSE_IF: return "IF_ELSE_IF";
+        case NODO_VECTOR_AUTO: return "VECTOR_AUTO";
+        case NODO_VALORES_VECTOR_LIST: return "VALORES_VECTOR_LIST";
+        case NODO_DECLARATION_VECTOR: return "DECLARATION_VECTOR";
+        case NODO_MATRIZ_AUTO: return "MATRIZ_AUTO";
+        case NODO_DECLARATION_MATRIX: return "DECLARATION_MATRIX";
+        case NODO_FOR_CONDITION: return "FOR_CONDITION";
+        case NODO_FOR_SENTENCE: return "FOR_SENTENCE";
+        case NODO_PLUS_MINUS_VAR: return "PLUS_MINUS_VAR";
+        case NODO_WHILE_SENTENCE: return "WHILE_SENTENCE";
+        case NODO_SWITCH_DEFAULT: return "SWITCH_DEFAULT";
+        case NODO_SWITCH_CASE_ONE: return "SWITCH_CASE_ONE";
+        case NODO_SWITCH_CASE_LIST: return "SWITCH_CASE_LIST";
+        case NODO_SWITCH_SENTENCE: return "SWITCH_SENTENCE";
+        case NODO_FUNCTION_DECLARATION: return "FUNCTION_DECLARATION";
+        case NODO_FUNCTION_CALL_NO_PARAM: return "FUNCTION_CALL_NO_PARAM";
+        case NODO_FUNCTION_CALL_PARAMETERS: return "FUNCTION_CALL_PARAMETERS";
+        case NODO_CONTINUE: return "CONTINUE";
+        case NODO_BREAK: return "BREAK";
+        case NODO_VACIO: return "VACIO";
+        case NODO_RETURN_SIMPLE: return "RETURN_SIMPLE";
+        case NODO_RETURN_FUNC: return "RETURN_FUNC";
+        case NODO_ASIGNATION_FUNC: return "ASIGNATION_FUNC";
+        case NODO_VECTOR_REFERENCE: return "VECTOR_REFERENCE";
+        case NODO_VECTOR_ASIGNATION: return "VECTOR_ASIGNATION";
+        case NODO_ARRAYS_INDEXOF: return "ARRAYS_INDEXOF";
+        case NODO_ARRAYS_DECLARATION: return "ARRAYS_DECLARATION";
+        case NODO_ARRAY_LENGTH: return "ARRAY_LENGTH";
+        case NODO_ARRAY_ADD: return "ARRAY_ADD";
+        case NODO_STRING_JOIN_ARRAY: return "STRING_JOIN_ARRAY";
+        case NODO_FOR_EACH: return "FOR_EACH";
+        case NODO_VECTOR_ASIGNATION_REF: return "VECTOR_ASIGNATION_REF";
+        case NODO_ASIGNACION_FUNCION_NO_PARAM: return "ASIGNACION_FUNCION_NO_PARAM";
+        case NODO_NEGATIVO: return "NEGATIVO";
         default: return "TIPO_DESCONOCIDO";
     }
 }
@@ -761,27 +809,23 @@ void Print_AST(Nodo* raiz, const char* filename) {
         printf("Error al crear archivo DOT\n");
         return;
     }
-
-    // Iniciar el archivo DOT
+    
+    // Iniciar el archivo DOT con configuración mejorada
     fprintf(f, "digraph AST {\n");
-    fprintf(f, "  node [shape=box, fontname=\"Arial\"];\n");
+    fprintf(f, "  node [shape=box, style=filled, fillcolor=lightblue, fontname=\"Arial\"];\n");
+    fprintf(f, "  edge [color=darkblue];\n");
+    fprintf(f, "  rankdir=TB;\n");
     
-    // Resetear contador de nodos
     node_count = 0;
-    
-    // Generar el árbol
     Print_AST_DOT(raiz, f);
-    
-    // Cerrar el grafo
     fprintf(f, "}\n");
     fclose(f);
 
-    // Generar PNG
     char command[512];
     snprintf(command, sizeof(command), "dot -Tpng %s.dot -o %s.png", filename, filename);
     system(command);
     
-    printf(" » 📊 AST generado en: %s.png\n", filename);
+    printf(" » 📊 AST generado \n");
 }
 
 static void Print_AST_DOT(Nodo* n, FILE* f) {
@@ -789,77 +833,26 @@ static void Print_AST_DOT(Nodo* n, FILE* f) {
 
     int my_num = node_count++;
 
-    // Imprimir el nodo actual
-    fprintf(f, "  node%d [label=\"", my_num);
-    
-    // Añadir tipo de nodo
-    fprintf(f, "%s", Get_Node_Type_Name(n->tipo));
-    
-    // Añadir información adicional según el tipo de nodo
-    if (n->nombre) fprintf(f, "\\nNombre: %s", n->nombre);
-    
-    // Añadir valores específicos según el tipo de nodo
-    switch (n->tipo) {
-        case NODO_INT:
-            fprintf(f, "\\nValor: %d", n->valor.i_val);
-            break;
-        case NODO_FLOAT:
-            fprintf(f, "\\nValor: %.2f", n->valor.f_val);
-            break;
-        case NODO_DOUBLE:
-            fprintf(f, "\\nValor: %.2lf", n->valor.d_val);
-            break;
-        case NODO_STRING:
-            fprintf(f, "\\nValor: %s", n->valor.s_val);
-            break;
-        case NODO_CHAR:
-            fprintf(f, "\\nValor: %c", n->valor.c_val);
-            break;
-        case NODO_BOOL:
-            fprintf(f, "\\nValor: %s", n->valor.b_val ? "true" : "false");
-            break;
-        case NODO_DECLARATION:
-        case NODO_DECLARATION_VECTOR:
-        case NODO_DECLARATION_MATRIX:
-            if (n->valor.varType) fprintf(f, "\\nTipo: %s", n->valor.varType);
-            break;
-    }
-    
-    fprintf(f, "\"];\n");
+    // Imprimir solo el tipo de nodo
+    fprintf(f, "  node%d [label=\"%s\"];\n", my_num, Get_Node_Type_Name(n->tipo));
 
-    // Imprimir conexiones a los hijos
-    if (n->izq) {
+    // Conexiones básicas
+    if (n->izq && n != NULL) {
         int left_num = node_count;
         Print_AST_DOT(n->izq, f);
         fprintf(f, "  node%d -> node%d [label=\"izq\"];\n", my_num, left_num);
     }
 
-    if (n->der) {
+    if (n->der && n != NULL) {
         int right_num = node_count;
         Print_AST_DOT(n->der, f);
         fprintf(f, "  node%d -> node%d [label=\"der\"];\n", my_num, right_num);
     }
 
-    // Si hay nodo_else (para IF-ELSE)
-    if (n->nodo_else) {
-        int else_num = node_count;
-        Print_AST_DOT(n->nodo_else, f);
-        fprintf(f, "  node%d -> node%d [label=\"else\"];\n", my_num, else_num);
-    }
-
-    // Si hay siguiente (para ELSE-IF)
-    if (n->siguiente) {
-        int next_num = node_count;
-        Print_AST_DOT(n->siguiente, f);
-        fprintf(f, "  node%d -> node%d [label=\"siguiente\"];\n", my_num, next_num);
-    }
-
-    // Si hay lista de nodos
-    if (n->lista_nodos) {
-        for (int i = 0; n->lista_nodos[i] != NULL; i++) {
-            int list_num = node_count;
-            Print_AST_DOT(n->lista_nodos[i], f);
-            fprintf(f, "  node%d -> node%d [label=\"lista[%d]\"];\n", my_num, list_num, i);
-        }
-    }
+    // Para nodos de control (if-else, switch, etc.)
+    //if (n->nodo_else) {
+    //    int else_num = node_count;
+    //    Print_AST_DOT(n->nodo_else, f);
+    //    fprintf(f, "  node%d -> node%d [label=\"else\"];\n", my_num, else_num);
+    //}
 }

@@ -1,0 +1,6 @@
+digraph lista_errores {
+    rankdir=LR;
+    node [shape=record];
+
+    errores [label="{Lista de Errores|{#1|Declaracion Int|Tipo de Dato Incompatible}|{#2|Declaracion String|Tipo de Dato Incompatible}}"];
+}

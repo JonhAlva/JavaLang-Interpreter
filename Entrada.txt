@@ -153,17 +153,22 @@ for( int i = 0; i < 5; i++) {
     System.out.println("Repeticion for normal" + i);
 }
 
+int val2 = 5;
+
 for (int lel = 0; lel < 10; lel++) {
     System.out.println("Ejecutando " + lel);
 
     if (lel == 5) {
-        System.out.println("Entrando al If");
+        System.out.println("Entrando al If ----------");
+	System.out.println(val2);
         continue; // aquí se salta lo de abajo en esta iteración
     }
 
     // Esto NO se ejecuta cuando lel == 5
     System.out.println("Instruccion despues del if" + lel);
+    val2 = val2 + 1;
 }
+System.out.println("Valor final de val: " + val2);
 
 
         // Sentencia WHILE            -------------------------------------------------------------------------
@@ -305,15 +310,22 @@ for ( int num : asigVec ) {
 
 
         // Declaracion de Matrices - Tamaño fijo descrito y llenado automatico con valor por defecto del tipo  -----------------------
-float[][] mat = new float[3][3];
+int[][] mat = new int[3][3];
 
         // SOLO RECONOCE EL PATRON DE MATRIZ PERO NO LA GUARDA
         // Declaracion de Matrices - Añadiendo sus elementos  ----------------------------------------------------------------------
 int[][] board = {
-    {0, 1, 0},
-    {1, 0, 1},
-    {0, 1, 0}
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
 };
+
+board[1][1] = 111;
+
+for ( int num: matriz) { System.out.println(num);}  //añadir for
+
+int valueMatrix = board[2][1]; // Eso deberia ser 8
+System.out.println(valueMatrix);
 
     /*
         Sentencias de transferencia, break, continue
@@ -326,12 +338,23 @@ int[][] board = {
 
         // Acceso a un valor de una matriz o vector y asignacion de un valor  ------------------------------------------------------
 
-
-String declaration_on_list2 = letters[2][1];
-
 letters[2][1] = "Compi2";
 
         // Array multidimensional de n valores        ------------------------------------------------------------------------------
 int hypercubo3D[][][] = new int[2][2][2];
 float superhyperCUbo6D[][][][][][] = new float[3][3][3][3][3][3];
 
+
+System.out.println("\nAcceso a filas completas:");
+    // Original
+    //System.out.println("Primera fila de matriz: " + Arrays.toString(primeraFila));
+    for (int num : primeraFila) { System.out.println(num); }
+    int primeraFila0 = matriz[0][0];
+    int primeraFila1 = matriz[0][1];
+    int primeraFila2 = matriz[0][2];
+    if (primeraFila0 == 100 && primeraFila1 == 2 && primeraFila2 == 3) {
+        puntosAccesoMultidimensional += 2;
+        System.out.println("OK Acceso a filas completas: correcto");
+    } else {
+        System.out.println("X Acceso a filas completas: incorrecto");
+    }

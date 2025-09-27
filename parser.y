@@ -44,7 +44,7 @@
 //Nombre de las producciones y su tipo de retorno {INT, FLOAT, BOOLEAN... etc}
 %type <nodo> input lista_instrucciones instruccion declaration asignation print expr if_sentence while_sentence expr_bridge variable_access
 %type <nodo> native_func vector_type string_join if_else_one vector matriz_type matriz for_condition for_sentence switch_default
-%type <nodo> switch_case_one switch_case function_sentence array_funcs
+%type <nodo> switch_case_one switch_case function_sentence array_funcs matrix_access
 %type <identificador> op_expr parse_expretion for_option
 %type <lista_nodos> vector_values if_else_chain matriz_values switch_case_list function_parameters_access function_parameters_declaration parameters_bridge
 
@@ -108,7 +108,10 @@ declaration:
             | dynamic_array         { $$ = Nodo_Vacio("DYNAMIC_ARRAY NO IMPLEMENTADO AUN"); /* DYNAMIC_ARRAY */ }
 
             | DATA_TYPE IDENTIFICADOR S_IGUAL variable_access S_PUNTO_COMA      
-            { $$ = Vector_Asignation($1, $2, $4); /* ASIGNACION DE VARIABLE A VECTOR O MATRIZ */ }
+            { $$ = Vector_Asignation($1, $2, $4); /* ASIGNACION DE VARIABLE A VECTOR*/ }
+
+            | DATA_TYPE IDENTIFICADOR S_IGUAL matrix_access S_PUNTO_COMA      
+            { $$ = Matriz_Asignation($1, $2, $4); /* ASIGNACION DE VARIABLE A MATRIZ*/ }
 
             | DATA_TYPE IDENTIFICADOR S_IGUAL parse_expretion PARENTESIS_OPEN expr PARENTESIS_CLOSE S_PUNTO_COMA 
             { $$ = Parse_Expression($2, $1, $4, $6); /* PARSEO DE TIPOS */ }
@@ -188,15 +191,38 @@ matriz_type:
             { $$ = Matriz_Auto($2, $4, $7); /* valores definidos en matriz*/ }
 
             | LLAVE_OPEN matriz_values LLAVE_CLOSE S_PUNTO_COMA
-            { $$ = Nodo_Vacio("VALORES DE MATRIZ NO IMPLEMENTADO AUN"); /* valores definidos en matriz*/ }
+            { $$ = Matriz_With_Values($2); /* valores definidos en matriz*/ }
 ;
 
 // ! RECURSIVA PARA MATRIZ, TOMAR VALORES INGRESADOS EN APARTADOS POR COMAS
+// Retorna una lista de nodos tipo Vector_Values
 matriz_values:
             matriz_values COMA LLAVE_OPEN vector_values LLAVE_CLOSE 
+            {
+                // Get current size of list
+                int size = 0;
+                while ($1 && $1[size] != NULL) size++;
+                
+                // Create new list with extra space
+                $$ = malloc(sizeof(Nodo*) * (size + 2));
+                
+                // Copy existing nodes
+                for(int i = 0; i < size; i++) {
+                    $$[i] = $1[i];
+                }
+                
+                // Add new vector_values node
+                $$[size] = Valores_Vector($4);
+                $$[size + 1] = NULL;
+            }
 
             | LLAVE_OPEN vector_values LLAVE_CLOSE 
-            { /* valores definidos en matriz*/}
+            {
+                // Create list with single node
+                $$ = malloc(sizeof(Nodo*) * 2);
+                $$[0] = Valores_Vector($2);
+                $$[1] = NULL;
+            }
 ;
 
 // ! DECLARACION DE ARRAY MULTIDIMENSIONAL
@@ -223,6 +249,9 @@ asignation:
             | variable_access S_IGUAL expr S_PUNTO_COMA                
             { $$ = Vector_Asignation_Ref($1, $3); }
 
+            | matrix_access S_IGUAL expr S_PUNTO_COMA                
+            { $$ = Matriz_Change_Value($1, $3); }
+
             | DATA_TYPE IDENTIFICADOR S_IGUAL IDENTIFICADOR PARENTESIS_OPEN function_parameters_access PARENTESIS_CLOSE S_PUNTO_COMA  
             {
                 Nodo* temp = Function_Call_Parameters($4, $6);
@@ -237,6 +266,7 @@ asignation:
 expr_bridge:
         expr                    { $$ = $1; }
         | variable_access       { $$ = $1; }
+        | matrix_access         { $$ = $1; }
 ;
 
 // ! OPERADORES DE ASIGNACION POSIBLES CASOS
@@ -280,9 +310,11 @@ native_func:
 variable_access:
                 IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE
                 {$$ = Vector_Reference($1, $3);/* ACCESO A VALOR EN UN VECTOR*/}
+;
 
-                | IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE     
-                {$$ = Nodo_Vacio("MATRIZ NO IMPLEMENTADO AUN");/* ACCESO A VALOR EN UNA MATRIZ */}
+matrix_access:
+                IDENTIFICADOR CORCHETE_OPEN expr CORCHETE_CLOSE CORCHETE_OPEN expr CORCHETE_CLOSE     
+                {$$ = Matriz_Reference($1, $3, $6);/* ACCESO A VALOR EN UNA MATRIZ */}
 ;
 
 // * CONDICIONALES IF ELSE ---------------------------------------------------------------------------------------------

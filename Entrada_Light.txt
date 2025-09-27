@@ -1,77 +1,309 @@
- // 1.4.3 Array Multidimensional – 4 pts
-    System.out.println("\n==== 1.4.3 Array Multidimensional ====");
-    int puntosMultidimensional = 0;
-
-    System.out.println("Creación de matriz 2D con literales:");
-    // Original
-    //int[][] matriz = new int[][]{
-    int[][] matriz = {
-        {1, 2, 3},
-        {4, 5, 6},
-        {7, 8, 9}
+System.out.println("=== SISTEMA DE ANALISIS DE DATOS ACADEMICOS ===");
+    
+    // Declaración dos dimensiones
+    System.out.println("\n--- DECLARACION DE MATRICES 2D ---");
+    
+    // Declaración con inicialización directa
+    int[][] calificacionesPorMateria = {
+        {85, 92, 78, 90},  // Estudiante 1: Mat, Fis, Qui, Bio
+        {90, 88, 85, 93},  // Estudiante 2
+        {78, 82, 90, 87},  // Estudiante 3
+        {95, 91, 88, 94}   // Estudiante 4
     };
-    System.out.println("###Validacion Manual");
-    // Original
-    //System.out.println(Arrays.deepToString(matriz));
-    for ( int num: matriz) { System.out.println(num);}
-    puntosMultidimensional += 2;
-
-    System.out.println("\nMatrices irregulares:");
-    int[][] matrizIrregular = {
-        {1, 2, 3, 4},
-        {5, 6},
-        {7, 8, 9}
+    
+    // Declaración con dimensiones específicas
+    int[][] promediosPorSemestre = new int[4][6]; // 4 estudiantes, 6 semestres
+    
+    // Matriz para operaciones matemáticas
+    int[][] matrizA = {
+        {3, 2, 1},
+        {1, 4, 2},
+        {2, 1, 3}
     };
-    System.out.println("###Validacion Manual");
-    // Original
-    //System.out.println(Arrays.deepToString(matrizIrregular));
-    for ( int num: matrizIrregular) { System.out.println(num);}
-    //  *   System.out.println("Elemento [0,3]: " + matrizIrregular[0][3]); // Acceso al elemento 4
-    puntosMultidimensional += 2;
+    
+    int[][] matrizB = {
+        {2, 1, 3},
+        {3, 2, 1},
+        {1, 3, 2}
+    };
+    
+    System.out.println("Matrices 2D declaradas exitosamente:");
+    int calificacionesPorMateriaLength = calificacionesPorMateria.length;
+    System.out.println("- calificacionesPorMateria: " + calificacionesPorMateriaLength + 
+                      " x " + calificacionesPorMateriaLength);
 
-    // 1.4.4 Acceso Array Multidimensional – 4 pts
-    System.out.println("\n==== 1.4.4 Acceso Array Multidimensional ====");
-    int puntosAccesoMultidimensional = 0;
+    int promediosPorSemestreLeg = promediosPorSemestre.length;
+    System.out.println("- promediosPorSemestre: " + promediosPorSemestreLeg + 
+                      " x " + (promediosPorSemestreLeg+2));
+    int matrizAleng = matrizA.length;
+    System.out.println("- matrizA: " + matrizAleng + 
+                      " x " + matrizAleng);
 
-    System.out.println("Acceso a elementos de matriz 2D:");
-    int elemento11 = matriz[0][0];
-    int elemento23 = matriz[1][2];
-    int elemento33 = matriz[2][2];
-    System.out.println("Elemento [0][0]: " + elemento11);
-    System.out.println("Elemento [1][2]: " + elemento23);
-    System.out.println("Elemento [2][2]: " + elemento33);
-    if (elemento11 == 1 && elemento23 == 6 && elemento33 == 9) {
-        puntosAccesoMultidimensional += 1;
-        System.out.println("OK Acceso a elementos de matriz 2D: correcto");
-    } else {
-        System.out.println("X Acceso a elementos de matriz 2D: incorrecto");
+    int matrizBleng = matrizB.length;
+    System.out.println("- matrizB: " + matrizBleng + 
+                      " x " + matrizBleng);
+    
+    // Declaración tres dimensiones
+    //System.out.println("\n--- DECLARACION DE MATRICES 3D ---");
+    
+    // Cubo de calificaciones: [estudiante][materia][evaluacion]
+    //int[][][] evaluacionesDetalladas = new int[4][4][3]; // 4 estudiantes, 4 materias, 3 evaluaciones
+    
+    // Cubo con datos inicializados
+    //double[][][] temperaturasPorDia = {
+    //    { // Semana 1
+    //        {20.5, 22.1, 25.3}, // Lunes: mañana, tarde, noche
+    //        {19.8, 21.5, 24.7}, // Martes
+    //        {21.2, 23.0, 26.1}  // Miércoles
+    //    },
+    //    { // Semana 2
+    //        {18.5, 20.1, 23.3}, // Lunes
+    //        {17.8, 19.5, 22.7}, // Martes
+    //        {19.2, 21.0, 24.1}  // Miércoles
+    //    }
+    //};
+    
+    //System.out.println("Matrices 3D declaradas exitosamente:");
+    //System.out.println("- evaluacionesDetalladas: " + String.valueOf(evaluacionesDetalladas.length) + 
+    //                  " x " + String.valueOf(evaluacionesDetalladas[0].length) + 
+    //                  " x " + String.valueOf(evaluacionesDetalladas[0][0].length));
+    //System.out.println("- temperaturasPorDia: " + String.valueOf(temperaturasPorDia.length) + 
+    //                  " x " + String.valueOf(temperaturasPorDia[0].length) + 
+    //                  " x " + String.valueOf(temperaturasPorDia[0][0].length));
+    
+    // Modificación de un elemento dos dimensiones
+    System.out.println("\n--- MODIFICACION DE ELEMENTOS 2D ---");
+    
+    int calificacion21 = calificacionesPorMateria[0][1];
+    System.out.println("Calificación original del Estudiante 1 en Física: " + calificacion21);
+    
+    // Modificar calificaciones específicas
+    calificacionesPorMateria[0][1] = 95; // Estudiante 1, Física
+    calificacionesPorMateria[2][0] = 82; // Estudiante 3, Matemáticas
+    calificacionesPorMateria[3][2] = 90; // Estudiante 4, Química
+    
+    int newrtas = calificacionesPorMateria[0][1];
+    System.out.println("Nueva calificación del Estudiante 1 en Física: " + newrtas);
+    System.out.println("Modificaciones adicionales realizadas en otras posiciones");
+    
+    // Llenar matriz de promedios
+    promediosPorSemestre[0][0] = 85.5;
+    promediosPorSemestre[0][1] = 87.2;
+    promediosPorSemestre[0][2] = 89.1;
+    promediosPorSemestre[1][0] = 90.3;
+    promediosPorSemestre[1][1] = 88.7;
+    promediosPorSemestre[1][2] = 91.2;
+    
+    System.out.println("Matriz de promedios por semestre inicializada");
+    
+    // Modificación de un elemento tres dimensiones
+    //System.out.println("\n--- MODIFICACION DE ELEMENTOS 3D ---");
+    
+    // Llenar cubo de evaluaciones detalladas
+    // Estudiante 1, Matemáticas, todas las evaluaciones
+    //evaluacionesDetalladas[0][0][0] = 88; // Examen 1
+    //evaluacionesDetalladas[0][0][1] = 92; // Examen 2
+    //evaluacionesDetalladas[0][0][2] = 85; // Proyecto final
+    
+    // Estudiante 2, Física, todas las evaluaciones  
+    //evaluacionesDetalladas[1][1][0] = 85;
+    //evaluacionesDetalladas[1][1][1] = 90;
+    //evaluacionesDetalladas[1][1][2] = 88;
+    
+    // Estudiante 3, Química, todas las evaluaciones
+    //evaluacionesDetalladas[2][2][0] = 92;
+    //evaluacionesDetalladas[2][2][1] = 87;
+    //evaluacionesDetalladas[2][2][2] = 94;
+    
+    // Estudiante 4, Biología, todas las evaluaciones
+    //evaluacionesDetalladas[3][3][0] = 96;
+    //evaluacionesDetalladas[3][3][1] = 93;
+    //evaluacionesDetalladas[3][3][2] = 97;
+    
+    //System.out.println("Cubo de evaluaciones detalladas inicializado:");
+    //System.out.println("- Estudiante 1, Matemáticas: [" + String.valueOf(evaluacionesDetalladas[0][0][0]) + 
+    //                  ", " + String.valueOf(evaluacionesDetalladas[0][0][1]) + 
+    //                  ", " + String.valueOf(evaluacionesDetalladas[0][0][2]) + "]");
+    //System.out.println("- Estudiante 4, Biología: [" + String.valueOf(evaluacionesDetalladas[3][3][0]) + 
+    //                  ", " + String.valueOf(evaluacionesDetalladas[3][3][1]) + 
+    //                  ", " + String.valueOf(evaluacionesDetalladas[3][3][2]) + "]");
+    
+    // Modificar temperaturas específicas
+    //temperaturasPorDia[0][1][2] = 25.5; // Semana 1, Martes, Noche
+    //temperaturasPorDia[1][0][1] = 21.8; // Semana 2, Lunes, Tarde
+    
+    //System.out.println("Temperaturas específicas modificadas");
+    
+    // Acceso a elementos dos dimensiones
+    System.out.println("\n--- ACCESO A ELEMENTOS 2D ---");
+    
+    //int calificleng = 4;
+    String[] materias = {"Matemáticas", "Física", "Química", "Biología"};
+    String[] estudiantes = {"Ana", "Luis", "María", "Carlos"};
+    int estudiantss = estudiantes.length;
+    int matersss = materias.length;
+    int sumaqwe = 0;
+    //int promedio = 0;
+    
+    System.out.println("Análisis de calificaciones por estudiante:");
+    for (int i = 0; i < calificacionesPorMateriaLength; i++) {
+        String estduas = estudiantes[i];
+        
+        System.out.println("Estudiante " + estduas + ":");
+        
+        for (int j = 0; j < calificacionesPorMateriaLength; j++) {
+            int nota = calificacionesPorMateria[i][j];
+            String mateas = materias[j];
+            System.out.println("  " + mateas + ": " + nota);
+            sumaqwe += nota;
+        }
+        int promedio = sumaqwe / 4;
+        System.out.println("  Promedio: " + promedio);
+        System.out.println("  ");
     }
+    
+    // Acceso a elementos específicos
+    System.out.println("Acceso directo a elementos específicos:");
+    int claisf = calificacionesPorMateria[0][0];
+    System.out.println("Primera calificación (Ana, Matemáticas): " + claisf);
 
-    System.out.println("\nModificación de elementos en matriz 2D:");
-    matriz[0][0] = 100;
-    matriz[1][1] = 500;
-    matriz[2][2] = 900;
-    if (matriz[0][0] == 100 && matriz[1][1] == 500 && matriz[2][2] == 900) {
-        puntosAccesoMultidimensional += 1;
-        System.out.println("OK Modificación de elementos en matriz 2D: correcto");
-    } else {
-        System.out.println("X Modificación de elementos en matriz 2D: incorrecto");
+    int lpoas = calificacionesPorMateria[estudiantss-1][matersss-1];
+    System.out.println("Última calificación (Carlos, Biología): " + lpoas);
+
+    int centralsaa = calificacionesPorMateria[estudiantss/2][matersss/2];
+    System.out.println("Elemento central: " + centralsaa);
+    
+    // Acceso a elementos tres dimensiones ------------------------------------------------------
+    //System.out.println("\n--- ACCESO A ELEMENTOS 3D ---");
+    
+    //System.out.println("Análisis de evaluaciones detalladas:");
+    //String[] tiposEvaluacion = {"Examen 1", "Examen 2", "Proyecto"};
+    
+    //for (int estudiante = 0; estudiante < 2; estudiante++) { // Solo primeros 2 estudiantes para brevedad
+    //    System.out.println("Estudiante " + estudiantes[estudiante] + ":");
+    //    for (int materia = 0; materia < 2; materia++) { // Solo primeras 2 materias
+    //        System.out.println("  " + materias[materia] + ":");
+    //        for (int evaluacion = 0; evaluacion < evaluacionesDetalladas[estudiante][materia].length; evaluacion++) {
+    //            int nota = evaluacionesDetalladas[estudiante][materia][evaluacion];
+    //            if (nota > 0) { // Solo mostrar si tiene valor asignado
+    //                System.out.println("    " + tiposEvaluacion[evaluacion] + ": " + String.valueOf(nota));
+    //            }
+    //        }
+    //    }
+    //    System.out.println();
+    //}
+    
+    // Análisis de temperaturas
+    //System.out.println("Temperaturas registradas:");
+    //String[] semanas = {"Semana 1", "Semana 2"};
+    //String[] dias = {"Lunes", "Martes", "Miércoles"};
+    //String[] periodos = {"Mañana", "Tarde", "Noche"};
+    
+    //for (int semana = 0; semana < temperaturasPorDia.length; semana++) {
+    //    System.out.println(semanas[semana] + ":");
+    //    for (int dia = 0; dia < temperaturasPorDia[semana].length; dia++) {
+    //        System.out.println("  " + dias[dia] + ":");
+    //        for (int periodo = 0; periodo < temperaturasPorDia[semana][dia].length; periodo++) {
+    //            double temp = temperaturasPorDia[semana][dia][periodo];
+    //            System.out.println("    " + periodos[periodo] + ": " + String.valueOf(temp) + "°C");
+    //        }
+    //    }
+    //}
+    
+    // Operaciones con matrices
+    System.out.println("\n--- OPERACIONES CON MATRICES ---");
+    
+    int matrizAleng = matrizA.length;
+    System.out.println("Matriz A:");
+
+    for (int i = 0; i < matrizAleng; i++) {
+      if (i == 0) {
+        int tupa = matrizA[0][0];
+        int tupa2 = matrizA[0][1];
+        int tupa3 = matrizA[0][2];
+        System.out.println("[ " + tupa + ", " + tupa2 + ", " + tupa3 + " ]");
+      }
+      if (i == 1) {
+        int tupa3 = matrizA[1][0];
+        int tupa4 = matrizA[1][1];
+        int tupa5 = matrizA[2][2];
+        System.out.println("[ " + tupa3 + ", " + tupa4 + ", " + tupa5 + " ]");
+      }
+      if (i == 2) {
+        int tupa6 = matrizA[2][0];
+        int tupa7 = matrizA[2][1];
+        int tupa8 = matrizA[2][2];
+        System.out.println("[ " + tupa6 + ", " + tupa7 + ", " + tupa8 + " ]");
+      }
     }
- 
-    System.out.println("\nAcceso a filas completas:");
-    int[] primeraFila = matriz[0];
-    // Original
-    //System.out.println("Primera fila de matriz: " + Arrays.toString(primeraFila));
-    for (int num : primeraFila) { System.out.println(num); }
-    if (primeraFila[0] == 100 && primeraFila[1] == 2 && primeraFila[2] == 3) {
-        puntosAccesoMultidimensional += 2;
-        System.out.println("OK Acceso a filas completas: correcto");
-    } else {
-        System.out.println("X Acceso a filas completas: incorrecto");
+    
+
+    int matrizBleng = matrizB.length;
+    System.out.println("\nMatriz B:");
+    for (int i = 0; i < matrizBleng; i++) {
+      if (i == 0) {
+        int tupa9 = matrizB[0][0];
+        int tupa10 = matrizB[0][1];
+        int tupa11 = matrizB[0][2];
+        System.out.println("[ " + tupa9 + ", " + tupa10 + ", " + tupa11 + " ]");
+      }
+      if (i == 1) {
+        int tupa12 = matrizB[1][0];
+        int tupa13 = matrizB[1][1];
+        int tupa14 = matrizB[2][2];
+        System.out.println("[ " + tupa12 + ", " + tupa13 + ", " + tupa14 + " ]");
+      }
+      if (i == 2) {
+        int tupa15 = matrizB[2][0];
+        int tupa16 = matrizB[2][1];
+        int tupa17 = matrizB[2][2];
+        System.out.println("[ " + tupa15 + ", " + tupa16 + ", " + tupa17 + " ]");
+      }
     }
+    
+    // Suma de matrices
+    int suyams = 0;
+    String comass = String.valueOf(",");
+    System.out.println("\nSuma A + B:");
+    for (int i = 0; i < matrizAleng; i++) {
+      System.out.println("[" + " ~");
+      for (int z = 0; z < matrizBleng; z++) {
+        int valueA = matrizA[i][z];
+        int valueB = matrizB[i][z];
+        suyams = valueA + valueB;
+        if (i == 0) {
+          System.out.println(suyams + comass + " ~");
+        }
+        if (i == 1) {
+          System.out.println(suyams + comass + " ~");
+        }
+        if (i == 2) {
+          System.out.println(suyams + comass + " ~");
+        }
+      }
+      System.out.println("]");
+    }
+    
+    // Multiplicación de matrices
+    System.out.println("\nProducto A * B:");
 
-/*
-gcc parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c main.c -o analizador2
-gcc `pkg-config --cflags gtk+-3.0` parser.tab.c lex.yy.c ./Functions/AST.c ./Functions/Evaluate.c ./Functions/Tabla_Simbolos.c ./Functions/PrintBuffer.c ./Functions/Vector.c main.c -o app `pkg-config --libs gtk+-3.0`
-*/
+        //int filasA = A.length;  // matrizAleng
+        //int columnasA = A[0].length; // matrizBleng
+        //int filasB = B.length;
+        //int columnasB = B[0].length;
 
+        // Multiplicación
+        int[][] resultadoxx = new int[3][3];
+        int mulrea = 0;
+        int op12 = 0;
+        int op14 = 0;
+        for (int i = 0; i < matrizAleng; i++) {
+            for (int j = 0; j < matrizBleng; j++) {
+                for (int k = 0; k < matrizAleng; k++) {
+                    op12 = matrizA[i][k];
+                    op14 = matrizB[k][j];
+                    mulrea = op12 * op14;
+                    resultadoxx[i][j] = mulrea;
+                }
+            }
+        }

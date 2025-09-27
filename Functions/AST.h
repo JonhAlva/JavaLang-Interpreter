@@ -79,7 +79,11 @@ typedef enum {
     NODO_FOR_EACH,              // 64
     NODO_VECTOR_ASIGNATION_REF,    // 65
     NODO_ASIGNACION_FUNCION_NO_PARAM,      // 66
-    NODO_NEGATIVO                // 67
+    NODO_NEGATIVO,                // 67
+    NODO_MATRIZ_WITH_VALUES,      // 68
+    NODO_MATRIZ_REFERENCE,       // 69
+    NODO_MATRIZ_ASIGNATION,      // 70
+    NODO_MATRIZ_CHANGE_VALUE      // 71
 } TipoNodo;
 
 typedef struct Nodo {
@@ -143,6 +147,10 @@ Nodo* Vector_Auto(char* TipoDato, int LlenadoAuto);
 Nodo* Declaration_Vector(char* DataType, char* Identificador, Nodo* TipoVector);
 Nodo* Valores_Vector(Nodo** lista);
 Nodo* Matriz_Auto(char* Tipo, Nodo* Val1, Nodo* Val2);
+Nodo* Matriz_With_Values(Nodo** Lista);
+Nodo* Matriz_Reference(char* Identificador, Nodo* Index1, Nodo* Index2);
+Nodo* Matriz_Asignation(char* TipoDato, char* Identificador, Nodo* exprValue);
+Nodo* Matriz_Change_Value(Nodo* Matrix_Info, Nodo* NewValue);
 Nodo* Declaration_Matriz(char* DataType, char* Identificador, Nodo* TipoMatriz);
 Nodo* Nodo_Vacio(const char* mensaje);
 

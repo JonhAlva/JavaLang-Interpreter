@@ -7,8 +7,10 @@
 #include "Functions/PrintBuffer.h"
 #include "Functions/Tabla_Simbolos.h"
 #include "Functions/Vector.h"
+#include "Functions/Matrix.h"
 #include <gtk/gtk.h>
 #include <locale.h>
+#include <time.h>
 
 // Prototipo de parser
 int yyparse(void);
@@ -20,7 +22,9 @@ extern void yyrestart(FILE *input_file);
 
 extern Nodo* raiz;
 
-SymbolTable *symtab;
+SymbolTable *symtab; // Tabla de simbolos de vectores
+
+MatrixTable *mtab; // Tabla de simbolos de matrices
 
 typedef struct {
     GtkWidget *input;
@@ -31,10 +35,15 @@ typedef struct {
 int Analizar_Codigo(char* codigo, GtkWidget *textview2) {
     //Escribir Exit para salir del bucle
 
+        if (raiz != NULL) {
+            // Liberar el árbol anterior si existe
+            //Free_AST(raiz);
+            raiz = NULL;
+        }
+
         Clear_All_Variables();
         Clear_All_Errors();
         Clear_All_Funciones();
-        //table_free(symtab);
         if (strncmp(codigo, "exit", 4) == 0) {
             return 1;
         }
@@ -52,6 +61,7 @@ int Analizar_Codigo(char* codigo, GtkWidget *textview2) {
         if (yyparse() == 0) {
             printf(" ✅ Análisis sintáctico terminado con éxito \n");
             if (raiz != NULL ) {
+                //Print_AST(raiz, "ast_report");
                 Evaluar(raiz);
 
                 int count;
@@ -140,34 +150,96 @@ static void Open_File_clicked(GtkWidget *widget, gpointer user_data) {
 }
 
 // * Funcion para generar el reporte de simbolos
-void Generate_Symbols_Report(){
+void Generate_Symbols_Report(GtkWidget *widget, gpointer user_data){
     if (num_vars == 0) {
-        printf("✅ No se encontraron variables declaradas\n");
+        printf("❌ No se encontraron simbolos, ejecute el código primero\n");
+        GtkWidget *error_dialog = gtk_message_dialog_new(
+            GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_CLOSE,
+            "❌ No se encontraron simbolos, compile el código primero"
+        );
+        gtk_dialog_run(GTK_DIALOG(error_dialog));
+        gtk_widget_destroy(error_dialog);
         return;
     } else {
         Print_All_Variables();
+        GtkWidget *info_dialog = gtk_message_dialog_new(
+            GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_INFO,
+            GTK_BUTTONS_OK,
+            "✅ Reporte Symbols generado"
+        );
+        gtk_dialog_run(GTK_DIALOG(info_dialog));
+        gtk_widget_destroy(info_dialog);
     }
 }
 
 // * Funcion para generar el reporte de errores
-void Generate_Errors_Report(){
+void Generate_Errors_Report(GtkWidget *widget, gpointer user_data){
 
     if (num_errores == 0) {
         printf("✅ No se encontraron errores\n");
+        GtkWidget *info_dialog = gtk_message_dialog_new(
+            GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_INFO,
+            GTK_BUTTONS_OK,
+            "✅ No se encontraron errores"
+        );
+        gtk_dialog_run(GTK_DIALOG(info_dialog));
+        gtk_widget_destroy(info_dialog);
         return;
     } else {
         Print_All_Errors();
+        GtkWidget *info_dialog = gtk_message_dialog_new(
+            GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_INFO,
+            GTK_BUTTONS_OK,
+            "✅ Reporte Errs generado"
+        );
+        gtk_dialog_run(GTK_DIALOG(info_dialog));
+        gtk_widget_destroy(info_dialog);
     }
     
 }
 
-void Generate_AST_Report(){
+void Generate_AST_Report(GtkWidget *widget, gpointer user_data){
     if (raiz == NULL) {
-        printf("❌ No se ha generado el AST, no hay código para analizar\n");
+        GtkWidget *error_dialog = gtk_message_dialog_new(
+            GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_CLOSE,
+            "❌ No se ha generado el AST, compile el código primero"
+        );
+        gtk_dialog_run(GTK_DIALOG(error_dialog));
+        gtk_widget_destroy(error_dialog);
         return;
-    } else {
-        Print_AST(raiz, "ast_report");
     }
+
+    char timestamp[32];
+    time_t now = time(NULL);
+    strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", localtime(&now));
+    
+    char filename[64];
+    snprintf(filename, sizeof(filename), "ast_report_%s", timestamp);
+    
+    Print_AST(raiz, filename);
+
+    GtkWidget *info_dialog = gtk_message_dialog_new(
+        GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+        GTK_DIALOG_DESTROY_WITH_PARENT,
+        GTK_MESSAGE_INFO,
+        GTK_BUTTONS_OK,
+        "✅ Reporte AST generado:\n%s.png",
+        filename
+    );
+    gtk_dialog_run(GTK_DIALOG(info_dialog));
+    gtk_widget_destroy(info_dialog);
 }
 
 // funcion de accion del boton {COMPILAR} de la ventana de gtk3
@@ -311,6 +383,7 @@ static void on_activate(GtkApplication *app, gpointer user_data) {
 int main(int argc, char **argv) {
 
     symtab = table_create(2);
+    mtab = matrix_table_create(2);
     setlocale(LC_NUMERIC, "C"); // Solo punto como decimal
     gtk_init(&argc, &argv);
     

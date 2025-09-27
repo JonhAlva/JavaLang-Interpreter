@@ -1,0 +1,467 @@
+void main(String[] args) {
+    System.out.println("=== SISTEMA DE GESTION DE INVENTARIO ===");
+    
+    // Declaración
+    System.out.println("\n--- DECLARACION DE ARREGLOS ---");
+    
+    // Declaración con inicialización directa
+    String[] productos = {"Laptop", "Mouse", "Teclado", "Monitor", "Impresora"};
+    int[] precios = {15000, 250, 800, 3500, 2200};
+    int[] cantidades = {10, 50, 30, 15, 8};
+    int[] disponibles = {1, 1, 1, 1, 0};
+    
+    // Declaración con tamaño específico
+    int[] codigosProducto = new int[5];
+    String[] proveedores = new String[5];
+    
+    int productosleng = productos.length;
+    int preciosleng = precios.length;
+    int cantidadesleng = cantidades.length;
+    int dispoiblesleng = disponibles.length;
+    int codigoProductoleng = codigosProducto.length;
+    int proveedoresleng = proveedores.length;
+    System.out.println("Arreglos declarados exitosamente:");
+    System.out.println("- productos: arreglo de String con " + productosleng + " elementos");
+    System.out.println("- precios: arreglo de int con " + preciosleng + " elementos");
+    System.out.println("- cantidades: arreglo de int con " + cantidadesleng + " elementos");
+    System.out.println("- disponibles: arreglo de boolean con " + dispoiblesleng + " elementos");
+    System.out.println("- codigosProducto: arreglo vacío de " + codigoProductoleng + " elementos");
+    System.out.println("- proveedores: arreglo vacío de " + proveedoresleng + " elementos");
+    
+    // Modificación de un elemento
+    System.out.println("\n--- MODIFICACION DE ELEMENTOS ---");
+    
+    // Modificar elementos en diferentes posiciones
+    System.out.println("Estado inicial del Mouse:");
+    String precios1 = precios[1];
+    int cantidades1 = cantidades[1];
+    int disponibles1 = disponibles[1];
+    System.out.println("- Precio: " + precios1);
+    System.out.println("- Cantidad: " + cantidades1);
+    System.out.println("- Disponible: " + disponibles1);
+    
+    // Realizar modificaciones
+    precios[1] = 280; // Aumentar precio del mouse
+    cantidades[1] = 45; // Reducir cantidad
+    disponibles[4] = 1; // Activar disponibilidad de impresora
+    
+    System.out.println("\nDespués de modificaciones:");
+    int precioss1 = precios[1];
+    int cantidadess1 = cantidades[1];
+    int disponibless1 = disponibles[4];
+    System.out.println("- Nuevo precio Mouse: " + precioss1);
+    System.out.println("- Nueva cantidad Mouse: " + cantidadess1);
+    System.out.println("- Impresora ahora disponible: " + disponibless1);
+    
+    // Llenar arreglos vacíos
+    codigosProducto[0] = 1001;
+    codigosProducto[1] = 1002;
+    codigosProducto[2] = 1003;
+    codigosProducto[3] = 1004;
+    codigosProducto[4] = 1005;
+    
+    proveedores[0] = "TechCorp";
+    proveedores[1] = "DeviceMax";
+    proveedores[2] = "KeyboardPro";
+    proveedores[3] = "ScreenTech";
+    proveedores[4] = "PrintSolutions";
+    
+    System.out.println("Códigos y proveedores asignados correctamente");
+    
+    // Acceso a elementos
+    System.out.println("\n--- ACCESO A ELEMENTOS ---");
+    
+    System.out.println("Inventario completo:");
+    String estado = "lol";
+    for (int i = 0; i < productosleng; i++) {
+        int dispol = disponibles[i];
+        int codeP = codigosProducto[i];
+        String productosi = productos[i];
+        String proovedoresi = proveedores[i];
+        int preciosi = precios[i];
+        int cantidadesi = cantidades[i];
+        if (dispol == 1) {
+            estado = "DISPONIBLE";
+        } else {
+            estado = "NO DISPONIBLE";
+        }
+        System.out.println("Posición " + i + ":");
+        System.out.println("  Código: " + codeP);
+        System.out.println("  Producto: " + productosi);
+        System.out.println("  Proveedor: " + proovedoresi);
+        System.out.println("  Precio: Q" + preciosi);
+        System.out.println("  Cantidad: " + cantidadesi);
+        System.out.println("  Estado: " + estado);
+        System.out.println("   ");
+    }
+    
+    // Acceso a elementos específicos
+    System.out.println("Acceso directo a elementos específicos:");
+    int productos00 = productos[0];
+    System.out.println("Primer producto: " + productos00);
+    int polaq = productosleng - 1;
+    int polaq2 = productos[polaq];
+    System.out.println("Último producto: " + polaq2);
+    float polaq3 = productosleng / 2;
+    int polaq4 = polaq3;
+    int polaq5 = productos[polaq4];
+    System.out.println("Producto del medio: " + polaq5);
+    
+    // Función para encontrar el índice de un elemento
+    System.out.println("\n--- BUSQUEDA CON Arrays.indexOf ---");
+    
+    // Buscar productos por nombre
+    String productoBuscado = "Monitor";
+    int posicionProducto = Arrays.indexOf(productos, productoBuscado);
+    
+    if (posicionProducto != -1) {
+        System.out.println("Producto '" + productoBuscado + "' encontrado en posición: " + posicionProducto);
+        System.out.println("Detalles:");
+        int codeProdu = codigosProducto[posicionProducto];
+        int preciosss = precios[posicionProducto];
+        int cantidadesss = cantidades[posicionProducto];
+        String poveedorsss = proveedores[posicionProducto];
+        System.out.println("  Código: " + codeProdu);
+        System.out.println("  Precio: Q" + preciosss);
+        System.out.println("  Cantidad: " + cantidadesss);
+        System.out.println("  Proveedor: " + poveedorsss);
+    } else {
+        System.out.println("Producto '" + productoBuscado + "' no encontrado");
+    }
+    
+    // Buscar por código
+    int codigoBuscado = 1003;
+    int posicionCodigo = Arrays.indexOf(codigosProducto, codigoBuscado);
+    System.out.println("Código " + codigoBuscado + " encontrado en posición: " + posicionCodigo);
+    if (posicionCodigo != -1) {
+        String prodt = productos[posicionCodigo];
+        System.out.println("Corresponde al producto: " + prodt);
+    }
+    
+    // Buscar elemento que no existe
+    String productoInexistente = "Tablet";
+    int posicionInexistente = Arrays.indexOf(productos, productoInexistente);
+    System.out.println("Búsqueda de '" + productoInexistente + "': " + posicionInexistente + " (no encontrado)");
+    
+    // Tamaño del arreglo (length)
+    System.out.println("\n--- TAMAÑO DE ARREGLOS (length) ---");
+    
+    int totalProductos = productos.length;
+    int totalPrecios = precios.length;
+    int totalCantidades = cantidades.length;
+    int totalDisponibles = disponibles.length;
+    
+    System.out.println("Información de tamaños:");
+    System.out.println("- Productos: " + totalProductos + " elementos");
+    System.out.println("- Precios: " + totalPrecios + " elementos");
+    System.out.println("- Cantidades: " + totalCantidades + " elementos");
+    System.out.println("- Disponibilidad: " + totalDisponibles + " elementos");
+    
+    // Verificar consistencia usando length
+    boolean datosConsistentes = (totalProductos == totalPrecios) && 
+                               (totalPrecios == totalCantidades) && 
+                               (totalCantidades == totalDisponibles);
+    System.out.println("Todos los arreglos tienen el mismo tamaño: " + datosConsistentes);
+    
+    // Usar length en bucles
+    System.out.println("\nUso de length en iteraciones:");
+    int productosDisponibles = 0;
+    for (int i = 0; i < totalDisponibles; i++) {
+        int disponiblezz = disponibles[i];
+        if (disponiblezz == 1) {
+            productosDisponibles++;
+        }
+    }
+    System.out.println("Productos disponibles: " + productosDisponibles + " de " + totalProductos);
+    
+    // Función add
+    System.out.println("\n--- AGREGAR ELEMENTOS CON add() ---");
+    
+    // Agregar nuevos productos
+    System.out.println("Estado inicial: " + totalProductos + " productos");
+    
+    String[] productosAmpliados = productos.add("Webcam");
+    String[] productosAmpliados2 = productosAmpliados.add("Audífonos");
+    String[] productosAmpliados3 = productosAmpliados2.add("Micrófono");
+    int productosAmpliadosLeng = productosAmpliados3.length;
+    
+    int[] preciosAmpliados = precios.add(450);
+    int[] preciosAmpliados2 = preciosAmpliados.add(320);
+    int[] preciosAmpliados3 = preciosAmpliados2.add(180);
+    int preciosAmpliadosLeng = preciosAmpliados3.length;
+    
+    int[] cantidadesAmpliadas = cantidades.add(25);
+    int[] cantidadesAmpliadas2 = cantidadesAmpliadas.add(40);
+    int[] cantidadesAmpliadas3 = cantidadesAmpliadas2.add(15);
+    int cantidadesAmpliadasLeng = cantidadesAmpliadas3.length;
+    
+    System.out.println("Después de agregar: " + productosAmpliadosLeng + " productos");
+    System.out.println("Nuevos productos agregados:");
+    
+    // Mostrar solo los productos nuevos
+    for (int i = productosleng; i < productosAmpliadosLeng; i++) {
+        String pructuy = productosAmpliados3[i];
+        int preciosAmp = preciosAmpliados3[i];
+        int canridadesampx = cantidadesAmpliadas3[i];
+        System.out.println("- " + pructuy + 
+                          " | Precio: Q" + preciosAmp + 
+                          " | Cantidad: " + canridadesampx);
+    }
+    
+    // Algoritmos de ordenamiento
+    System.out.println("\n--- ALGORITMOS DE ORDENAMIENTO ---");
+    
+    // Preparar datos para ordenamiento
+    int[] preciosParaOrdenar = {15000, 280, 800, 3500, 2200, 450, 320, 180};
+    String[] productosParaOrdenar = {"Laptop", "Mouse", "Teclado", "Monitor", "Impresora", "Webcam", "Audífonos", "Micrófono"};
+    int productosssleng = productosParaOrdenar.length;
+    
+    System.out.println("Productos antes del ordenamiento (por precio):");
+    for (int xx = 0; xx < productosssleng; xx++) {
+        int PPOrdenar = preciosParaOrdenar[xx];
+        String PPrOrde = productosParaOrdenar[xx];
+        System.out.println((xx+1) + ". " + PPrOrde + " - Q" + PPOrdenar);
+    }
+    //mostrarInventario(productosParaOrdenar, preciosParaOrdenar);
+    
+    // Algoritmo de ordenamiento burbuja (ascendente por precio)
+    System.out.println("\nAplicando ordenamiento BURBUJA (precio ascendente):");
+    int ncz = preciosParaOrdenar.length;
+    System.out.println("Iniciando ordenamiento burbuja para " + ncz + " elementos...");
+
+    for (int i = 0; i < (ncz - 1); i++) {
+            for (int j = 0; j < (ncz - 1 - i); j++) {
+                int preciosazz = preciosParaOrdenar[j];
+                int precioasw = preciosParaOrdenar[j + 1];
+                if (preciosazz > precioasw) {
+                    // Intercambiar precios
+                    int tempPrecio = preciosParaOrdenar[j];
+                    int newPRex = preciosParaOrdenar[j + 1];
+                    preciosParaOrdenar[j] = newPRex;
+                    preciosParaOrdenar[j + 1] = tempPrecio;
+
+                    // Intercambiar productos para que correspondan
+                    String tempProducto = productosParaOrdenar[j];
+                    String newprs = productosParaOrdenar[j + 1];
+                    productosParaOrdenar[j] = newprs;
+                    productosParaOrdenar[j + 1] = tempProducto;
+                }
+            }
+        }
+    System.out.println("Ordenamiento burbuja completado");
+    //ordenamientoBurbuja(preciosParaOrdenar, productosParaOrdenar);
+    
+    System.out.println("Productos después del ordenamiento burbuja:");
+    for (int yy = 0; yy < productosssleng; yy++) {
+        int PPOrdenar = preciosParaOrdenar[yy];
+        String PPrOrde = productosParaOrdenar[yy];
+        System.out.println((yy+1) + ". " + PPrOrde + " - Q" + PPOrdenar);
+    }
+
+    //mostrarInventario(productosParaOrdenar, preciosParaOrdenar);
+    
+    // Preparar otra copia para ordenamiento por selección
+    int[] cantidadesParaOrdenar = {10, 45, 30, 15, 8, 25, 40, 15};
+    String[] productosSeleccion = {"Laptop", "Mouse", "Teclado", "Monitor", "Impresora", "Webcam", "Audífonos", "Micrófono"};
+    int productslengas = productosSeleccion.length;
+    int casnteas = cantidadesParaOrdenar.length;
+    
+    System.out.println("\nProductos antes del ordenamiento por SELECCION (cantidad descendente):");
+    for (int zz = 0; zz < productslengas; zz++) {
+        int PPOrdenar = cantidadesParaOrdenar[zz];
+        String PPrOrde = productosSeleccion[zz];
+        System.out.println((zz+1) + ". " + PPrOrde + " - Q" + PPOrdenar);
+    }
+    //mostrarInventarioCantidad(productosSeleccion, cantidadesParaOrdenar);
+    
+    // Algoritmo de ordenamiento por selección (descendente por cantidad)
+    System.out.println("\nAplicando ordenamiento SELECCION (cantidad descendente):");
+
+    for (int i = 0; i < (casnteas - 1); i++) {
+            for (int j = 0; j < (casnteas - 1 - i); j++) {
+                int lopa = cantidadesParaOrdenar[j];
+                int pasasq = cantidadesParaOrdenar[j + 1];
+                if (lopa < pasasq) {
+                    // Intercambiar cantidades
+                    int tempCantidad = cantidadesParaOrdenar[j];
+                    int nwar = cantidadesParaOrdenar[j + 1];
+                    cantidadesParaOrdenar[j] = nwar;
+                    cantidadesParaOrdenar[j + 1] = tempCantidad;
+
+                    // Intercambiar productos
+                    String lasl = productosSeleccion[j + 1];
+                    String tempProducto = productosSeleccion[j];
+                    productosSeleccion[j] = lasl;
+                    productosSeleccion[j + 1] = tempProducto;
+                }
+            }
+        }
+    //ordenamientoSeleccion(cantidadesParaOrdenar, productosSeleccion);
+    
+    System.out.println("Productos después del ordenamiento por selección:");
+    for (int zz = 0; zz < productslengas; zz++) {
+        int PPOrdenar = cantidadesParaOrdenar[zz];
+        String PPrOrde = productosSeleccion[zz];
+        System.out.println((zz+1) + ". " + PPrOrde + " - Q" + PPOrdenar);
+    }
+    //mostrarInventarioCantidad(productosSeleccion, cantidadesParaOrdenar);
+    
+    System.out.println("\n=== GESTION DE INVENTARIO COMPLETADA ===");
+}
+
+main();
+
+/*
+================================================================================
+SALIDA ESPERADA:
+================================================================================
+
+=== SISTEMA DE GESTION DE INVENTARIO ===
+
+--- DECLARACION DE ARREGLOS ---
+Arreglos declarados exitosamente:
+- productos: arreglo de String con 5 elementos
+- precios: arreglo de int con 5 elementos
+- cantidades: arreglo de int con 5 elementos
+- disponibles: arreglo de boolean con 5 elementos
+- codigosProducto: arreglo vacío de 5 elementos
+- proveedores: arreglo vacío de 5 elementos
+
+--- MODIFICACION DE ELEMENTOS ---
+Estado inicial del Mouse:
+- Precio: 250
+- Cantidad: 50
+- Disponible: true
+
+Después de modificaciones:
+- Nuevo precio Mouse: 280
+- Nueva cantidad Mouse: 45
+- Impresora ahora disponible: true
+Códigos y proveedores asignados correctamente
+
+--- ACCESO A ELEMENTOS ---
+Inventario completo:
+Posición 0:
+  Código: 1001
+  Producto: Laptop
+  Proveedor: TechCorp
+  Precio: Q15000
+  Cantidad: 10
+  Estado: DISPONIBLE
+
+Posición 1:
+  Código: 1002
+  Producto: Mouse
+  Proveedor: DeviceMax
+  Precio: Q280
+  Cantidad: 45
+  Estado: DISPONIBLE
+
+Posición 2:
+  Código: 1003
+  Producto: Teclado
+  Proveedor: KeyboardPro
+  Precio: Q800
+  Cantidad: 30
+  Estado: DISPONIBLE
+
+Posición 3:
+  Código: 1004
+  Producto: Monitor
+  Proveedor: ScreenTech
+  Precio: Q3500
+  Cantidad: 15
+  Estado: DISPONIBLE
+
+Posición 4:
+  Código: 1005
+  Producto: Impresora
+  Proveedor: PrintSolutions
+  Precio: Q2200
+  Cantidad: 8
+  Estado: DISPONIBLE
+
+Acceso directo a elementos específicos:
+Primer producto: Laptop
+Último producto: Impresora
+Producto del medio: Teclado
+
+--- BUSQUEDA CON Arrays.indexOf ---
+Producto 'Monitor' encontrado en posición: 3
+Detalles:
+  Código: 1004
+  Precio: Q3500
+  Cantidad: 15
+  Proveedor: ScreenTech
+Código 1003 encontrado en posición: 2
+Corresponde al producto: Teclado
+Búsqueda de 'Tablet': -1 (no encontrado)
+
+--- TAMAÑO DE ARREGLOS (length) ---
+Información de tamaños:
+- Productos: 5 elementos
+- Precios: 5 elementos
+- Cantidades: 5 elementos
+- Disponibilidad: 5 elementos
+Todos los arreglos tienen el mismo tamaño: true
+
+Uso de length en iteraciones:
+Productos disponibles: 5 de 5
+
+--- AGREGAR ELEMENTOS CON add() ---
+Estado inicial: 5 productos
+Después de agregar: 8 productos
+Nuevos productos agregados:
+- Webcam | Precio: Q450 | Cantidad: 25
+- Audífonos | Precio: Q320 | Cantidad: 40
+- Micrófono | Precio: Q180 | Cantidad: 15
+
+--- ALGORITMOS DE ORDENAMIENTO ---
+Productos antes del ordenamiento (por precio):
+  1. Laptop - Q15000
+  2. Mouse - Q280
+  3. Teclado - Q800
+  4. Monitor - Q3500
+  5. Impresora - Q2200
+  6. Webcam - Q450
+  7. Audífonos - Q320
+  8. Micrófono - Q180
+
+Aplicando ordenamiento BURBUJA (precio ascendente):
+Iniciando ordenamiento burbuja para 8 elementos...
+Ordenamiento burbuja completado
+Productos después del ordenamiento burbuja:
+  1. Micrófono - Q180
+  2. Mouse - Q280
+  3. Audífonos - Q320
+  4. Webcam - Q450
+  5. Teclado - Q800
+  6. Impresora - Q2200
+  7. Monitor - Q3500
+  8. Laptop - Q15000
+
+Productos antes del ordenamiento por SELECCION (cantidad descendente):
+  1. Laptop - 10 unidades
+  2. Mouse - 45 unidades
+  3. Teclado - 30 unidades
+  4. Monitor - 15 unidades
+  5. Impresora - 8 unidades
+  6. Webcam - 25 unidades
+  7. Audífonos - 40 unidades
+  8. Micrófono - 15 unidades
+
+Aplicando ordenamiento SELECCION (cantidad descendente):
+Iniciando ordenamiento por selección para 8 elementos...
+Ordenamiento por selección completado
+Productos después del ordenamiento por selección:
+  1. Mouse - 45 unidades
+  2. Audífonos - 40 unidades
+  3. Teclado - 30 unidades
+  4. Webcam - 25 unidades
+  5. Monitor - 15 unidades
+  6. Micrófono - 15 unidades
+  7. Laptop - 10 unidades
+  8. Impresora - 8 unidades
+
+=== GESTION DE INVENTARIO COMPLETADA ===
+*/

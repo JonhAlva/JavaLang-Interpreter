@@ -1,0 +1,6 @@
+digraph tabla_simbolos {
+    rankdir=LR;
+    node [shape=record];
+
+    tabla [label="{Tabla de Símbolos|{b|int|23}|{c|int|23}|{suma|int|46}}"];
+}

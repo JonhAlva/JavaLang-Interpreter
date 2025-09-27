@@ -3,6 +3,7 @@
 #include "Tabla_Simbolos.h"
 #include "PrintBuffer.h"
 #include "Vector.h"
+#include "Matrix.h"
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -15,6 +16,7 @@
     int continue_ = 0;
     int break_ = 0;
     extern SymbolTable *symtab;
+    extern MatrixTable *mtab;
 
 // * Evalua nodos
 Valor Evaluar(Nodo* n) {
@@ -130,6 +132,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_MODULO: {
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
@@ -162,6 +171,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_SUMA: { // * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
@@ -270,6 +286,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_RESTA: { // * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
@@ -302,6 +325,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_MULTIPLICACION: {// * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
@@ -334,6 +364,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_DIVISION: {// * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
@@ -610,7 +647,7 @@ Valor Evaluar(Nodo* n) {
 
         }
 
-        case NODO_AND: { // * ----------------------------------------------------------------------------------------
+        case NODO_AND: { // * ----------------------------------------------------------------------------------------          
             Valor izq = Evaluar(n->izq);
             
             // Si el primer operando es falso, no evaluamos el segundo
@@ -667,6 +704,12 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_DECLARATION: { // * ----------------------------------------------------------------------------------------
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             Valor izq = Evaluar(n->izq);
             // * Nombre de variable en "n->nombre"
             // * Tipo de variable en "n->valor.varType"
@@ -698,8 +741,12 @@ Valor Evaluar(Nodo* n) {
                     // Permitir asignar un float eliminando la parte fraccionaria
                     AsignarVariable_Int(n->nombre, (int)izq.f_val);
                     printf(" » 💾 Variable Registrada (int -> float): '%s' asignada con valor: %d \n", n->nombre, (int)izq.f_val);
+                } else if (izq.tipo == VAL_CHAR) {
+                    // Permitir asignar un char usando su valor ASCII
+                    AsignarVariable_Int(n->nombre, (int)izq.c_val);
+                    printf(" » 💾 Variable Registrada (int -> char): '%s' asignada con valor ASCII: %d \n", n->nombre, (int)izq.c_val);
                 } else {
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    printf(" »   Int Error: Tipo de dato no coincide para %s \n", n->nombre);
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion Int";
@@ -714,9 +761,12 @@ Valor Evaluar(Nodo* n) {
                     // perimitir asignar un double eliminando la parte fraccionaria extra
                     AsignarVariable_Float(n->nombre, (float)izq.d_val);
                     printf(" » 💾 Variable Registrada (float -> double): '%s' asignada con valor: %f \n", n->nombre, (float)izq.d_val);
+                } else if (izq.tipo == VAL_INT) {
+                    // permitir asignar un int convirtiéndolo a float
+                    AsignarVariable_Float(n->nombre, (float)izq.i_val);
+                    printf(" » 💾 Variable Registrada (float -> int): '%s' asignada con valor: %f \n", n->nombre, (float)izq.i_val);
                 } else {
                     printf(" »   Float Error: Tipo de dato no coincide \n");
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion Float";
@@ -728,8 +778,7 @@ Valor Evaluar(Nodo* n) {
                     AsignarVariable_String(n->nombre, izq.s_val);
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %s \n", n->nombre, izq.s_val);
                 } else {
-                    printf(" »   String Error: Tipo de dato no coincide \n");
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    printf(" »   String Error: Tipo de dato no coincide para %s \n", n->nombre);
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion String";
@@ -742,7 +791,6 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.b_val ? 1 : 0);
                 } else {
                     printf(" »   Boolean Error: Tipo de dato no coincide \n");
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion Boolean";
@@ -762,8 +810,7 @@ Valor Evaluar(Nodo* n) {
                         printf(" »   Char Error: Valor entero fuera del rango ASCII \n");
                     }
                 } else {
-                    printf(" »   Char Error: Tipo de dato no coincide \n");
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
+                    printf(" »   Char Error: Tipo de dato no coincide para %s \n", n->nombre);
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion Char";
@@ -776,7 +823,6 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
                 } else {
                     printf(" »   Long Error: Tipo de dato no coincide \n");
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion Long";
@@ -789,7 +835,6 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %d \n", n->nombre, izq.i_val);
                 } else {
                     printf(" »   Short Error: Tipo de dato no coincide \n");
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion Short";
@@ -800,9 +845,12 @@ Valor Evaluar(Nodo* n) {
                 if (izq.tipo == VAL_DOUBLE) {
                     AsignarVariable_Double(n->nombre, izq.d_val);
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %f \n", n->nombre, izq.d_val);
+                } else if (izq.tipo == VAL_FLOAT) {
+                    // Permitir asignar un float convirtiéndolo a double
+                    AsignarVariable_Double(n->nombre, (double)izq.f_val);
+                    printf(" » 💾 Variable Registrada (double -> float): '%s' asignada con valor: %f \n", n->nombre, (double)izq.f_val);
                 } else {
                     printf(" »   Double Error: Tipo de dato no coincide \n");
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion Double";
@@ -815,7 +863,6 @@ Valor Evaluar(Nodo* n) {
                     printf(" » 💾 Variable Registrada: '%s' asignada con valor: %c \n", n->nombre, izq.c_val);
                 } else {
                     printf(" »   Byte Error: Tipo de dato no coincide \n");
-                    printf(" »   Int Error: Tipo de dato no coincide \n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Tipo de Dato Incompatible";
                     lista_Errores[num_errores].Tipo_Error = "Declaracion Byte";
@@ -832,6 +879,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_IDENTIFICADOR: { // * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // * Buscar variable en tabla de simbolos y retornar su valor
             Nodo* varNodo = Acceso_Variable(n->nombre);
             if (varNodo != NULL) {
@@ -849,7 +903,14 @@ Valor Evaluar(Nodo* n) {
             }
         }
         
-        case NODO_ASIGNACION: { // * ----------------------------------------------------------------------------------------
+        case NODO_ASIGNACION: { // * ----------------------------------------------------------------------------------------        
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             Valor izq = Evaluar(n->izq);
             Nodo* varNodo = Acceso_Variable(n->nombre);
             // * Nombre de variable en "n->nombre"
@@ -857,6 +918,68 @@ Valor Evaluar(Nodo* n) {
             // * Buscar si la variable ya existe
             
             if (varNodo != NULL) {
+
+                if (n->izq->tipo == NODO_MATRIZ_REFERENCE) {
+                    // Si es una referencia a matriz verificar si existe la variable
+                    // extraer el nombre de la matriz
+                    char* nombreMatriz = n->izq->nombre;
+                    //buscar la matriz en la tabla de simbolos
+                    Matrix *matriz = matrix_table_get(mtab, strdup(nombreMatriz));
+                    if (matriz == NULL) {
+                        printf(" »   Error: La matriz '%s' no ha sido declarada.\n", nombreMatriz);
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "Matriz no declarada";
+                        lista_Errores[num_errores].Tipo_Error = "Asignacion Matriz";
+                        num_errores++;
+                        break;
+                    }
+
+                    // extraer los indices
+                    Valor index1 = Evaluar(n->izq->izq);
+                    Valor index2 = Evaluar(n->izq->der);
+
+                    if (index1.tipo != VAL_INT || index2.tipo != VAL_INT) {
+                        printf(" »   Error: Los indices de la matriz deben ser enteros.\n");
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "Indices no enteros";
+                        lista_Errores[num_errores].Tipo_Error = "Asignacion Matriz";
+                        num_errores++;
+                        break;
+                    }
+
+                    //buscar la vairble en n->nombre para saber su tipo de dato
+                    Nodo* varTipoNodo = Acceso_Variable(n->nombre);
+                    Valor varTipo = Evaluar(varTipoNodo);
+
+                    if (varTipo.tipo == VAL_INT) {
+                        // OBTENER EL VALOR DE LA MATRIZ EN LOS INDICES CON MATRIX GET INT
+                        int valorINT= matrix_get_int(matriz, index1.i_val, index2.i_val);
+                        Valor nx;
+                        nx.tipo = VAL_INT;
+                        nx.i_val = valorINT;
+                        // ASIGNAR EL VALOR A LA VARIABLE
+                        Actualizar_Variable(n->nombre, nx);
+                        break;
+                    } else if (varTipo.tipo == VAL_STRING) {
+                        // OBTENER EL VALOR DE LA MATRIZ EN LOS INDICES CON MATRIX GET STRING
+                        char* valorSTR = strdup(matrix_get_string(matriz, index1.i_val, index2.i_val));
+                        Valor nx;
+                        nx.tipo = VAL_STRING;
+                        nx.s_val = valorSTR;
+                        // ASIGNAR EL VALOR A LA VARIABLE
+                        Actualizar_Variable(n->nombre, nx);
+                        break;
+                    } else {
+                        printf(" »   Error: Tipo de dato no soportado en asignacion desde matriz.\n");
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "Tipo de dato no soportado";
+                        lista_Errores[num_errores].Tipo_Error = "Asignacion Matriz";
+                        num_errores++;
+                        break;
+                    }
+                }
+
+
                 if (strcmp(n->valor.op_bool, "=") == 0) {
                     Actualizar_Variable(n->nombre, izq);
                     break;
@@ -870,6 +993,12 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_CASTEO_NARROWING: {
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             Valor izq = Evaluar(n->izq);
             Valor der = Evaluar(n->der);
 
@@ -883,7 +1012,6 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_EQUALS_COMPARE: { // * ----------------------------------------------------------------------------------------
-
             // agregar condicion cuando el nodo sea un tipo val_string
             if (n->nombre[0] == '"' && n->nombre[strlen(n->nombre)-1] == '"') {
                 Valor izq = Evaluar(n->izq);
@@ -912,6 +1040,11 @@ Valor Evaluar(Nodo* n) {
 
         case NODO_PARSEO: { // * ----------------------------------------------------------------------------------------
 
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
             Valor izq = Evaluar(n->izq);
             char* tipoVariable = n->valor.varType;
             char* Identificador = n->nombre;
@@ -965,7 +1098,7 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
-        case NODO_IF_ELSE_IF: {
+        case NODO_IF_ELSE_IF: {      
             Valor condicionIf = Evaluar(n->izq);
 
             if (condicionIf.tipo == VAL_BOOL && condicionIf.b_val == 1) {
@@ -1006,6 +1139,12 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_DECLARATION_VECTOR: { // * ----------------------------------------------------------------------------------------
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // * Nombre de variable en "n->nombre"
             // * Tipo de variable en "n->valor.varType"
             // * Tipo del vector en "n->izq"
@@ -1231,6 +1370,12 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_VECTOR_ASIGNATION: { // * ----------------------------------------------------------------------------------------
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // ! AQUI ENTRA EL NODO_VECTOR_ASIGNATION = n
             char* Asignation_Name = n->nombre; // nombre del vector
             char* Asignation_Type = n->valor.varType; // tipo del vector
@@ -1278,113 +1423,446 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_DECLARATION_MATRIX: { // * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // * Nombre de variable en "n->nombre"
             // * Tipo de variable en "n->valor.varType"
             // * Tipo del vector en "n->izq"
             // del nodo izq ver que tipo de vector viene
             if (n->izq != NULL) {
                 if (n->izq->tipo == NODO_MATRIZ_AUTO) {
-                    printf(" * * *  Matriz Registrada: '%s' de tipo Auto \n", n->nombre);
+                    if(strcmp(n->valor.varType, n->izq->nombre) != 0) {
+                        printf(" » ❌ Error Vector: El Tipo de matriz no coincide con el tipo declarado \n");
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "El nombre de la matriz no coincide con el tipo Declarado";
+                        lista_Errores[num_errores].Tipo_Error = "Matriz";
+                        num_errores++;
+                        break;
+                    }
+
+                    //Evaluar para ver los valores de las columnas y filas
+                    Valor filas = Evaluar(n->izq->izq);
+                    Valor columnas = Evaluar(n->izq->der);
+
+                    if (strcmp(n->valor.varType, "int") == 0) {
+                        // ? CREAR MATRIZ DE ENTEROS
+                        int rows = filas.i_val;
+                        int cols = columnas.i_val;
+
+                        Matrix *mInt = matrix_create(T_INT, rows, cols);
+
+                        //agregar los valores a la matriz
+                        for (int i = 0; i < rows; i++) {
+                            for (int j = 0; j < cols; j++) {
+                                matrix_set_int(mInt, i, j, 0); // valor por defecto   
+                            }
+                        }
+
+                        matrix_table_add(mtab, n->nombre, mInt);
+                        printf(" » 🗃️ Matriz de Int creada: '%s' con tamaño %dx%d \n", n->nombre, rows, cols);
+                        break;
+
+                    } else if (strcmp(n->valor.varType, "String") == 0) {
+                        // ? CREAR MATRIZ DE STRINGS
+                        int rows = filas.i_val;
+                        int cols = columnas.i_val;
+
+                        Matrix *mString = matrix_create(T_STRING, rows, cols);
+
+                        //agregar los valores a la matriz
+                        for (int i = 0; i < rows; i++) {
+                            for (int j = 0; j < cols; j++) {
+                                matrix_set_string(mString, i, j, "Vacio"); // valor por defecto   
+                            }
+                        }
+
+                        matrix_table_add(mtab, n->nombre, mString);
+                        printf(" » 🗃️ Matriz de String creada: '%s' con tamaño %dx%d \n", n->nombre, rows, cols);
+                        break;
+
+                    }
+                    break;
 
                     //AÑADIR UN ELSE IF PARA EL OTRO TIPO DE MATRIZ CON LOS VALORES DEFINIDOS
+                } else if (n->izq->tipo == NODO_MATRIZ_WITH_VALUES) {
+                    char* Name_matrix_declaration = n->nombre;
+                    char* Type_matrix_declaration = n->valor.varType;
+                    printf(" » 🔄 Creando matriz con valores explícitos...\n");
+                    int max_iterations = 100; // Limitar a 100 iteraciones para evitar bucles infinitos
+
+                    // Primero contar filas y columnas para crear la matriz
+                    int filas = 0;
+                    int columnas = 0;
+                    
+                    // Contar filas
+                    for (int i = 0; n->izq->lista_nodos[i] != NULL; i++) {
+                        filas++;
+                        // Contar columnas usando la primera fila
+                        if (i == 0) {
+                            for (int j = 0; n->izq->lista_nodos[i]->lista_nodos[j] != NULL; j++) {
+                                columnas++;
+                            }
+                        }
+                        if (i >= max_iterations) {
+                            printf(" » ❌ Error: Demasiadas filas en la declaración de matriz\n");
+                            break;
+                        }
+                    }
+
+                    // Crear la matriz con el tamaño correcto
+                    Matrix* mInt = NULL;
+                    Matrix* mString = NULL;
+                    
+                    if (strcmp(Type_matrix_declaration, "int") == 0) {
+                        mInt = matrix_create(T_INT, filas, columnas);
+                    } else if (strcmp(Type_matrix_declaration, "String") == 0) {
+                        mString = matrix_create(T_STRING, filas, columnas);
+                    }
+
+                    // Recorrer y asignar valores
+                    for (int i = 0; n->izq->lista_nodos[i] != NULL; i++) {
+                        for (int j = 0; n->izq->lista_nodos[i]->lista_nodos[j] != NULL; j++) {
+                            Valor val = Evaluar(n->izq->lista_nodos[i]->lista_nodos[j]);
+                            
+                            if (strcmp(Type_matrix_declaration, "int") == 0) {
+                                if (val.tipo == VAL_INT) {
+                                    matrix_set_int(mInt, i, j, val.i_val);
+                                } else {
+                                    printf(" » ❌ Error: Tipo de dato incompatible en matriz\n");
+                                    break;
+                                }
+                            } else if (strcmp(Type_matrix_declaration, "String") == 0) {
+                                if (val.tipo == VAL_STRING) {
+                                    matrix_set_string(mString, i, j, val.s_val);
+                                } else {
+                                    printf(" » ❌ Error: Tipo de dato incompatible en matriz\n");
+                                    break;
+                                }
+                            }
+                            if (j >= max_iterations) {
+                                printf(" » ❌ Error: Demasiadas columnas en la declaración de matriz\n");
+                                break;
+                            }
+                        }
+                        if (i >= max_iterations) {
+                            printf(" » ❌ Error: Demasiadas filas en la declaración de matriz\n");
+                            break;
+                        }
+                    }
+
+                    // Agregar la matriz a la tabla
+                    if (strcmp(Type_matrix_declaration, "int") == 0) {
+                        matrix_table_add(mtab, Name_matrix_declaration, mInt);
+                        printf(" » 🗃️ Matriz de Int '%s' creada con tamaño %dx%d\n", Name_matrix_declaration, filas, columnas);
+                    } else if (strcmp(Type_matrix_declaration, "String") == 0) {
+                        matrix_table_add(mtab, Name_matrix_declaration, mString);
+                        printf(" » 🗃️ Matriz de String '%s' creada con tamaño %dx%d\n", Name_matrix_declaration, filas, columnas);
+                    }
+                    break;
+                    
                 } else {
-                    printf(" » » » »  Tipo de dato desconocido en declaracion de matriz * \n");
+                    printf(" » ❌ Tipo de dato desconocido en declaracion de matriz\n");
                     lista_Errores[num_errores].Num = num_errores;
                     lista_Errores[num_errores].Desc_Error = "Dato desconocido en declaracion de matriz";
                     lista_Errores[num_errores].Tipo_Error = "Matriz";
-                num_errores++;
+                    num_errores++;
+                    break;
                 }
             }
             break;
+        }     
+
+        case NODO_MATRIZ_ASIGNATION: { // * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
+            // ! AQUI ENTRA EL NODO_MATRIZ_REFERENCE = n
+            char* Asignation_Name = n->nombre; // nombre de la variable que recibira el valor de la matriz
+            char* Asignation_Type = n->valor.varType; // tipo de la variable que recibira el valor de la matriz
+
+            Valor Row_Index = Evaluar(n->izq->izq); // indice de la fila
+            Valor Col_Index = Evaluar(n->izq->der); // indice de la columna
+            char* Name_of_matrix = n->izq->nombre; // nombre de la matriz
+
+            //varificar que la matriz exista
+            Matrix* mat = matrix_table_get(mtab, Name_of_matrix);
+            if (mat == NULL) {
+                printf(" » ❌ Error Matriz Asignation: La matriz '%s' no existe \n", Name_of_matrix);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "La matriz no existe";
+                lista_Errores[num_errores].Tipo_Error = "Asignacion Matriz";
+                num_errores++;
+                break;
+            }
+
+            //Obtener el valor del indice de la matriz para asignarlo
+            if (mat->type == T_INT) { // * ASIGNACION DE VARIABLE INT
+                int value_to_assign = matrix_get_int(mat, Row_Index.i_val, Col_Index.i_val);
+
+                //declarar variable
+                AsignarVariable_Int(Asignation_Name, value_to_assign);
+                printf(" » 🆗 Valor de Matriz Asignada: '%s' de la matriz '%s' con valor %d \n", Asignation_Name, Name_of_matrix, value_to_assign);
+                break;
+            } else if (mat->type == T_STRING) {
+                char* value_to_assign = strdup(matrix_get_string(mat, Row_Index.i_val, Col_Index.i_val));
+
+                //declarar variable
+                AsignarVariable_String(Asignation_Name, value_to_assign);
+                printf(" » 🆗 Valor de Matriz Asignada: '%s' de la matriz '%s' con valor %s \n", Asignation_Name, Name_of_matrix, value_to_assign);
+                free(value_to_assign);
+                break;
+            } else {
+                printf(" » ❌ Error Matriz Asignation: Tipo de dato no soportado en matriz \n");
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "Tipo de Dato no soportado en matriz";
+                lista_Errores[num_errores].Tipo_Error = "Asignacion Matriz";
+                num_errores++;
+                break;
+            }
+        }
+
+        case NODO_MATRIZ_CHANGE_VALUE: { // * ----------------------------------------------------------------------------------------
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
+            
+            // ! AQUI ENTRA EL NODO_MATRIZ_CHANGE_VALUE = n
+            char* Name_of_matrix = n->izq->nombre; // nombre de la matriz a modificar
+
+            Valor Row_Index = Evaluar(n->izq->izq); // indice de la fila
+            Valor Col_Index = Evaluar(n->izq->der); // indice de la columna
+            Valor New_Value = Evaluar(n->der); // nuevo valor a asignar
+            //varificar que la matriz exista
+            Matrix* mat = matrix_table_get(mtab, strdup(Name_of_matrix));
+            if (mat == NULL) {
+                printf(" » ❌ Error Matriz Change Value: La matriz '%s' no existe \n", Name_of_matrix);
+                lista_Errores[num_errores].Num = num_errores;
+                lista_Errores[num_errores].Desc_Error = "La matriz no existe";
+                lista_Errores[num_errores].Tipo_Error = "Cambio de valor Matriz";
+                num_errores++;
+                break;
+            }
+
+            //Cambiar el valor del indice de la matriz
+            if (mat->type == T_INT) { // * ASIGNACION DE VARIABLE INT
+                if (New_Value.tipo != VAL_INT) {
+                    printf(" » ❌ Error Matriz Change Value: El nuevo valor debe ser un entero \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "El nuevo valor debe ser un entero";
+                    lista_Errores[num_errores].Tipo_Error = "Cambio de valor Matriz";
+                    num_errores++;
+                    break;
+                }
+                matrix_set_int(mat, Row_Index.i_val, Col_Index.i_val, New_Value.i_val);
+                printf(" » 🆗 Valor de Matriz Modificado: de la matriz '%s' en posicion [%d][%d] con valor %d \n", Name_of_matrix, Row_Index.i_val, Col_Index.i_val, New_Value.i_val);
+                break;
+
+            } else if (mat->type == T_STRING) {
+                if (New_Value.tipo != VAL_STRING) {
+                    printf(" » ❌ Error Matriz Change Value: El nuevo valor debe ser un String \n");
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "El nuevo valor debe ser un String";
+                    lista_Errores[num_errores].Tipo_Error = "Cambio de valor Matriz";
+                    num_errores++;
+                    break;
+                }
+            }
+
         }
 
         case NODO_FOR_SENTENCE: { // * ----------------------------------------------------------------------------------------
-
             // Instrucciones del for each
             if (n->izq->tipo == NODO_FOR_EACH) {
                 char* Vector_Name = n->izq->separador; // nombre del vector a recorrer
                 char* Var_Name = n->izq->nombre; // nombre de la variable que tomara el valor del vector
                 char* Type_Var = n->izq->valor.varType; // tipo de la variable que tomara el valor del vector
+                int IsVector = 0;
+                int IsMatrix = 0;
 
                 // verificar que el vector exista
                 Vector* vec = table_get(symtab, Vector_Name);
-                if (vec == NULL) {
-                    printf(" » ❌ Error For Each: El vector '%s' no existe \n", Vector_Name);
+                if (vec != NULL) {
+                    IsVector = 1;
+                }
+
+                Matrix* mat = matrix_table_get(mtab, Vector_Name);
+                if (mat != NULL) {
+                    IsMatrix = 1;
+                }
+
+                //
+                if (!IsVector && !IsMatrix) {
+                    printf(" » ❌ Error For Each: El vector o Matriz '%s' no existe \n", Vector_Name);
                     lista_Errores[num_errores].Num = num_errores;
-                    lista_Errores[num_errores].Desc_Error = "El vector no existe";
+                    lista_Errores[num_errores].Desc_Error = "El vector o Matriz no existe";
                     lista_Errores[num_errores].Tipo_Error = "Sentencia For Each";
                     num_errores++;
                     break;
                 }
 
-                // recorrer el vector segun su tipo
-                if (vec->type == T_INT) {
-                    int vectorSize = (int)vec->size;
-                    for (int i = 0; i < vectorSize; i++) {
-                        // Obtener el valor actual del vector
-                        int value = vector_get_int(vec, i);
-                        
-                        // Asignar el valor a la variable temporal
-                        AsignarVariable_Int(Var_Name, value);
-                        
-                        printf(" » 🔄 For Each: Iterando valor %d en vector '%s'\n", value, Vector_Name);
-                        
-                        // Ejecutar el bloque de código
-                        Evaluar(n->der);
-                        
-                        // Verificar si se encontró un break
-                        if(break_) {
-                            printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
-                            break_ = 0;
-                            break;
+                if(IsMatrix) {
+                    // recorrer la matriz segun su tipo
+                    if (mat->type == T_INT) {
+                        int rowSize = mat->rows;
+                        int colSize = mat->cols;
+                        for (int i = 0; i < rowSize; i++) {
+                            for (int j = 0; j < colSize; j++) {
+                                // Obtener el valor actual de la matriz
+                                int value = matrix_get_int(mat, i, j);
+                                
+                                // Asignar el valor a la variable temporal
+                                AsignarVariable_Int(Var_Name, value);
+                                
+                                //printf(" » 🔄 For Each: Iterando valor %d en matriz '%s' [%d][%d]\n", 
+                                //        value, Name_of_matrix, i, j);
+                                
+                                // Ejecutar el bloque de código
+                                Evaluar(n->der);
+                                
+                                // Verificar si se encontró un break
+                                if(break_) {
+                                    printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
+                                    break_ = 0;
+                                    goto end_matrix_loop;
+                                }
+                                
+                                // Verificar si se encontró un continue
+                                if(continue_) {
+                                    printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                                    continue_ = 0;
+                                    continue;
+                                }
+                            }
                         }
-                        
-                        // Verificar si se encontró un continue 
-                        if(continue_) {
-                            printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
-                            continue_ = 0;
-                            continue;
+                        end_matrix_loop:
+                        EliminarVariable(Var_Name);
+                    } else if (mat->type == T_STRING) {
+                        int rowSize = mat->rows;
+                        int colSize = mat->cols;
+                        for (int i = 0; i < rowSize; i++) {
+                            for (int j = 0; j < colSize; j++) {
+                                // Obtener el valor actual de la matriz
+                                char* value = strdup(matrix_get_string(mat, i, j));
+                                
+                                // Asignar el valor a la variable temporal
+                                AsignarVariable_String(Var_Name, value);
+                                
+                                //printf(" » 🔄 For Each: Iterando valor %s en matriz '%s' [%d][%d]\n", 
+                                //      value, Name_of_matrix, i, j);
+                                
+                                // Ejecutar el bloque de código
+                                Evaluar(n->der);
+                                
+                                // Verificar si se encontró un break
+                                if(break_) {
+                                    printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
+                                    break_ = 0;
+                                    goto end_matrix_loop_string;
+                                }
+                                
+                                // Verificar si se encontró un continue
+                                if(continue_) {
+                                    printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                                    continue_ = 0;
+                                    continue;
+                                }
+                            }
                         }
+                        end_matrix_loop_string:
+                        EliminarVariable(Var_Name);
+                    } else {
+                        printf(" » ❌ Error For: Tipo de matriz no soportado en For Each\n");
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "Tipo de matriz no soportado";
+                        lista_Errores[num_errores].Tipo_Error = "Sentencia For Each";
+                        num_errores++;
+                        break;
                     }
-                    EliminarVariable (Var_Name);
-                } else if (vec->type == T_STRING) {
-                    int vectorSize = (int)vec->size;
-                    for (int i = 0; i < vectorSize; i++) {
-                        // Obtener el valor actual del vector
-                        char* value = vector_get_string(vec, i);
-                        
-                        // Asignar el valor a la variable temporal
-                        AsignarVariable_String(Var_Name, value);
-                        
-                        printf(" » 🔄 For Each: Iterando valor %s en vector '%s'\n", value, Vector_Name);
-                        
-                        // Ejecutar el bloque de código
-                        Evaluar(n->der);
-                        
-                        // Verificar si se encontró un break
-                        if(break_) {
-                            printf(" » ⏹️ Break encontrado, saliendo del ciclo\n"); 
-                            break_ = 0;
-                            break;
-                        }
-                        
-                        // Verificar si se encontró un continue
-                        if(continue_) {
-                            printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
-                            continue_ = 0;
-                            continue;
-                        }
-                    }
-                    EliminarVariable (Var_Name);
-                } else {
-                    printf(" » ❌ Error For: Tipo de vector no soportado en For Each\n");
-                    lista_Errores[num_errores].Num = num_errores;
-                    lista_Errores[num_errores].Desc_Error = "Tipo de vector no soportado";
-                    lista_Errores[num_errores].Tipo_Error = "Sentencia For Each";
-                    num_errores++;
                     break;
                 }
-            break;
+
+                if (IsVector) {
+                    // recorrer el vector segun su tipo
+                    if (vec->type == T_INT) {
+                        int vectorSize = (int)vec->size;
+                        for (int i = 0; i < vectorSize; i++) {
+                            // Obtener el valor actual del vector
+                            int value = vector_get_int(vec, i);
+                            
+                            // Asignar el valor a la variable temporal
+                            AsignarVariable_Int(Var_Name, value);
+                            
+                            printf(" » 🔄 For Each: Iterando valor %d en vector '%s'\n", value, Vector_Name);
+                            
+                            // Ejecutar el bloque de código
+                            Evaluar(n->der);
+                            
+                            // Verificar si se encontró un break
+                            if(break_) {
+                                printf(" » ⏹️ Break encontrado, saliendo del ciclo\n");
+                                break_ = 0;
+                                break;
+                            }
+                            
+                            // Verificar si se encontró un continue 
+                            if(continue_) {
+                                printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                                continue_ = 0;
+                                continue;
+                            }
+                        }
+                        EliminarVariable (Var_Name);
+                    } else if (vec->type == T_STRING) {
+                        int vectorSize = (int)vec->size;
+                        for (int i = 0; i < vectorSize; i++) {
+                            // Obtener el valor actual del vector
+                            char* value = vector_get_string(vec, i);
+                            
+                            // Asignar el valor a la variable temporal
+                            AsignarVariable_String(Var_Name, value);
+                            
+                            printf(" » 🔄 For Each: Iterando valor %s en vector '%s'\n", value, Vector_Name);
+                            
+                            // Ejecutar el bloque de código
+                            Evaluar(n->der);
+                            
+                            // Verificar si se encontró un break
+                            if(break_) {
+                                printf(" » ⏹️ Break encontrado, saliendo del ciclo\n"); 
+                                break_ = 0;
+                                break;
+                            }
+                            
+                            // Verificar si se encontró un continue
+                            if(continue_) {
+                                printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                                continue_ = 0;
+                                continue;
+                            }
+                        }
+                        EliminarVariable (Var_Name);
+                    } else {
+                        printf(" » ❌ Error For: Tipo de vector no soportado en For Each\n");
+                        lista_Errores[num_errores].Num = num_errores;
+                        lista_Errores[num_errores].Desc_Error = "Tipo de vector no soportado";
+                        lista_Errores[num_errores].Tipo_Error = "Sentencia For Each";
+                        num_errores++;
+                        break;
+                    }
+                    break;
+                }
             }
 
             // Evaluar la declaración inicial
@@ -1407,7 +1885,7 @@ Valor Evaluar(Nodo* n) {
             // Ciclo principal del for clasico
             while(1) {
                 // Evaluar condición
-                printf(" » 🔄 Evaluando condicion For\n");
+                printf(" » 🔄 Evaluando condicion For Simple \n");
                 Valor condicion = Evaluar(n->izq->der);
 
                 if(condicion.tipo != VAL_BOOL) {
@@ -1425,7 +1903,7 @@ Valor Evaluar(Nodo* n) {
                 }
 
                 if(continue_) {
-                    printf(" » ⏭️ Continue encontrado, saltando a siguiente iteracion\n");
+                    printf(" » ⏭️⏭️ Continue encontrado, saltando a siguiente iteracion\n");
                     continue_ = 0; // Reiniciar el estado de continue
                     
                     // Actualizar variable de control antes de continuar
@@ -1435,11 +1913,9 @@ Valor Evaluar(Nodo* n) {
                         break;
                     }
                     Valor valorActual = Evaluar(varNodo);
-                    if(strcmp(tipoOp, "++") == 0) {
-                        Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val + 1});
-                    } else {
-                        Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val - 1});
-                    }
+                    
+                    Actualizar_Variable(nombreVar, (Valor){.tipo = VAL_INT, .i_val = valorActual.i_val + 1});
+                    
                     continue;
                 }
 
@@ -1474,6 +1950,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_PLUS_MINUS_VAR: {
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             Valor izq = Evaluar(n->izq);
 
             // Obtener nombre de variable y tipo de operación
@@ -1585,7 +2068,7 @@ Valor Evaluar(Nodo* n) {
             break;
         }
 
-        case NODO_SWITCH_SENTENCE: { // * ----------------------------------------------------------------------------------------
+        case NODO_SWITCH_SENTENCE: { // * ----------------------------------------------------------------------------------------        
             // ? Nombre de la variable a comparar
             char* nombreVar = n->nombre;
 
@@ -1665,6 +2148,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_FUNCTION_DECLARATION: { // * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // * Nombre de la funcion en "n->nombre"
             // * Tipo de retorno en "n->valor.varType"
             // * Parametros en "n->izq" (lista enlazada de nodos PARAMETRO)
@@ -1677,6 +2167,12 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_FUNCTION_CALL_NO_PARAM: { // * ----------------------------------------------------------------------------------------
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // * Nombre de la funcion en "n->nombre"
             // Buscar la funcion en la tabla de simbolos
             Funcion* funcionStruct = Acceso_Funcion(n->nombre);
@@ -1702,6 +2198,12 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_RETURN_FUNC: { // * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
             // * Valor a retornar en "n->izq"
             Valor retorno = Evaluar(n->izq);
             // esta llegando un nodo suma
@@ -1710,6 +2212,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_ASIGNATION_FUNC: { // * ----------------------------------------------------------------------------------------
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // Obtener la función de la tabla de símbolos
             Funcion* funcionStruct = Acceso_Funcion(n->izq->nombre);
             if (funcionStruct == NULL) {
@@ -1812,6 +2321,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_ARRAYS_DECLARATION: {
+           
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // ! AQUI ENTRA EL NODO: NODO_ARRAYS_DECLARATION = n
             if (n->izq->tipo == NODO_ARRAYS_INDEXOF) {  
                 // nombre del vector a buscar el indice
@@ -1855,29 +2371,58 @@ Valor Evaluar(Nodo* n) {
             } else if (n->izq->tipo == NODO_ARRAY_LENGTH) {
                 // nombre del vector a buscar el indice
                 char* Name_array_to_find = n->izq->nombre;
+                int IsVector = 0;
+                int IsMatrix = 0;
 
                 // verificar si el vector existe
                 Vector* vec = table_get(symtab, Name_array_to_find);
-                if (vec == NULL) {
-                    printf(" » ❌ Error Array: El array '%s' no existe \n", Name_array_to_find);
-                    lista_Errores[num_errores].Num = num_errores;
-                    lista_Errores[num_errores].Desc_Error = "El array no existe";
-                    lista_Errores[num_errores].Tipo_Error = "Array";
-                    num_errores++;
-                    break;  
+                if (vec != NULL) {
+                    IsVector = 1;  
                 }
 
+                //Verificar si la matriz existe
+                Matrix* mat = matrix_table_get(mtab, Name_array_to_find);
+                if (mat != NULL) {
+                    IsMatrix = 1;
+                }
+
+                if (IsVector == 0 && IsMatrix == 0) {
+                    printf(" » ❌ Error Array Length: El array o matriz '%s' no existe \n", Name_array_to_find);
+                    lista_Errores[num_errores].Num = num_errores;
+                    lista_Errores[num_errores].Desc_Error = "El array o matriz no existe";
+                    lista_Errores[num_errores].Tipo_Error = "Array/Matrix";
+                    num_errores++;
+                    break;
+                }
+
+                if (IsMatrix == 1) {
+                    //declarar variable
+                    AsignarVariable_Int(n->nombre, mat->rows);
+                    printf(" » 🆗 Array.Length Asignado a '%s'\n", n->nombre);
+                    break;
+                }
+
+                if(IsVector == 1) {
+                // obtener el length del vector
                 size_t length_of_array = vector_size(vec);
                 int count = (int)length_of_array;
 
                 //declarar variable
                 AsignarVariable_Int(n->nombre, count);
-                printf(" » 🆗 Array.Length Asignado a '%s' el valor del length: %d\n", n->nombre, count);
-            break;
+                printf(" » 🆗 Array.Length Asignado a '%s'\n", n->nombre);
+                break;
+                }
             }
         }
 
         case NODO_STRING_JOIN_ARRAY: {
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             char* Nombre_Variable_Asignar = n->nombre;
             char* Separador = n->separador;
             char separador_str[256];
@@ -1943,6 +2488,12 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_VECTOR_ASIGNATION_REF: {
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             char* Name_of_vector = n->izq->nombre; // nombre del vector a asignar
             Valor number = Evaluar(n->izq->izq); // valor del índice
             int index = number.i_val; // indice donde se asignara el valor
@@ -1979,6 +2530,13 @@ Valor Evaluar(Nodo* n) {
         }
 
         case NODO_ASIGNACION_FUNCION_NO_PARAM:{ 
+            
+            if (continue_) {
+                // Si estamos en un estado de continue o break, no evaluamos más
+                continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+            
             // * Nombre de la funcion en "n->nombre"
             // Buscar la funcion en la tabla de simbolos
             char* Nombre_variable_a_declarar = n->nombre;
@@ -2047,6 +2605,12 @@ Valor Evaluar(Nodo* n) {
 
         case NODO_PRINT: { // * ----------------------------------------------------------------------------------------
             // ! TODO LO QUE SALGA EN PRINT ES LO QUE SE RETORNA AL FRONTEND
+
+            if (continue_ == 1) {
+                //continue_ = 0; // Reiniciar el estado de continue
+                break;
+            }
+
             Valor resultado = Evaluar(n->izq);
             char buffer[MAX_PRINT_LENGTH];
 
@@ -2068,7 +2632,18 @@ Valor Evaluar(Nodo* n) {
                     break;
                 
                 case VAL_STRING:
-                    snprintf(buffer, MAX_PRINT_LENGTH, "%s\n", resultado.s_val);
+                    if (strchr(resultado.s_val, '~') != NULL) {
+                        char *temp = strdup(resultado.s_val);
+                        char *p = strchr(temp, '~');
+                        if (p != NULL) {
+                            *p = '\0'; // Reemplaza el '~' con un terminador de cadena
+                        }
+                        snprintf(buffer, MAX_PRINT_LENGTH, "%s", temp);
+                        free(temp);
+                    } else {
+                        // Normal case with newline 
+                        snprintf(buffer, MAX_PRINT_LENGTH, "%s\n", resultado.s_val);
+                    }
                     //printf(" » 🖨️  »  %s\n", resultado.s_val);
                     break;
 

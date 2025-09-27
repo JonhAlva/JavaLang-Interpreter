@@ -51,7 +51,83 @@ void main(String[] args) {
         System.out.println("X Modificación de elementos: incorrecto");
     }
 
-   
+   // 1.4.3 Array Multidimensional – 4 pts
+    System.out.println("\n==== 1.4.3 Array Multidimensional ====");
+    int puntosMultidimensional = 0;
+
+    System.out.println("Creación de matriz 2D con literales:");
+    // Original
+    //int[][] matriz = new int[][]{
+    int[][] matriz = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    System.out.println("###Validacion Manual");
+    // Original
+    //System.out.println(Arrays.deepToString(matriz));
+    for ( int num: matriz) { System.out.println(num);}
+    puntosMultidimensional += 2;
+
+    System.out.println("\nMatrices irregulares:");
+    int[][] matrizIrregular = {
+        {1, 2, 3, 4},
+        {5, 6},
+        {7, 8, 9}
+    };
+    System.out.println("###Validacion Manual");
+    // Original
+    //System.out.println(Arrays.deepToString(matrizIrregular));
+    for ( int num: matrizIrregular) { System.out.println(num);}
+    int matrizIrregular_ = matrizIrregular[0][3];
+    System.out.println("Elemento [0,3]: " + matrizIrregular_); // Acceso al elemento 4
+    puntosMultidimensional += 2;
+
+    // 1.4.4 Acceso Array Multidimensional – 4 pts
+    System.out.println("\n==== 1.4.4 Acceso Array Multidimensional ====");
+    int puntosAccesoMultidimensional = 0;
+
+    System.out.println("Acceso a elementos de matriz 2D:");
+    int elemento11 = matriz[0][0];
+    int elemento23 = matriz[1][2];
+    int elemento33 = matriz[2][2];
+    System.out.println("Elemento [0][0]: " + elemento11);
+    System.out.println("Elemento [1][2]: " + elemento23);
+    System.out.println("Elemento [2][2]: " + elemento33);
+    if (elemento11 == 1 && elemento23 == 6 && elemento33 == 9) {
+        puntosAccesoMultidimensional += 1;
+        System.out.println("OK Acceso a elementos de matriz 2D: correcto");
+    } else {
+        System.out.println("X Acceso a elementos de matriz 2D: incorrecto");
+    }
+
+    System.out.println("\nModificación de elementos en matriz 2D:");
+    matriz[0][0] = 100;
+    matriz[1][1] = 500;
+    matriz[2][2] = 900;
+    int matriz00 = matriz[0][0];
+    int matriz11 = matriz[1][1];
+    int matriz22 = matriz[2][2]; 
+    if (matriz00 == 100 && matriz11 == 500 && matriz22 == 900) {
+        puntosAccesoMultidimensional += 1;
+        System.out.println("OK Modificación de elementos en matriz 2D: correcto");
+    } else {
+        System.out.println("X Modificación de elementos en matriz 2D: incorrecto");
+    }
+ 
+    System.out.println("\nAcceso a filas completas:");
+    // Original
+    //System.out.println("Primera fila de matriz: " + Arrays.toString(primeraFila));
+    for (int num : primeraFila) { System.out.println(num); }
+    int primeraFila0 = matriz[0][0];
+    int primeraFila1 = matriz[0][1];
+    int primeraFila2 = matriz[0][2];
+    if (primeraFila0 == 100 && primeraFila1 == 2 && primeraFila2 == 3) {
+        puntosAccesoMultidimensional += 2;
+        System.out.println("OK Acceso a filas completas: correcto");
+    } else {
+        System.out.println("X Acceso a filas completas: incorrecto");
+    }
 
 
     // 1.4.5 Función para encontrar el índice (Array.indexOf) – 3 pts
@@ -89,13 +165,16 @@ void main(String[] args) {
         System.out.println("X Strings.join: incorrecto");
     }
 
-/*
     // 1.4.7 Tamaño de arreglos (length) (obligatorio) – 3 pts ------------------------------------------------------------------------------
     System.out.println("\n==== 1.4.7 Tamaño de arreglos (length) (obligatorio) ====");
     int puntosLen = 0;
     int longitud1 = base.length;
-    int longitud2 = matrizIrregular.length;
-    int longitud3 = matrizIrregular[1].length;
+    int[] arrayList1 = {1,2,3};
+    int[] arrayList2 = {2,3};
+    int longitud2 = arrayList1.length;
+    int longitud3 = arrayList2.length;
+    //int longitud2 = matrizIrregular.length;
+    //int longitud3 = matrizIrregular[1].length;
     System.out.println("len(base)            = " + longitud1);
     System.out.println("len(matrizIrregular) = " + longitud2);
     System.out.println("len(matrizIrregular[1]) = " + longitud3);
@@ -105,7 +184,6 @@ void main(String[] args) {
     } else {
         System.out.println("X length: incorrecto");
     }
-    */
 
     // 1.4.8 Función add (obligatorio) – 3 pts
     System.out.println("\n==== 1.4.8 Función add (obligatorio) ====");
