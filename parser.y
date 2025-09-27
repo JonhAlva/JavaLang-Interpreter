@@ -49,12 +49,12 @@
 %type <lista_nodos> vector_values if_else_chain matriz_values switch_case_list function_parameters_access function_parameters_declaration parameters_bridge
 
 // Precedencia de Operadores
-%left LOGIC_OR
 %left LOGIC_AND
+%left LOGIC_OR
 %left OP_IGUAL_IGUAL OP_DISTINTO_A
 %left OP_MENOR_A OP_MAYOR_A OP_MENOR_IGUAL_A OP_MAYOR_IGUAL_A
-%left '+' '-'
-%left '*' '/' '%'
+%left '*' '/'
+%left '+' '-' '%'
 %right LOGIC_NOT
 %precedence UMINUS
 
